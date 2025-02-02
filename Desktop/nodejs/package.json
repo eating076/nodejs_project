@@ -10,14 +10,15 @@
     "mongoose": "^8.8.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.11.4",
-    "negotiator": "^1.0.0"
+    "negotiator": "^1.0.0"  
   },
+    "scripts": {
+      "start": "node app.js",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
   "name": "node",
   "version": "1.0.0",
   "main": "webServer.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Tang",
   "license": "ISC",
   "description": ""
