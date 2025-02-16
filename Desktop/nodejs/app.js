@@ -339,6 +339,7 @@ app.delete('/steps/:id', (req, res) => {
         res.send('Data deleted successfully');
     });
 });
+// 獲取所有測驗分數資料
 app.get('/scores', (req, res) => {
     const query = 'SELECT * FROM scores';
     connection.query(query, (err, results) => {
@@ -347,12 +348,14 @@ app.get('/scores', (req, res) => {
             res.status(500).send(`Error querying data: ${err.message}`);
             return;
         }
-        res.render('scores', { scores: results });
+        res.render('scores', { scores: results }); // 渲染 scores.ejs 模板
     });
 });
-app.get('/scores/:id', (req, res) => {
-    const scoreId = req.params.id;
-    const query = 'SELECT * FROM scores WHERE id = ?';
+
+// 根據 score_id 獲取特定測驗分數資料
+app.get('/scores/:score_id', (req, res) => {
+    const scoreId = req.params.score_id;
+    const query = 'SELECT * FROM scores WHERE score_id = ?';
     connection.query(query, [scoreId], (err, results) => {
         if (err) {
             console.error('Error executing query:', err);
@@ -360,44 +363,62 @@ app.get('/scores/:id', (req, res) => {
             return;
         }
         if (results.length > 0) {
-            res.json(results[0]);
+            res.json(results[0]); // 返回 JSON 數據
         } else {
             res.status(404).send('Score data not found');
         }
     });
 });
+// 新增測驗分數資料
 app.post('/scores', (req, res) => {
-    const { testDate, stressIndex, weightChange, depressionIndex, testScore } = req.body;
+    console.log('Request body:', req.body); // 檢查請求數據
+
+    const { user_id, test_date, stress_index, weight_change, depression_index, test_score } = req.body;
+
+    console.log('user_id:', user_id);
+    console.log('test_date:', test_date);
+    console.log('stress_index:', stress_index);
+    console.log('weight_change:', weight_change);
+    console.log('depression_index:', depression_index);
+    console.log('test_score:', test_score);
+
+    if (!user_id || !test_date) {
+        console.log('Validation failed');
+        return res.status(400).send('user_id and test_date cannot be null');
+    }
 
     const query = `
-        INSERT INTO scores (test_date, stress_index, weight_change, depression_index, test_score) 
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO scores (user_id, test_date, stress_index, weight_change, depression_index, test_score) 
+        VALUES (?, ?, ?, ?, ?, ?)
         ON DUPLICATE KEY UPDATE 
             stress_index = VALUES(stress_index), 
             weight_change = VALUES(weight_change), 
             depression_index = VALUES(depression_index),
             test_score = VALUES(test_score);
     `;
-    connection.query(query, [testDate, stressIndex, weightChange, depressionIndex, testScore], (err, result) => {
+
+    connection.query(query, [user_id, test_date, stress_index, weight_change, depression_index, test_score], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
-            res.status(500).send(`Error saving data: ${err.message}`);
-            return;
+            return res.status(500).send(`Error saving data: ${err.message}`);
+        } else {
+            console.log('Query result:', result);
+            res.send('Data saved successfully');
         }
-        console.log('Query result:', result);
-        res.send('Data saved successfully');
     });
 });
-app.put('/scores/:id', (req, res) => {
-    const scoreId = req.params.id;
-    const { testDate, stressIndex, weightChange, depressionIndex, testScore } = req.body;
+// 更新測驗分數資料
+app.put('/scores/:score_id', (req, res) => {
+    const scoreId = req.params.score_id;
+    const { test_date, stress_index, weight_change, depression_index, test_score } = req.body;
 
     const query = `
         UPDATE scores 
         SET test_date = ?, stress_index = ?, weight_change = ?, depression_index = ?, test_score = ?
-        WHERE id = ?
+        WHERE score_id = ?
     `;
-    connection.query(query, [testDate, stressIndex, weightChange, depressionIndex, testScore, scoreId], (err, result) => {
+
+    connection.query(query, [test_date, stress_index, weight_change, depression_index, test_score, scoreId], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
             res.status(500).send(`Error updating data: ${err.message}`);
@@ -407,9 +428,13 @@ app.put('/scores/:id', (req, res) => {
         res.send('Data updated successfully');
     });
 });
-app.delete('/scores/:id', (req, res) => {
-    const scoreId = req.params.id;
-    const query = 'DELETE FROM scores WHERE id = ?';
+
+// 刪除測驗分數資料
+app.delete('/scores/:score_id', (req, res) => {
+    const scoreId = req.params.score_id;
+    
+    const query = 'DELETE FROM scores WHERE score_id = ?';
+    
     connection.query(query, [scoreId], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
