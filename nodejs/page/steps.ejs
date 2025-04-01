@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>步數統計</title>
+    <link rel="stylesheet" href="steps.css">
+</head>
+<body>
+    <h1>步數統計</h1>
+
+    <form id="stepForm">
+        <label for="date">日期:</label>
+        <input type="date" id="date" name="date" required>
+        <br>
+        <label for="steps">今日步數:</label>
+        <input type="number" id="steps" name="steps" required>
+        <br>
+        <label for="goal">目標步數:</label>
+        <input type="number" id="goal" name="goal" required>
+        <br>
+        <button type="button" id="calculateBtn">計算完成率</button>
+        <button type="submit">提交</button>
+    </form>
+
+    <h2>完成率: <span id="completionRate">0%</span></h2>
+
+    <nav>
+        <ul>
+            <li><a href="/about">返回查詢結果</a></li>
+            <li><a href="/scores">測驗分數</a></li>
+            <li><a href="/analysis">分析結果</a></li>
+            <li><a href="/advanced-search">進階查詢</a></li>
+        </ul>
+    </nav>
+
+    <script>
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            const steps = parseInt(document.getElementById('steps').value);
+            const goal = parseInt(document.getElementById('goal').value);
+            if (goal > 0) {
+                const completionRate = ((steps / goal) * 100).toFixed(2);
+                document.getElementById('completionRate').innerText = `${completionRate}%`;
+            } else {
+                alert('目標步數必須大於0');
+            }
+        });
+
+        document.getElementById('stepForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const user_id = localStorage.getItem('user_id'); // 從本地存儲中獲取 user_id
+            const date = document.getElementById('date').value;
+            const steps = document.getElementById('steps').value;
+            const goal = document.getElementById('goal').value;
+
+            fetch('/steps', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: user_id,
+                    date: date,
+                    steps: steps,
+                    goal: goal
+                })
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert('數據提交成功');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('數據提交失敗');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -31,6 +31,7 @@ app.use((req, res, next) => {
     next();
 });
 
+<<<<<<< HEAD
 // 新增 logActivity 函數
 function logActivity(userId, action, ipAddress, userAgent, details) {
     if (!userId) {
@@ -80,6 +81,24 @@ app.get('/index', (req, res) => {
     });
 });
 
+=======
+app.use((req, res, next) => { 
+    const userId = req.body.userId || null; const action = req.method + ' ' + req.originalUrl;
+    const ipAddress = req.ip;
+    const userAgent = req.headers['user-agent'];
+    const details = JSON.stringify(req.body);
+    const query = ` INSERT INTO user_activity_logs (user_id, action, ip_address, user_agent, details) VALUES (?, ?, ?, ?, ?) `;
+    
+    connection.query(query, [userId, action, ipAddress, userAgent, details], (err, result) => { if (err) {
+         console.error('Error logging activity:', err);
+         }
+    next();
+ });
+ });
+
+
+app.get('/', (req, res) => { res.render('index'); });
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
 // 獲取所有 users
 app.get('/users', (req, res) => {
     const query = 'SELECT * FROM users';
@@ -97,14 +116,22 @@ app.get('/users', (req, res) => {
 app.get('/users/:user_id', (req, res) => {
     const userId = req.params.user_id;
     const query = 'SELECT * FROM users WHERE user_id = ?';
+<<<<<<< HEAD
    
+=======
+    
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     connection.query(query, [userId], (err, results) => {
         if (err) {
             console.error('Error executing query:', err);
             res.status(500).send(`Error fetching data: ${err.message}`);
             return;
         }
+<<<<<<< HEAD
        
+=======
+        
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         if (results.length === 0) {
             res.status(404).send('User not found');
         } else {
@@ -112,11 +139,18 @@ app.get('/users/:user_id', (req, res) => {
         }
     });
 });
+<<<<<<< HEAD
 // 新增用戶 (POST)
 app.post('/users', (req, res) => {
     const {
         user_name, user_email, user_gender, user_salutation, user_birthdate,
         user_age, user_address, user_phone, user_id_number, user_height, user_weight,
+=======
+// 新增用戶
+app.post('/users', (req, res) => {
+    const {
+        user_name, user_email, user_age, user_address, user_phone, user_id_number, user_gender, user_birthdate, user_height, user_weight,
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         user_blood_type, emergency_contact_name, emergency_contact_phone, betel_nut_habit, allergies
     } = req.body;
 
@@ -126,8 +160,12 @@ app.post('/users', (req, res) => {
     }
 
     console.log('Received data:', {
+<<<<<<< HEAD
         user_name, user_email, user_gender, user_salutation, user_birthdate,
         user_age, user_address, user_phone, user_id_number, user_height, user_weight,
+=======
+        user_name, user_email, user_age, user_address, user_phone, user_id_number, user_gender, user_birthdate, user_height, user_weight,
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         user_blood_type, emergency_contact_name, emergency_contact_phone, betel_nut_habit, allergies
     });
 
@@ -149,18 +187,29 @@ app.post('/users', (req, res) => {
         if (userId) {
             // 若存在相同名字的記錄，更新該記錄
             const updateQuery = `
+<<<<<<< HEAD
                 UPDATE users
                 SET user_email = ?, user_gender = ?, user_salutation = ?, user_birthdate = ?, user_age = ?,
                     user_address = ?, user_phone = ?, user_id_number = ?, user_height = ?, user_weight = ?,
                     user_blood_type = ?, emergency_contact_name = ?, emergency_contact_phone = ?,
+=======
+                UPDATE users 
+                SET user_email = ?, user_age = ?, user_address = ?, user_phone = ?, user_id_number = ?, user_gender = ?, user_birthdate = ?, 
+                    user_height = ?, user_weight = ?, user_blood_type = ?, emergency_contact_name = ?, emergency_contact_phone = ?, 
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
                     betel_nut_habit = ?, allergies = ?
                 WHERE user_id = ?;
             `;
             connection.query(updateQuery, [
+<<<<<<< HEAD
                 user_email, user_gender, user_salutation, user_birthdate, user_age,
                 user_address, user_phone, user_id_number, user_height, user_weight,
                 user_blood_type, emergency_contact_name, emergency_contact_phone,
                 betel_nut_habit, allergies, userId
+=======
+                user_email, user_age, user_address, user_phone, user_id_number, user_gender, user_birthdate, user_height, user_weight,
+                user_blood_type, emergency_contact_name, emergency_contact_phone, betel_nut_habit, allergies, userId
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
             ], (err, result) => {
                 if (err) {
                     console.error('Error executing query:', err);
@@ -185,13 +234,19 @@ app.post('/users', (req, res) => {
                         return;
                     }
                     console.log('Activity logged:', result);
+<<<<<<< HEAD
                    
                     res.redirect(`/result?user_id=${userId}`);
+=======
+                    
+                    res.redirect(`/about?user_id=${userId}`);
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
                 });
             });
         } else {
             // 新增新記錄
             const insertQuery = `
+<<<<<<< HEAD
                 INSERT INTO users (user_name, user_email, user_gender, user_salutation, user_birthdate,
                     user_age, user_address, user_phone, user_id_number, user_height, user_weight,
                     user_blood_type, emergency_contact_name, emergency_contact_phone, betel_nut_habit, allergies)
@@ -200,6 +255,14 @@ app.post('/users', (req, res) => {
             connection.query(insertQuery, [
                 user_name, user_email, user_gender, user_salutation, user_birthdate,
                 user_age, user_address, user_phone, user_id_number, user_height, user_weight,
+=======
+                INSERT INTO users (user_name, user_email, user_age, user_address, user_phone, user_id_number, user_gender, user_birthdate, user_height,
+                    user_weight, user_blood_type, emergency_contact_name, emergency_contact_phone, betel_nut_habit, allergies)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            `;
+            connection.query(insertQuery, [
+                user_name, user_email, user_age, user_address, user_phone, user_id_number, user_gender, user_birthdate, user_height, user_weight,
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
                 user_blood_type, emergency_contact_name, emergency_contact_phone, betel_nut_habit, allergies
             ], (err, result) => {
                 if (err) {
@@ -226,14 +289,21 @@ app.post('/users', (req, res) => {
                         return;
                     }
                     console.log('Activity logged:', result);
+<<<<<<< HEAD
                    
                     // 將 user_id 作為 URL 參數傳遞到 about 頁面
                     res.redirect(`/result?user_id=${newUserId}`);
+=======
+                    
+                    // 將 user_id 作為 URL 參數傳遞到 about 頁面
+                    res.redirect(`/about?user_id=${newUserId}`);
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
                 });
             });
         }
     });
 });
+<<<<<<< HEAD
 
 
 // 更新用戶資料
@@ -243,6 +313,12 @@ app.put('/users/:user_id', (req, res) => {
         user_age, user_address, user_phone, user_id_number, user_height, user_weight,
         user_blood_type, emergency_contact_name, emergency_contact_phone, betel_nut_habit, allergies } = req.body;
 
+=======
+// 更新用戶資料
+app.put('/users/:user_id', (req, res) => {
+    const userId = req.params.user_id;
+    const { user_name, user_email, user_age, user_address, user_phone, user_id_number, user_gender, user_birthdate, user_height, user_weight, user_blood_type, emergency_contact_name, emergency_contact_phone, betel_nut_habit, allergies } = req.body;
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
 
     const checkQuery = 'SELECT user_id FROM users WHERE user_email = ? AND user_id != ?';
     connection.query(checkQuery, [user_email, userId], (err, results) => {
@@ -252,11 +328,15 @@ app.put('/users/:user_id', (req, res) => {
             return;
         }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         if (results.length > 0) {
             res.status(400).send('Duplicate email found');
         } else {
             const updateQuery = `
+<<<<<<< HEAD
                 UPDATE users
                 SET user_name = ?, user_email = ?, user_gender = ?, user_salutation = ?, user_birthdate = ?, user_age = ?,
                     user_address = ?, user_phone = ?, user_id_number = ?, user_height = ?, user_weight = ?,
@@ -270,6 +350,13 @@ app.put('/users/:user_id', (req, res) => {
                 user_blood_type, emergency_contact_name, emergency_contact_phone,
                 betel_nut_habit, allergies, userId
             ], (err, result) => {
+=======
+                UPDATE users 
+                SET user_name = ?, user_email = ?, user_age = ?, user_address = ?, user_phone = ?, user_id_number = ?, user_gender = ?, user_birthdate = ?, user_height = ?, user_weight = ?, user_blood_type = ?, emergency_contact_name = ?, emergency_contact_phone = ?, betel_nut_habit = ?, allergies = ?
+                WHERE user_id = ?;
+            `;
+            connection.query(updateQuery, [user_name, user_email, user_age, user_address, user_phone, user_id_number, user_gender, user_birthdate, user_height, user_weight, user_blood_type, emergency_contact_name, emergency_contact_phone, betel_nut_habit, allergies, userId], (err, result) => {
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
                 if (err) {
                     console.error('Error executing query:', err);
                     res.status(500).send(`Error updating data: ${err.message}`);
@@ -282,14 +369,20 @@ app.put('/users/:user_id', (req, res) => {
     });
 });
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
 // 刪除用戶
 app.delete('/users/:user_id', (req, res) => {
     const userId = req.params.user_id;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     const deleteQuery = 'DELETE FROM users WHERE user_id = ?';
     connection.query(deleteQuery, [userId], (err, result) => {
         if (err) {
@@ -304,6 +397,7 @@ app.delete('/users/:user_id', (req, res) => {
         }
     });
 });
+<<<<<<< HEAD
 // 獲取模糊查詢結果 (GET)
 app.get('/fuzzy_search', (req, res) => {
     const searchName = req.query.name;
@@ -412,10 +506,22 @@ app.get('/result', (req, res) => {
         user_gender: req.query.user_gender,
         user_salutation: req.query.user_salutation,
         user_birthdate: req.query.user_birthdate,
+=======
+// about 頁面 GET 請求
+app.get('/about', (req, res) => {
+    res.render('about', {
+        user_name: req.query.user_name,
+        user_email: req.query.user_email,
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         user_age: req.query.user_age,
         user_address: req.query.user_address,
         user_phone: req.query.user_phone,
         user_id_number: req.query.user_id_number,
+<<<<<<< HEAD
+=======
+        user_gender: req.query.user_gender,
+        user_birthdate: req.query.user_birthdate,
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         user_height: req.query.user_height,
         user_weight: req.query.user_weight,
         user_blood_type: req.query.user_blood_type,
@@ -426,6 +532,7 @@ app.get('/result', (req, res) => {
     });
 });
 
+<<<<<<< HEAD
 
 
 
@@ -490,10 +597,17 @@ app.post('/result1', (req, res) => {
     const {
         user_name, user_email, user_gender, user_salutation, user_birthdate,
         user_age, user_address, user_phone, user_id_number, user_height, user_weight,
+=======
+// about 頁面 POST 請求
+app.post('/about', (req, res) => {
+    const {
+        user_name, user_email, user_age, user_address, user_phone, user_id_number, user_gender, user_birthdate, user_height, user_weight,
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         user_blood_type, emergency_contact_name, emergency_contact_phone, betel_nut_habit, allergies
     } = req.body;
 
     const query = `
+<<<<<<< HEAD
         INSERT INTO users (user_name, user_email, user_gender, user_salutation, user_birthdate,
             user_age, user_address, user_phone, user_id_number, user_height, user_weight,
             user_blood_type, emergency_contact_name, emergency_contact_phone, betel_nut_habit, allergies)
@@ -503,6 +617,15 @@ app.post('/result1', (req, res) => {
     connection.query(query, [
         user_name, user_email, user_gender, user_salutation, user_birthdate,
         user_age, user_address, user_phone, user_id_number, user_height, user_weight,
+=======
+        INSERT INTO users (user_name, user_email, user_age, user_address, user_phone, user_id_number, user_gender, user_birthdate, user_height, user_weight,
+            user_blood_type, emergency_contact_name, emergency_contact_phone, betel_nut_habit, allergies)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    connection.query(query, [
+        user_name, user_email, user_age, user_address, user_phone, user_id_number, user_gender, user_birthdate, user_height, user_weight,
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         user_blood_type, emergency_contact_name, emergency_contact_phone, betel_nut_habit, allergies
     ], (err, result) => {
         if (err) {
@@ -513,6 +636,7 @@ app.post('/result1', (req, res) => {
 
         console.log('Insert result:', result);
 
+<<<<<<< HEAD
         res.redirect(`/result1?user_name=${encodeURIComponent(user_name)}&user_email=${encodeURIComponent(user_email)}&user_gender=${encodeURIComponent(user_gender)}&user_salutation=${encodeURIComponent(user_salutation)}&user_birthdate=${encodeURIComponent(user_birthdate)}&user_age=${encodeURIComponent(user_age)}&user_address=${encodeURIComponent(user_address)}&user_phone=${encodeURIComponent(user_phone)}&user_id_number=${encodeURIComponent(user_id_number)}&user_height=${encodeURIComponent(user_height)}&user_weight=${encodeURIComponent(user_weight)}&user_blood_type=${encodeURIComponent(user_blood_type)}&emergency_contact_name=${encodeURIComponent(emergency_contact_name)}&emergency_contact_phone=${encodeURIComponent(emergency_contact_phone)}&betel_nut_habit=${encodeURIComponent(betel_nut_habit)}&allergies=${encodeURIComponent(allergies)}`);
     });
 });
@@ -624,6 +748,11 @@ app.post('/result3', (req, res) => {
 });
 
 
+=======
+        res.redirect(`/about?user_name=${encodeURIComponent(user_name)}&user_email=${encodeURIComponent(user_email)}&user_age=${encodeURIComponent(user_age)}&user_address=${encodeURIComponent(user_address)}&user_phone=${encodeURIComponent(user_phone)}&user_id_number=${encodeURIComponent(user_id_number)}&user_gender=${encodeURIComponent(user_gender)}&user_birthdate=${encodeURIComponent(user_birthdate)}&user_height=${encodeURIComponent(user_height)}&user_weight=${encodeURIComponent(user_weight)}&user_blood_type=${encodeURIComponent(user_blood_type)}&emergency_contact_name=${encodeURIComponent(emergency_contact_name)}&emergency_contact_phone=${encodeURIComponent(emergency_contact_phone)}&betel_nut_habit=${encodeURIComponent(betel_nut_habit)}&allergies=${encodeURIComponent(allergies)}`);
+    });
+});
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
 // 獲取所有步數統計資料
 app.get('/steps', (req, res) => {
     const query = 'SELECT * FROM steps';
@@ -637,7 +766,10 @@ app.get('/steps', (req, res) => {
     });
 });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
 // 根據 step_id 獲取特定步數統計資料
 app.get('/steps/:step_id', (req, res) => {
     const stepId = req.params.step_id;
@@ -663,6 +795,7 @@ app.post('/steps', (req, res) => {
     }
     const completionRate = ((steps / goal) * 100).toFixed(2);
 
+<<<<<<< HEAD
 
     const query = `
         INSERT INTO steps (user_id, step_date, steps, goal, completion_rate)
@@ -675,6 +808,18 @@ app.post('/steps', (req, res) => {
     `;
 
 
+=======
+    const query = `
+        INSERT INTO steps (user_id, step_date, steps, goal, completion_rate) 
+        VALUES (?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+            step_date = VALUES(step_date), 
+            steps = VALUES(steps), 
+            goal = VALUES(goal), 
+            completion_rate = VALUES(completion_rate);
+    `;
+
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     connection.query(query, [user_id, step_date, steps, goal, completionRate], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
@@ -691,14 +836,22 @@ app.put('/steps/:step_id', (req, res) => {
     const { step_date, steps, goal } = req.body;
     const completionRate = ((steps / goal) * 100).toFixed(2);
 
+<<<<<<< HEAD
 
     const query = `
         UPDATE steps
+=======
+    const query = `
+        UPDATE steps 
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         SET step_date = ?, steps = ?, goal = ?, completion_rate = ?
         WHERE step_id = ?
     `;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     connection.query(query, [step_date, steps, goal, completionRate, stepId], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
@@ -710,6 +863,7 @@ app.put('/steps/:step_id', (req, res) => {
     });
 });
 
+<<<<<<< HEAD
 
 // 刪除步數統計資料
 app.delete('/steps/:step_id', (req, res) => {
@@ -717,6 +871,14 @@ app.delete('/steps/:step_id', (req, res) => {
    
     const query = 'DELETE FROM steps WHERE step_id = ?';
    
+=======
+// 刪除步數統計資料
+app.delete('/steps/:step_id', (req, res) => {
+    const stepId = req.params.step_id;
+    
+    const query = 'DELETE FROM steps WHERE step_id = ?';
+    
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     connection.query(query, [stepId], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
@@ -727,17 +889,24 @@ app.delete('/steps/:step_id', (req, res) => {
         res.send('Data deleted successfully');
     });
 });
+<<<<<<< HEAD
 app.get('/scores', (req, res) => {
     res.render('scores');
 });
 app.get('/support_assessment', (req, res) => {
     const query = 'SELECT * FROM support_assessment';
+=======
+// 獲取所有測驗分數資料
+app.get('/scores', (req, res) => {
+    const query = 'SELECT * FROM scores';
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     connection.query(query, (err, results) => {
         if (err) {
             console.error('Error executing query:', err);
             res.status(500).send(`Error querying data: ${err.message}`);
             return;
         }
+<<<<<<< HEAD
         res.render('support_assessment', { assessments: results });
     });
 });
@@ -749,12 +918,24 @@ app.get('/support_assessment/:support_assessment_id', (req, res) => {
     const assessmentId = req.params.support_assessment_id;
     const query = 'SELECT * FROM support_assessment WHERE support_assessment_id = ?';
     connection.query(query, [assessmentId], (err, results) => {
+=======
+        res.json(results); // 返回 JSON 數據
+    });
+});
+
+// 根據 score_id 獲取特定測驗分數資料
+app.get('/scores/:score_id', (req, res) => {
+    const scoreId = req.params.score_id;
+    const query = 'SELECT * FROM scores WHERE score_id = ?';
+    connection.query(query, [scoreId], (err, results) => {
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         if (err) {
             console.error('Error executing query:', err);
             res.status(500).send(`Error querying data: ${err.message}`);
             return;
         }
         if (results.length > 0) {
+<<<<<<< HEAD
             res.json(results[0]);
         } else {
             res.status(404).send('Support assessment not found');
@@ -793,11 +974,70 @@ app.put('/support_assessment/:support_assessment_id', (req, res) => {
 
     const query = 'UPDATE support_assessment SET user_id = ?, support_assessment_test_date = ?, support_assessment_score = ?, support_assessment_follow_up_required = ? WHERE support_assessment_id = ?';
     connection.query(query, [user_id, support_assessment_test_date, support_assessment_score, support_assessment_follow_up_required, assessmentId], (err, result) => {
+=======
+            res.json(results[0]); // 返回 JSON 數據
+        } else {
+            res.status(404).send('Score data not found');
+        }
+    });
+});
+// 新增測驗分數資料
+app.post('/scores', (req, res) => {
+    console.log('Request body:', req.body); // 檢查請求數據
+
+    const { user_id, test_date, stress_index, weight_change, depression_index, test_score } = req.body;
+
+    console.log('user_id:', user_id);
+    console.log('test_date:', test_date);
+    console.log('stress_index:', stress_index);
+    console.log('weight_change:', weight_change);
+    console.log('depression_index:', depression_index);
+    console.log('test_score:', test_score);
+
+    if (!user_id || !test_date) {
+        console.log('Validation failed');
+        return res.status(400).send('user_id and test_date cannot be null');
+    }
+
+    const query = `
+        INSERT INTO scores (user_id, test_date, stress_index, weight_change, depression_index, test_score) 
+        VALUES (?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+            stress_index = VALUES(stress_index), 
+            weight_change = VALUES(weight_change), 
+            depression_index = VALUES(depression_index),
+            test_score = VALUES(test_score);
+    `;
+
+    connection.query(query, [user_id, test_date, stress_index, weight_change, depression_index, test_score], (err, result) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            return res.status(500).send(`Error saving data: ${err.message}`);
+        } else {
+            console.log('Query result:', result);
+            res.send('Data saved successfully');
+        }
+    });
+});
+// 更新測驗分數資料
+app.put('/scores/:score_id', (req, res) => {
+    const scoreId = req.params.score_id;
+    const { test_date, stress_index, weight_change, depression_index, test_score } = req.body;
+
+    const query = `
+        UPDATE scores 
+        SET test_date = ?, stress_index = ?, weight_change = ?, depression_index = ?, test_score = ?
+        WHERE score_id = ?
+    `;
+
+    connection.query(query, [test_date, stress_index, weight_change, depression_index, test_score, scoreId], (err, result) => {
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         if (err) {
             console.error('Error executing query:', err);
             res.status(500).send(`Error updating data: ${err.message}`);
             return;
         }
+<<<<<<< HEAD
         res.send('Support assessment updated successfully');
     });
 });
@@ -811,11 +1051,26 @@ app.delete('/support_assessment/:support_assessment_id', (req, res) => {
 
     const query = 'DELETE FROM support_assessment WHERE support_assessment_id = ?';
     connection.query(query, [assessmentId], (err, result) => {
+=======
+        console.log('Update result:', result);
+        res.send('Data updated successfully');
+    });
+});
+
+// 刪除測驗分數資料
+app.delete('/scores/:score_id', (req, res) => {
+    const scoreId = req.params.score_id;
+    
+    const query = 'DELETE FROM scores WHERE score_id = ?';
+    
+    connection.query(query, [scoreId], (err, result) => {
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         if (err) {
             console.error('Error executing query:', err);
             res.status(500).send(`Error deleting data: ${err.message}`);
             return;
         }
+<<<<<<< HEAD
         res.send('Support assessment deleted successfully');
     });
 });
@@ -1217,6 +1472,12 @@ app.delete('/sleep/:sleep_id', (req, res) => {
     });
 });
 
+=======
+        console.log('Delete result:', result);
+        res.send('Data deleted successfully');
+    });
+});
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
 // 獲取所有分析結果資料
 app.get('/analysis', (req, res) => {
     const query = 'SELECT * FROM analysis';
@@ -1226,9 +1487,16 @@ app.get('/analysis', (req, res) => {
             res.status(500).send(`Error querying data: ${err.message}`);
             return;
         }
+<<<<<<< HEAD
         res.render('analysis', { analysis: results }); // 渲染 analysis.ejs 模板
 });
 });
+=======
+        res.json(results); // 返回 JSON 數據
+    });
+});
+
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
 // 根據 analysis_id 獲取特定分析結果資料
 app.get('/analysis/:analysis_id', (req, res) => {
     const analysisId = req.params.analysis_id;
@@ -1250,6 +1518,7 @@ app.get('/analysis/:analysis_id', (req, res) => {
 app.post('/analysis', (req, res) => {
     console.log('Request body:', req.body); // 檢查請求數據
 
+<<<<<<< HEAD
 
     const { user_id, analysis_date, test_score, analysis_advice } = req.body;
 
@@ -1258,10 +1527,18 @@ app.post('/analysis', (req, res) => {
     console.log('analysis_date:', analysis_date); // 檢查 analysis_date 值
 
 
+=======
+    const { user_id, analysis_date, test_score, analysis_advice } = req.body;
+
+    console.log('user_id:', user_id); // 檢查 user_id 值
+    console.log('analysis_date:', analysis_date); // 檢查 analysis_date 值
+
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     if (!user_id || !analysis_date) {
         return res.status(400).send('user_id and analysis_date cannot be null');
     }
 
+<<<<<<< HEAD
 
     const query = `
         INSERT INTO analysis (user_id, analysis_date, test_score, analysis_advice)
@@ -1272,6 +1549,16 @@ app.post('/analysis', (req, res) => {
     `;
 
 
+=======
+    const query = `
+        INSERT INTO analysis (user_id, analysis_date, test_score, analysis_advice) 
+        VALUES (?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+            test_score = VALUES(test_score), 
+            analysis_advice = VALUES(analysis_advice);
+    `;
+
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     connection.query(query, [user_id, analysis_date, test_score, analysis_advice], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
@@ -1287,14 +1574,22 @@ app.put('/analysis/:analysis_id', (req, res) => {
     const analysisId = req.params.analysis_id;
     const { analysis_date, test_score, analysis_advice } = req.body;
 
+<<<<<<< HEAD
 
     const query = `
         UPDATE analysis
+=======
+    const query = `
+        UPDATE analysis 
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         SET analysis_date = ?, test_score = ?, analysis_advice = ?
         WHERE analysis_id = ?
     `;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     connection.query(query, [analysis_date, test_score, analysis_advice, analysisId], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
@@ -1306,6 +1601,7 @@ app.put('/analysis/:analysis_id', (req, res) => {
     });
 });
 
+<<<<<<< HEAD
 
 // 刪除分析結果資料
 app.delete('/analysis/:analysis_id', (req, res) => {
@@ -1313,6 +1609,14 @@ app.delete('/analysis/:analysis_id', (req, res) => {
    
     const query = 'DELETE FROM analysis WHERE analysis_id = ?';
    
+=======
+// 刪除分析結果資料
+app.delete('/analysis/:analysis_id', (req, res) => {
+    const analysisId = req.params.analysis_id;
+    
+    const query = 'DELETE FROM analysis WHERE analysis_id = ?';
+    
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     connection.query(query, [analysisId], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
@@ -1324,7 +1628,11 @@ app.delete('/analysis/:analysis_id', (req, res) => {
     });
 });
 // 獲取所有進階查詢資料
+<<<<<<< HEAD
 app.get('/advanced_search', (req, res) => {
+=======
+app.get('/advanced-search', (req, res) => {
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     const query = 'SELECT * FROM advanced_search';
     connection.query(query, (err, results) => {
         if (err) {
@@ -1332,6 +1640,7 @@ app.get('/advanced_search', (req, res) => {
             res.status(500).send(`Error querying data: ${err.message}`);
             return;
         }
+<<<<<<< HEAD
         res.render('advanced_search', { advancedSearch: results }); // 渲染 advanced_search.ejs 模板
     });
 });
@@ -1339,6 +1648,14 @@ app.get('/advanced_search', (req, res) => {
 
 // 根據 search_id 獲取特定進階查詢資料
 app.get('/advanced_search/:search_id', (req, res) => {
+=======
+        res.json(results); // 返回 JSON 數據
+    });
+});
+
+// 根據 search_id 獲取特定進階查詢資料
+app.get('/advanced-search/:search_id', (req, res) => {
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     const searchId = req.params.search_id;
     const query = 'SELECT * FROM advanced_search WHERE search_id = ?';
     connection.query(query, [searchId], (err, results) => {
@@ -1354,6 +1671,7 @@ app.get('/advanced_search/:search_id', (req, res) => {
         }
     });
 });
+<<<<<<< HEAD
 
 
 // 新增進階查詢資料
@@ -1361,10 +1679,17 @@ app.post('/advanced_search', (req, res) => {
     const { user_id, child_order, search_name, search_birthdate, search_blood_type } = req.body;
 
 
+=======
+// 新增進階查詢資料
+app.post('/advanced-search', (req, res) => {
+    const { user_id, child_order, search_name, search_birthdate, search_blood_type } = req.body;
+
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     if (!user_id || !child_order || !search_name || !search_birthdate || !search_blood_type) {
         return res.status(400).send('All fields are required and cannot be null');
     }
 
+<<<<<<< HEAD
 
     const query = `
         INSERT INTO advanced_search (user_id, child_order, search_name, search_birthdate, search_blood_type)
@@ -1372,11 +1697,22 @@ app.post('/advanced_search', (req, res) => {
         ON DUPLICATE KEY UPDATE
             child_order = VALUES(child_order),
             search_name = VALUES(search_name),
+=======
+    const query = `
+        INSERT INTO advanced_search (user_id, child_order, search_name, search_birthdate, search_blood_type) 
+        VALUES (?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE 
+            child_order = VALUES(child_order), 
+            search_name = VALUES(search_name), 
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
             search_birthdate = VALUES(search_birthdate),
             search_blood_type = VALUES(search_blood_type);
     `;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     connection.query(query, [user_id, child_order, search_name, search_birthdate, search_blood_type], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
@@ -1387,6 +1723,7 @@ app.post('/advanced_search', (req, res) => {
         res.send('Data saved successfully');
     });
 });
+<<<<<<< HEAD
 
 
 // 更新進階查詢資料
@@ -1397,11 +1734,23 @@ app.put('/advanced_search/:search_id', (req, res) => {
 
     const query = `
         UPDATE advanced_search
+=======
+// 更新進階查詢資料
+app.put('/advanced-search/:search_id', (req, res) => {
+    const searchId = req.params.search_id;
+    const { search_id, child_order, search_name, search_birthdate, search_blood_type } = req.body;
+
+    const query = `
+        UPDATE advanced_search 
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         SET search_id = ?, child_order = ?, search_name = ?, search_birthdate = ?, search_blood_type = ?
         WHERE search_id = ?
     `;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     connection.query(query, [search_id, child_order, search_name, search_birthdate, search_blood_type, searchId], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
@@ -1413,6 +1762,7 @@ app.put('/advanced_search/:search_id', (req, res) => {
     });
 });
 
+<<<<<<< HEAD
 
 // 刪除進階查詢資料
 app.delete('/advanced_search/:search_id', (req, res) => {
@@ -1420,6 +1770,14 @@ app.delete('/advanced_search/:search_id', (req, res) => {
    
     const query = 'DELETE FROM advanced_search WHERE search_id = ?';
    
+=======
+// 刪除進階查詢資料
+app.delete('/advanced-search/:search_id', (req, res) => {
+    const searchId = req.params.search_id;
+    
+    const query = 'DELETE FROM advanced_search WHERE search_id = ?';
+    
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     connection.query(query, [searchId], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
@@ -1443,7 +1801,10 @@ app.get('/user_activity_logs', (req, res) => {
     });
 });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
 // 根據 log_id 獲取特定活動日誌資料
 app.get('/user_activity_logs/:log_id', (req, res) => {
     const logId = req.params.log_id;
@@ -1465,6 +1826,7 @@ app.get('/user_activity_logs/:log_id', (req, res) => {
 app.post('/user_activity_logs', (req, res) => {
     const { user_id, action, ip_address, user_agent, details } = req.body;
 
+<<<<<<< HEAD
 
     const query = `
         INSERT INTO user_activity_logs (user_id, action, ip_address, user_agent, details)
@@ -1472,6 +1834,13 @@ app.post('/user_activity_logs', (req, res) => {
     `;
 
 
+=======
+    const query = `
+        INSERT INTO user_activity_logs (user_id, action, ip_address, user_agent, details) 
+        VALUES (?, ?, ?, ?, ?)
+    `;
+
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     connection.query(query, [user_id, action, ip_address, user_agent, details], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
@@ -1483,20 +1852,31 @@ app.post('/user_activity_logs', (req, res) => {
     });
 });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
 // 更新活動日誌資料
 app.put('/user_activity_logs/:log_id', (req, res) => {
     const logId = req.params.log_id;
     const { user_id, action, ip_address, user_agent, details } = req.body;
 
+<<<<<<< HEAD
 
     const query = `
         UPDATE user_activity_logs
+=======
+    const query = `
+        UPDATE user_activity_logs 
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
         SET user_id = ?, action = ?, ip_address = ?, user_agent = ?, details = ?
         WHERE log_id = ?
     `;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     connection.query(query, [user_id, action, ip_address, user_agent, details, logId], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
@@ -1508,15 +1888,23 @@ app.put('/user_activity_logs/:log_id', (req, res) => {
     });
 });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
 // 刪除活動日誌資料
 app.delete('/user_activity_logs/:log_id', (req, res) => {
     const logId = req.params.log_id;
 
+<<<<<<< HEAD
 
     const query = 'DELETE FROM user_activity_logs WHERE log_id = ?';
 
 
+=======
+    const query = 'DELETE FROM user_activity_logs WHERE log_id = ?';
+
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
     connection.query(query, [logId], (err, result) => {
         if (err) {
             console.error('Error executing query:', err);
@@ -1529,6 +1917,7 @@ app.delete('/user_activity_logs/:log_id', (req, res) => {
 });
 
 
+<<<<<<< HEAD
 app.get('/settings', (req, res) => {
     const query = 'SELECT * FROM settings';
     connection.query(query, (err, results) => {
@@ -1698,6 +2087,80 @@ app.delete('/dashboard/:dashboard_id', (req, res) => {
     });
 });
        
+=======
+app.get('/settings', (req, res) => 
+    { res.render('settings'); 
+    }); 
+app.get('/add1', (req, res) => 
+    { res.render('add1', { type: 'admin', action: '/add1' 
+
+    }); 
+}); 
+app.post('/add1', (req, res) => 
+    { const { employeeId, employeeName } = req.body; const query = 'INSERT INTO admins (employee_id, employee_name) VALUES (?, ?)'; connection.query(query, [employeeId, employeeName], (err, result) => 
+        { if (err) { console.error('Error executing query:', err); res.status(500).send(`Error saving data: ${err.message}`); return; } console.log('Insert result:', result); res.redirect('/settings'); 
+}); 
+}); 
+app.get('/edit1', (req, res) => 
+    { res.render('edit1', { type: 'admin', action: '/edit1' 
+    }); 
+}); 
+app.post('/edit1', (req, res) => 
+    { const { employeeId, employeeName } = req.body; const query = 'UPDATE admins SET employee_name = ? WHERE employee_id = ?'; connection.query(query, [employeeName, employeeId], (err, result) => 
+        { if (err) { console.error('Error executing query:', err); res.status(500).send(`Error updating data: ${err.message}`); return; } console.log('Update result:', result); res.redirect('/settings'); 
+}); 
+}); 
+app.get('/delete1', (req, res) => 
+    { res.render('delete1', { type: 'admin', action: '/delete1' 
+    }); 
+}); 
+app.post('/delete1', (req, res) => 
+    { const { employeeId } = req.body; const query = 'DELETE FROM admins WHERE employee_id = ?'; connection.query(query, [employeeId], (err, result) => { if (err) { console.error('Error executing query:', err); res.status(500).send(`Error deleting data: ${err.message}`); return; } console.log('Delete result:', result); res.redirect('/settings'); 
+}); 
+}); 
+app.get('/add2', (req, res) => 
+    { res.render('add2', { type: 'item', action: '/add2' 
+
+    }); 
+}); 
+app.post('/add2', (req, res) => 
+    { const { itemName, itemContent } = req.body; const query = 'INSERT INTO items (item_name, item_content) VALUES (?, ?)'; connection.query(query, [itemName, itemContent], (err, result) => { if (err) { console.error('Error executing query:', err); res.status(500).send(`Error saving data: ${err.message}`); return; } console.log('Insert result:', result); res.redirect('/settings'); 
+}); 
+}); 
+app.get('/edit2', (req, res) => 
+    { res.render('edit2', { type: 'item', action: '/edit2' 
+
+    }); 
+}); 
+app.post('/edit2', (req, res) => 
+    { const { itemId, itemName, itemContent } = req.body; 
+const query = 'UPDATE items SET item_name = ?, item_content = ? WHERE item_id = ?'; 
+connection.query(query, [itemName, itemContent, itemId], (err, result) => 
+        {if (err) { console.error('Error executing query:', err); 
+            res.status(500).send(`Error updating data: ${err.message}`); 
+            return; 
+        } 
+            console.log('Update result:', result); 
+            res.redirect('/settings'); 
+}); 
+}); 
+app.get('/delete2', (req, res) => 
+    { res.render('delete2', { type: 'item', action: '/delete2' 
+
+    }); 
+}); 
+app.post('/delete2', (req, res) => 
+    { const { itemId } = req.body; 
+      const query = 'DELETE FROM items WHERE item_id = ?'; 
+      connection.query(query, [itemId], (err, result) => {
+        if (err) { console.error('Error executing query:', err);
+             res.status(500).send(`Error deleting data: ${err.message}`);
+              return; } console.log('Delete result:', result);
+               res.redirect('/settings'); 
+            }); 
+        });
+        
+>>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
