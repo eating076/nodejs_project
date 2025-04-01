@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模糊查詢結果</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* 樣式設定 */
+        body {
+            font-family: "標楷體", Arial, sans-serif;
+            background: linear-gradient(to right, #b9c2cd, #9dbce7);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+        }
+        h1 {
+            color: #333;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+        .user-list {
+            list-style: none;
+            padding: 0;
+        }
+        .user-list li {
+            background: #f9f9f9;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .user-list li:hover {
+            background: #e0e0e0;
+            transform: scale(1.05);
+        }
+        .no-result {
+            color: red;
+            font-weight: bold;
+        }
+        .settings-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 26px;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s, transform 0.2s;
+        }
+        .settings-icon:hover {
+            color: #007bff;
+            transform: rotate(90deg);
+        }
+        .back-button {
+            background-color: #6c757d;
+            color: white;
+            font-size: 18px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .back-button:hover {
+            background-color: #565e64;
+            transform: scale(1.1);
+        }
+    </style>
+    <script>
+        // DOM 加載後的操作
+        document.addEventListener("DOMContentLoaded", function () {
+            const params = new URLSearchParams(window.location.search);
+            const searchName = params.get("name") || "";
+
+            const validUsers = [
+                { name: "蔡昆佑", page: "/result" },
+                { name: "王小明", page: "/result1" },
+                { name: "張美麗", page: "/result2" },
+                { name: "蔡小華", page: "/result3" },
+                { name: "李美麗", page: "/result4" }
+            ];
+
+            const matchedUsers = validUsers.filter(user => user.name.includes(searchName));
+            const userList = document.getElementById("userList");
+
+            if (matchedUsers.length > 0) {
+                matchedUsers.forEach(user => {
+                    const li = document.createElement("li");
+                    li.textContent = user.name;
+                    li.onclick = function () {
+                        window.location.href = user.page;
+                    };
+                    userList.appendChild(li);
+                });
+            } else {
+                userList.innerHTML = `<p class="no-result">⚠️ 查無相似資料</p>`;
+            }
+        });
+
+        // 跳轉到設定頁面
+        function goToSettings() {
+            window.location.href = '/settings';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- 設定圖示 -->
+        <div class="settings-icon" onclick="goToSettings()">
+            <i class="fas fa-cog"></i>
+        </div>
+
+        <h1>模糊查詢結果</h1>
+        <ul id="userList" class="user-list"></ul>
+        <button class="back-button" onclick="window.location.href='/index'">返回</button>
+    </div>
+</body>
+</html>

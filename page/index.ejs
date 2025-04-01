@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基本資料查詢</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 漸變效果 */
+            height: 100vh; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-family: Arial, sans-serif; 
+            padding : 0; 
+            } 
+        </style> 
+    <style>
+        body {
+            font-family: "標楷體", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            text-align: center;
+        }
+        .settings-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .settings-icon:hover {
+            color: #007bff;
+        }
+        h1 {
+            color: #333;
+            font-weight: bold;
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: space-between;
+        }
+        .form-group {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+        .form-group label {
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        .form-group input,
+        .form-group select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #007bff;
+        }
+        .form-group .radio-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 15px;
+        }
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+    <script>
+        function validateForm(event) {
+            event.preventDefault(); // 阻止表單自動提交
+    
+            const name = document.getElementById("user_name").value.trim();
+            
+            if (name === "") {
+                alert("請輸入姓名！");
+                return;
+            }
+    
+            // 跳轉到模糊查詢結果頁面，將姓名帶入 URL
+            window.location.href = `/fuzzy_search?name=${encodeURIComponent(name)}`;
+        }
+        function goToSettings() {
+            window.location.href = '/settings';
+        }
+    </script>
+    
+
+</head>
+<body>
+    <div class="container">
+        <!-- 設定圖示 -->
+        <div class="settings-icon" onclick="goToSettings()">
+            <i class="fas fa-cog"></i>
+        </div>
+
+        <h1>基本資料查詢</h1>
+
+        <form id="userForm" onsubmit="validateForm(event)"> <!-- 添加了 id="userForm" -->
+            <div class="form-group">
+                <label for="user_name">姓名</label>
+                <input type="text" id="user_name" name="user_name" placeholder="輸入姓名">
+            </div>
+
+            <div class="form-group">
+                <label>性別</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="user_gender" value="男"> 男</label>
+                    <label><input type="radio" name="user_gender" value="女"> 女</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="user_salutation">稱謂</label>
+                <select id="user_salutation" name="user_salutation">
+                    <option value="新手媽媽">新手媽媽</option>
+                    <option value="媽媽">媽媽</ption>
+                    <option value="新手爸爸">新手爸爸</ption>
+                    <option value="爸爸">爸爸</ption>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="user_birthdate">生日</label> <!-- user_birthdate 是正確的 id -->
+                <input type="date" id="user_birthdate" name="user_birthdate"> <!-- 修改了 id -->
+            </div>
+
+            <div class="form-group">
+                <label for="user_email">電子郵件</label>
+                <input type="email" id="user_email" name="user_email" placeholder="輸入電子郵件">
+            </div>
+
+            <div class="error-message" id="errorMessage">⚠️ 查無此人</div>
+
+            <button type="submit" class="btn-submit">查詢</button>
+        </form>
+    </div>
+
+    <script>
+        function validateForm(event) { <!-- 添加了 validateForm 函數 -->
+            event.preventDefault(); // 阻止表單自動提交
+
+            const name = document.getElementById("user_name").value.trim();
+
+            if (name === "") {
+                alert("請輸入姓名！");
+                return;
+            }
+
+            // 跳轉到模糊查詢結果頁面，將姓名帶入 URL
+            window.location.href = `/fuzzy_search?name=${encodeURIComponent(name)}`;
+        }
+
+        function goToSettings() {
+            window.location.href = '/settings';
+        }
+
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+           
+            const user_name = document.getElementById('user_name').value;
+            const user_gender = document.querySelector('input[name="user_gender"]:checked').value;
+            const user_salutation = document.getElementById('user_salutation').value;
+            const user_birthdate = document.getElementById('user_birthdate').value; //<!-- user_birthdate 是正確的 id -->
+            const user_email = document.getElementById('user_email').value;
+
+            fetch('/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_name, user_gender, user_salutation, user_birthdate, user_email
+                })
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                window.location.href = '/result'; // 提交成功後跳轉到 fuzzy_search 頁面
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById('user_birthdate').setAttribute('max', new Date().toISOString().split('T')[0]);
+    </script>
+</body>
+</html>

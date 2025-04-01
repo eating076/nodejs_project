@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.6">
+    <title>疼痛量表</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style> 
+        body {
+            background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 漸變效果 */
+            height: 100vh; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-family: Arial, sans-serif; 
+            padding : 0; 
+            } 
+        </style> 
+        <style> 
+        body { 
+            background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 漸變效果 */ 
+            height: 100vh; margin: 0; display: flex; justify-content: center; /* 水平居中 */ 
+            align-items: flex-start; /* 改為頂部對齊 */ 
+            font-family: Arial, sans-serif; padding: 10px; /* 增加整體的內邊距 */ 
+            } 
+            .left-bottom { 
+                max-width: 400px; 
+                margin: 40px; /* 減小上下間距 */ 
+                padding: 65px;
+                background-color: #e1d8e1; 
+                border-radius: 8px; 
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+                flex: 1;
+             } 
+                .line { width: 100%; /* 線條寬度 */ 
+                height: 1px; /* 線條高度 */ 
+                background-color: #ccc; /* 線條顏色 */ 
+                margin: 20px 30px 20px 30px;
+
+                } 
+                .left-top { 
+                width: 100%; 
+                border-collapse: collapse; 
+                text-align: center; 
+                margin-right : 70px; 
+                margin-left : 100px; 
+                flex :1; 
+                } 
+                h1 { 
+                    text-align: center; 
+                    color: #333; 
+                } 
+                .profile-header { 
+                    text-align: center; 
+                    margin-bottom: 20px; 
+                } 
+                .profile-header img { 
+                    width: 150px; 
+                    height: 150px; 
+                    border-radius: 50%;
+                } 
+                .profile-header h2 { 
+                    margin: 10px 0; 
+                    color: #333; 
+                } 
+                .profile-header p { 
+                    color: #777;
+                 } 
+                .profile-info { 
+                    margin-top: 20px; 
+                } 
+                .profile-info h3 { 
+                    color: #333;
+                } 
+                .profile-info ul { 
+                    list-style-type: none; 
+                    padding: 0; 
+                } 
+                .profile-info ul li { 
+                    margin: 10px 0; 
+                    color: #555; 
+                } footer { 
+                    text-align: center; 
+                    margin-top: 20px; 
+                    color: #777; 
+                } 
+        </style>
+</head>
+<body>
+    <div class="left-bottom">
+        <div class="profile-header">
+            <h2>個人基本資訊</h2>
+             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrjDKvX46GOpgDflhYQ7KI9fewSC6y552-hA&s" alt="頭像" class="profile-picture">
+        </div>
+        <div class="line"></div>
+        <div class="profile-info">
+            <ul>
+                <li><strong>姓名：</strong> 蔡昆佑</li>
+                <li><strong>年齡：</strong> 25</li>
+                <li><strong>生日：</strong> 2002/01/01</li>
+                <li><strong>血型：</strong> O型</li>
+                <li><strong>稱謂：</strong> 新手爸爸</li>
+                <li><strong>身分證字號：</strong> F131420505</li>
+                <li><strong>通訊地址：</strong> 新北市淡水區XX路XX段XX號XX樓</li>
+                <li><strong>連絡電話：</strong> 0900-123-123</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>© 2025 xx醫院 | 版權所有</p>
+        </footer>
+    </div>
+</body>
+<style>
+    body {
+        font-family: "標楷體", Arial, sans-serif;
+        background-color: #c2aecc;
+        padding: 20px;
+        margin: 0;
+        display: flex;
+        flex: 1;  /* 讓此區塊占據剩餘空間 */
+    }
+
+    .right-bottom {
+        width: 90%;
+        max-width: 900px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        overflow-x: auto;
+        position: relative;
+        flex: 2;
+        height: 600px; /* 固定高度 */
+        overflow-y: auto; /* 允許垂直滾動 */
+        margin-left : 50px;
+    }
+
+    .right-top {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+        margin-right : 0px;
+        margin-left : 50px;
+        flex :1;
+    }
+    .settings-icon {
+        position: absolute;
+        top: 10px;
+        right: 5px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #6b7280;
+        transition: color 0.3s;
+    }
+    .settings-icon:hover {
+        color: #4b5563;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    th {
+        background-color: #c8b1d7;
+    }
+    .score-low {
+        color: red;
+        font-weight: bold;
+    }
+    .weight-change {
+        color: red;
+    }
+    .love-score {
+        padding: 5px;
+        border-radius: 5px;
+        display: inline-block;
+        width: 40px;
+        text-align: center;
+        color: rgb(3, 3, 3);
+        font-weight: bold;
+    }
+    .btn-info {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 3px 6px;
+        font-size: 12px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-left: 5px;
+    }
+    .btn-info:hover {
+        background-color: #0056b3;
+    }
+
+    /* 色階設定 */
+    .level-0 { background-color: rgb(253, 255, 144); }
+    .level-1 { background-color: #b1f3ba; }
+    .level-2 { background-color: #7ee77e; }
+    .level-3 { background-color: #07bd07; }
+    .level-4 { background-color: #008000; }
+
+    /* 彈出視窗 */
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 300px;
+        width: 80%;
+    }
+    .popup img {
+        width: 100%;
+    }
+    .popup .close-btn {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 12px 20px;
+        font-size: 18px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #565e64;
+    }
+    .buttons-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+.buttons-container button {
+    flex: 1;
+    margin: 0 5px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+.step-count { background-color: #28a745; }
+.test-score { background-color: #ffc107; }
+.analysis-result { background-color: #17a2b8; }
+.progress-check { background-color: #6c757d; }
+.goback{background-color: rgb(255, 0, 0);}
+</style>
+</head>
+<body>
+    <div class="right">
+        <a href="/settings" class="settings-icon">
+           <i class="fas fa-cog"></i>
+        </a>
+        <div class="right-top">
+            <!-- 步數統計按鈕 -->
+            <button class="step-count" onclick="window.location.href='/steps'">步數統計</button>
+            <!-- 測驗分數按鈕 -->
+            <button class="test-score">測驗分數
+            <td>
+                <select name="score-dropdown" onchange="handleSelection(this.value)">
+                    <option value="" selected>疼痛量表</option>
+                    <option value="support_assessment">生產支持知覺量表</option>
+                    <option value="attachment_support">親子依附支持量表</option>
+                    <option value="knowledge">母乳知識量表</option>
+                    <option value="dour">產後憂鬱量表</option>
+                    <option value="hurt">疼痛量表</option>
+                    <option value="sleep">匹茲堡睡眠品質量表</option>
+                </select>
+            </td>
+        </button>
+            
+            <script>
+                function handleSelection(value) {
+                    if (value) {
+                        window.location.href = `/${value}`;
+                    }
+                }
+            </script>
+            
+            
+            <!-- 分析結果按鈕 -->
+            <button class="analysis-result" onclick="window.location.href='/analysis'">分析結果</button>
+            <!-- 進階查詢按鈕 -->
+            <button class="progress-check" onclick="window.location.href='/advanced_search'">進階查詢</button>
+
+            <button class="goback" onclick="window.location.href='/index'">重新查詢</button>
+        </div>
+        <hr style="margin-left: 200px;">
+        
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+            margin: 0;
+            font-family: "標楷體", Arial, sans-serif;
+            position: relative;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            margin: auto;
+            overflow-x: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding-top:10px;
+            padding-bottom:0px;
+            padding-left:30px;
+            padding-right:30px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            height:600px;
+            margin-left:50px;
+        }
+        h2 {
+            text-align: center;
+            font-weight: bold;
+        }
+        .form-group {
+            margin: 20px 0;
+        }
+        .slider-container {
+            text-align: center;
+            margin-top: 20px;
+            position: relative;
+        }
+        .slider-container input[type="range"] {
+            width: 100%;
+        }
+        .value-display {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .character {
+            position: absolute;
+            bottom: 30px;
+            font-size: 30px;
+            transition: all 0.3s ease;
+        }
+        .character.green {
+            color: #4caf50;
+        }
+        .character.orange {
+            color: #ff9800;
+        }
+        .character.red {
+            color: #f44336;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #565e64;
+        }
+        .settings-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            transition: color 0.3s;
+        }
+        .settings-icon:hover {
+            color: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>疼痛量表</h2>
+        <p class="info"> 患者 ID: 123456</p>
+        <div class="form-group">
+            <label>姓名：</label>
+            <input type="text" id="name" readonly>
+        </div>
+        <div class="form-group">
+            <label>生產方式：</label>
+            <br><br>
+            <div class="checkbox-group">
+                <label><input type="checkbox" id="natural" disabled> 自然產</label>
+                <label><input type="checkbox" id="cesarean" disabled> 剖腹產</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>疼痛指數：</label>
+            <div class="slider-container">
+                <input type="range" min="0" max="10" value="5" id="painSlider" disabled>
+                <div class="value-display" id="painValue">5</div>
+                <div class="character" id="character" style="left: 50%;">&#128578;</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>是否有使用自控式止痛：</label>
+            <label><input type="checkbox" id="yesControl" disabled> 是</label>
+            <label><input type="checkbox" id="noControl" disabled> 否</label>
+        </div>
+        <div class="buttons">
+            <button class="btn btn-secondary" onclick="prevPage()">上一頁</button>
+            <button class="btn btn-secondary" onclick="nextPage()">下一頁</button>
+        </div>
+        <a href="settings.html" class="settings-icon">
+            <i class="fas fa-cog"></i>
+        </a>
+    </div>
+
+    <script>
+        const data = [
+            { name: "蔡昆佑", mode: "自然產", pain: 7, control: "是" },
+            { name: "蔡昆佑", mode: "自然產", pain: 10, control: "是" },
+            { name: "蔡昆佑", mode: "自然產", pain: 5, control: "是" },
+            { name: "蔡昆佑", mode: "自然產", pain: 3, control: "否" }
+        ];
+
+        let currentIndex = 0;
+
+        function updateForm() {
+            const currentData = data[currentIndex];
+            document.getElementById('name').value = currentData.name;
+            document.getElementById('natural').checked = (currentData.mode === "自然產");
+            document.getElementById('cesarean').checked = (currentData.mode === "剖腹產");
+            document.getElementById('painSlider').value = currentData.pain;
+            document.getElementById('painValue').textContent = currentData.pain;
+
+            // 更新小人位置及顏色
+            const percentage = (currentData.pain / 10) * 100;
+            const character = document.getElementById('character');
+            character.style.left = `calc(${percentage}% - 15px)`;
+
+            if (currentData.pain <= 4) {
+                character.className = 'character green';
+                character.innerHTML = '&#128578;'; // 😊 笑臉
+            } else if (currentData.pain <= 6) {
+                character.className = 'character orange';
+                character.innerHTML = '&#128528;'; // 😐 平淡
+            } else if (currentData.pain <= 9) {
+                character.className = 'character red';
+                character.innerHTML = '&#128577;'; // ☹️ 難過
+            } else {
+                character.className = 'character red';
+                character.innerHTML = '&#128557;'; // 😭 哭臉
+            }
+
+            document.getElementById('yesControl').checked = (currentData.control === "是");
+            document.getElementById('noControl').checked = (currentData.control === "否");
+        }
+
+        function nextPage() {
+            if (currentIndex < data.length - 1) {
+                currentIndex++;
+                updateForm();
+            }
+        }
+
+        function prevPage() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateForm();
+            }
+        }
+
+        function goBack() {
+            window.location.href = '/scores'; // 返回測驗分數頁面
+        }
+
+        // 讓表情可以被拖曳
+        const character = document.getElementById('character');
+        const slider = document.getElementById('painSlider');
+        const painValue = document.getElementById('painValue');
+
+        let isDragging = false;
+
+        character.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            const sliderRect = slider.getBoundingClientRect();
+            const offsetX = e.clientX - sliderRect.left;
+            const percentage = Math.min(Math.max(offsetX / sliderRect.width, 0), 1);
+            const newPain = Math.round(percentage * 10);
+            updateCharacterPosition(newPain);
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const sliderRect = slider.getBoundingClientRect();
+                const offsetX = e.clientX - sliderRect.left;
+                const percentage = Math.min(Math.max(offsetX / sliderRect.width, 0), 1);
+                const newPain = Math.round(percentage * 10);
+                updateCharacterPosition(newPain);
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        function updateCharacterPosition(painLevel) {
+            slider.value = painLevel;
+            painValue.textContent = painLevel;
+
+            // 更新小人位置
+            const percentage = (painLevel / 10) * 100;
+            character.style.left = `calc(${percentage}% - 15px)`;
+
+            // 更新表情
+            updateCharacterAppearance(painLevel);
+        }
+
+        function updateCharacterAppearance(painLevel) {
+            const character = document.getElementById('character');
+            if (painLevel <= 4) {
+                character.className = 'character green';
+                character.innerHTML = '&#128578;'; // 😊 笑臉
+            } else if (painLevel <= 6) {
+                character.className = 'character orange';
+                character.innerHTML = '&#128528;'; // 😐 平淡
+            } else if (painLevel <= 9) {
+                character.className = 'character red';
+                character.innerHTML = '&#128577;'; // ☹️ 難過
+            } else {
+                character.className = 'character red';
+                character.innerHTML = '&#128557;'; // 😭 哭臉
+            }
+        }
+
+        // 初始化頁面
+        updateForm();
+    </script>
+</body>
+</html>

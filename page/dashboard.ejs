@@ -1,0 +1,496 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理員介面</title>
+        <style> 
+        body {
+            background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 漸變效果 */
+            height: 100vh; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-family: Arial, sans-serif; 
+            padding : 0; 
+            } 
+        </style> 
+    <style>
+        body {
+            font-family: "標楷體", Arial, sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .container {
+            width: 30%;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 15px;
+        }
+        .menu-item {
+            display: block;
+            padding: 10px;
+            margin: 10px;
+            background-color: #f0f0f0;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .menu-item:hover {
+            background-color: pink;
+            transform: scale(1.05);
+        }
+        .form-container, .table-container {
+            display: none;
+            margin: 10px auto;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 80%;
+        }
+        input, select, button {
+            display: block;
+            width: 85%;
+            margin: 6px auto;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+        button {
+            background-color: rgb(195, 0, 255);
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+            font-size: 12px;
+            padding: 8px 10px;
+            border-radius: 8px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #565e64;
+        }
+        /* 三角形按鈕樣式 */
+        #toggle-items {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: transparent;
+            position: relative;
+            cursor: pointer;
+        }
+
+        #toggle-items::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(0deg);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid black;
+            transition: transform 0.3s;
+        }
+
+        #toggle-items.active::before {
+            transform: translate(-50%, -50%) rotate(180deg);
+        }
+
+        /* 編輯區塊 */
+        #edit-items-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>管理員權限</h2>
+    <div class="menu-item" onclick="toggleForm('form-add')">權限新增</div>
+    <div class="form-container" id="form-add">
+        <h3>新增權限</h3>
+        <input type="text" placeholder="員工編號">
+        <input type="text" placeholder="員工姓名">
+        <select>
+            <option>管理者</option>
+            <option>修改者</option>
+            <option>檢視者</option>
+        </select>
+        <button>新增</button>
+    </div>
+
+    <div class="menu-item" onclick="toggleForm('form-edit')">權限修改</div>
+    <div class="form-container" id="form-edit">
+        <h3>修改權限</h3>
+        <input type="text" placeholder="員工編號">
+        <input type="text" placeholder="員工姓名">
+        <select>
+            <option>管理者</option>
+            <option>修改者</option>
+            <option>檢視者</option>
+        </select>
+        <button>更新</button>
+    </div>
+
+    <div class="menu-item" onclick="toggleForm('form-delete')">權限刪除</div>
+    <div class="form-container" id="form-delete">
+        <h3>刪除權限</h3>
+        <input type="text" placeholder="員工編號">
+        <input type="text" placeholder="員工姓名">
+        <button>刪除</button>
+    </div>
+
+    <div class="menu-item" onclick="toggleForm('table-container')">查看所有權限</div>
+    <div class="table-container" id="table-container">
+        <table>
+            <tr>
+                <th>員工編號</th>
+                <th>&emsp;姓名</th>
+                <th>&emsp;權限</th>
+                <th>&emsp;權限修改</th>
+            </tr>
+            <tr id="row-001">
+                <td>001</td>
+                <td>&emsp;王小明</td>
+                <td>&emsp;管理者</td>
+                <td><button onclick="populateForm('001', '王小明', '管理者')">修改</button></td>
+            </tr>
+            <tr id="row-002">
+                <td>002</td>
+                <td>&emsp;李大華</td>
+                <td>&emsp;修改者</td>
+                <td><button onclick="populateForm('002', '李大華', '修改者')">修改</button></td>
+            </tr>
+            <tr id="row-003">
+                <td>003</td>
+                <td>&emsp;陳美玲</td>
+                <td>&emsp;檢視者</td>
+                <td><button onclick="populateForm('003', '陳美玲', '檢視者')">修改</button></td>
+            </tr>
+            <tr id="row-004">
+                <td>004</td>
+                <td>&emsp;張志強</td>
+                <td>&emsp;管理者</td>
+                <td>
+                    <button onclick="populateForm('004', '張志強', '管理者')">修改</button>
+                </td>
+            </tr>
+            <tr id="row-005">
+                <td>005</td>
+                <td>&emsp;林佳蓉</td>
+                <td>&emsp;修改者</td>
+                <td>
+                    <button onclick="populateForm('005', '林佳蓉', '修改者')">修改</button>
+                </td>
+            </tr>
+            <tr id="row-006">
+                <td>006</td>
+                <td>&emsp;王大明</td>
+                <td>&emsp;管理者</td>
+                <td>
+                    <button onclick="populateForm('006', '王大明', '管理者')">修改</button>
+                </td>
+            </tr>
+            <tr id="row-007">
+                <td>007</td>
+                <td>&emsp;李小華</td>
+                <td>&emsp;修改者</td>
+                <td>
+                    <button onclick="populateForm('007', '李小華', '修改者')">修改</button>
+                </td>
+            </tr>
+            <tr id="row-008">
+                <td>008</td>
+                <td>&emsp;陳美惠</td>
+                <td>&emsp;檢視者</td>
+                <td>
+                    <button onclick="populateForm('008', '陳美惠', '檢視者')">修改</button>
+                </td>
+            </tr>
+            <tr id="row-009">
+                <td>009</td>
+                <td>&emsp;張國強</td>
+                <td>&emsp;管理者</td>
+                <td>
+                    <button onclick="populateForm('009', '張國強', '管理者')">修改</button>
+                </td>
+            </tr>
+            <tr id="row-010">
+                <td>010</td>
+                <td>&emsp;林奇蓉</td>
+                <td>&emsp;修改者</td>
+                <td>
+                    <button onclick="populateForm('010', '林奇蓉', '修改者')">修改</button>
+                </td>
+            </tr>
+            
+        </table>
+    </div>
+    <h2>
+        編輯頁面
+        <button id="toggle-items"></button>
+    </h2>
+        
+        <div id="edit-items-container">
+            <div class="menu-item" onclick="toggleForm('form-add-item')">新增項目</div>
+            <div class="form-container" id="form-add-item">
+                <h3>新增項目</h3>
+                <input type="text" placeholder="項目名稱">
+                <input type="text" placeholder="項目內容">
+                <button>新增</button>
+            </div>
+        
+            <div class="menu-item" onclick="toggleForm('form-edit-item')">修改項目</div>
+            <div class="form-container" id="form-edit-item">
+                <h3>修改項目</h3>
+                <input type="text" placeholder="項目名稱">
+                <input type="text" placeholder="項目內容">
+                <button>更新</button>
+            </div>
+        
+            <div class="menu-item" onclick="toggleForm('form-delete-item')">刪除項目</div>
+            <div class="form-container" id="form-delete-item">
+                <h3>刪除項目</h3>
+                <input type="text" placeholder="項目名稱">
+                <input type="text" placeholder="項目內容">
+                <button>刪除</button>
+            </div>
+        </div>
+ 
+    
+<script>
+document.getElementById('toggle-items').addEventListener('click', function () {
+    let container = document.getElementById('edit-items-container');
+    if (container.style.display === 'none' || container.style.display === '') {
+        container.style.display = 'block';
+        this.classList.add('active'); // 三角形向下
+    } else {
+        container.style.display = 'none';
+        this.classList.remove('active'); // 三角形向上
+    }
+});
+
+// 監聽員工編號輸入框，當使用者輸入時，自動填入對應的姓名
+document.querySelectorAll('input[placeholder="員工編號"]').forEach(input => {
+    input.addEventListener('input', function () {
+        const empId = this.value.trim(); // 取得輸入的員工編號
+        const nameInput = this.closest('.form-container').querySelector('input[placeholder="員工姓名"]');
+        
+        if (employeesData[empId]) {
+            nameInput.value = employeesData[empId]; // 自動填入姓名
+        } else {
+            nameInput.value = ''; // 若找不到對應姓名，則清空
+        }
+    });
+});
+// 監聽輸入框變化
+document.addEventListener("DOMContentLoaded", function () {
+    const empIdInputs = document.querySelectorAll(".auto-fill-emp-name"); // 選取所有自動填入的欄位
+    empIdInputs.forEach(input => {
+        input.addEventListener("input", function () {
+            autoFillEmployeeName(this);
+        });
+    });
+});
+
+// 自動填入員工姓名的函式
+function autoFillEmployeeName(inputElement) {
+    const empId = inputElement.value.trim(); // 取得輸入的員工編號
+    let userData = JSON.parse(localStorage.getItem('userData')) || {}; // 讀取 localStorage
+
+    // 獲取輸入框對應的姓名欄位
+    let nameField = inputElement.closest("form").querySelector(".emp-name");
+
+    if (userData[empId]) {
+        nameField.value = userData[empId].empName; // 自動填入姓名
+    } else {
+        nameField.value = ""; // 若找不到對應資料，清空姓名欄位
+    }
+}
+
+
+// 新的 populateForm 函數，用來將資料填充到權限修改表單
+function toggleForm(formId) {
+    let elements = document.querySelectorAll('.form-container, .table-container');
+    elements.forEach(element => {
+        element.style.display = (element.id === formId && element.style.display !== "block") ? "block" : "none";
+    });
+
+    // 當打開刪除權限表單時，自動填入姓名
+    if (formId === "form-delete") {
+        document.querySelector('#form-delete input[placeholder="員工編號"]').addEventListener("input", function () {
+            let empId = this.value;
+            let userData = JSON.parse(localStorage.getItem('userData')) || {};
+            if (userData[empId]) {
+                document.querySelector('#form-delete input[placeholder="員工姓名"]').value = userData[empId].empName;
+            } else {
+                document.querySelector('#form-delete input[placeholder="員工姓名"]').value = "";
+            }
+        });
+    }
+}
+
+
+// populateForm 用來填充表單
+function populateForm(empId, empName, empRole) {
+    document.querySelector('#form-edit input[placeholder="員工編號"]').value = empId;
+    document.querySelector('#form-edit input[placeholder="員工姓名"]').value = empName;
+    document.querySelector('#form-edit select').value = empRole;
+    
+    toggleForm('form-edit');
+}
+
+// 更新資料
+function updateData() {
+    const empId = document.querySelector('#form-edit input[placeholder="員工編號"]').value;
+    const empName = document.querySelector('#form-edit input[placeholder="員工姓名"]').value;
+    const empRole = document.querySelector('#form-edit select').value;
+
+    // 更新表格中的資料
+    let row = document.querySelector(`#row-${empId}`);
+    if (row) {
+        row.cells[1].innerHTML = `&emsp;${empName}`;  // 保持縮進格式
+        row.cells[2].innerHTML = `&emsp;${empRole}`;
+    }
+
+    // 存儲到 localStorage
+    let userData = JSON.parse(localStorage.getItem('userData')) || {};
+    userData[empId] = { empName, empRole };
+    localStorage.setItem('userData', JSON.stringify(userData));
+
+    // 隱藏表單
+    toggleForm('');
+}
+
+function addData() {
+    const empId = document.querySelector('#form-add input[placeholder="員工編號"]').value;
+    const empName = document.querySelector('#form-add input[placeholder="員工姓名"]').value;
+    const empRole = document.querySelector('#form-add select').value;
+
+    let table = document.querySelector("#table-container table");
+
+    // 檢查是否已存在該員工編號，若存在則更新而非新增
+    let existingRow = document.querySelector(`#row-${empId}`);
+    if (existingRow) {
+        existingRow.cells[1].innerHTML = `&emsp;${empName}`;
+        existingRow.cells[2].innerHTML = `&emsp;${empRole}`;
+    } else {
+        // 新增表格行
+        let newRow = table.insertRow();
+        newRow.id = `row-${empId}`;
+        newRow.innerHTML = `
+            <td>${empId}</td>
+            <td>&emsp;${empName}</td>
+            <td>&emsp;${empRole}</td>
+            <td><button onclick="populateForm('${empId}', '${empName}', '${empRole}')">修改</button></td>
+        `;
+    }
+
+    // 存入 localStorage
+    let userData = JSON.parse(localStorage.getItem('userData')) || {};
+    userData[empId] = { empName, empRole };
+    localStorage.setItem('userData', JSON.stringify(userData));
+
+    // 隱藏表單
+    toggleForm('');
+}
+document.querySelector('#form-add button').addEventListener('click', addData);
+
+function deleteData() {
+    const empId = document.querySelector('#form-delete input[placeholder="員工編號"]').value;
+
+    let row = document.querySelector(`#row-${empId}`);
+    if (row) {
+        row.remove();  // 刪除表格中的該行
+    } else {
+        alert("找不到該員工編號！");
+        return;
+    }
+    confirm("確定要刪除該員工嗎？")
+
+    // 從 localStorage 刪除
+    let userData = JSON.parse(localStorage.getItem('userData')) || {};
+    delete userData[empId];
+    localStorage.setItem('userData', JSON.stringify(userData));
+
+    // 隱藏表單
+    toggleForm('');
+}
+document.querySelector('#form-delete button').addEventListener('click', deleteData);
+
+function loadData() {
+    let userData = JSON.parse(localStorage.getItem('userData')) || {};
+    let table = document.querySelector("#table-container table");
+
+    Object.keys(userData).forEach(empId => {
+        // 確保不重複新增
+        if (!document.querySelector(`#row-${empId}`)) {
+            let row = document.createElement("tr");
+            row.id = `row-${empId}`;
+            row.innerHTML = `
+                <td>${empId}</td>
+                <td>&emsp;${userData[empId].empName}</td>
+                <td>&emsp;${userData[empId].empRole}</td>
+                <td><button onclick="populateForm('${empId}', '${userData[empId].empName}', '${userData[empId].empRole}')">修改</button></td>
+            `;
+            table.appendChild(row);
+        }
+    });
+}
+
+// 頁面載入時執行
+window.onload = loadData;
+
+
+
+// 綁定更新按鈕事件
+document.querySelector('#form-edit button').addEventListener('click', updateData);
+
+
+    function goBack() {
+        window.location.href = '/result'; // 返回主頁面
+    }
+
+    function goToSettings() {
+        window.location.href = '/settings'; // 前往設定頁面
+    }
+</script>
+
+</body>
+</html>

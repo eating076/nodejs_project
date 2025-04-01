@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.6">
+    <title>產後憂鬱量表</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style> 
+    body {
+        background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 漸變效果 */
+        height: 100vh; 
+        margin: 0; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        font-family: Arial, sans-serif; 
+        padding : 0; 
+        } 
+    </style> 
+    <style> 
+    body { 
+        background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 漸變效果 */ 
+        height: 100vh; margin: 0; display: flex; justify-content: center; /* 水平居中 */ 
+        align-items: flex-start; /* 改為頂部對齊 */ 
+        font-family: Arial, sans-serif; padding: 10px; /* 增加整體的內邊距 */ 
+        } 
+        .left-bottom { 
+            max-width: 400px; 
+            margin: 40px; /* 減小上下間距 */ 
+            padding: 65px;
+            background-color: #e1d8e1; 
+            border-radius: 8px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+            flex: 1; } 
+            .line { width: 100%; /* 線條寬度 */ 
+            height: 1px; /* 線條高度 */ 
+            background-color: #ccc; /* 線條顏色 */ 
+            margin: 20px 0; /* 與上下內容的間距 */ 
+            } 
+            .left-top { 
+            width: 100%; 
+            border-collapse: collapse; 
+            text-align: center; 
+            margin-right : 70px; 
+            margin-left : 100px; 
+            flex :1; 
+            } 
+            h1 { 
+                text-align: center; 
+                color: #333; 
+            } 
+            .profile-header { 
+                text-align: center; 
+                margin-bottom: 20px; 
+            } 
+            .profile-header img { 
+                width: 150px; 
+                height: 150px; 
+                border-radius: 50%;
+            } 
+            .profile-header h2 { 
+                margin: 10px 0; 
+                color: #333; 
+            } 
+            .profile-header p { 
+                color: #777;
+             } 
+            .profile-info { 
+                margin-top: 20px; 
+            } 
+            .profile-info h3 { 
+                color: #333;
+            } 
+            .profile-info ul { 
+                list-style-type: none; 
+                padding: 0; 
+            } 
+            .profile-info ul li { 
+                margin: 10px 0; 
+                color: #555; 
+            } footer { 
+                text-align: center; 
+                margin-top: 20px; 
+                color: #777; 
+            } 
+    </style>
+</head>
+<body>
+    <div class="left-bottom">
+        <div class="profile-header">
+            <h2>個人基本資訊</h2>
+             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrjDKvX46GOpgDflhYQ7KI9fewSC6y552-hA&s" alt="頭像" class="profile-picture">
+        </div>
+        <div class="line"></div>
+        <div class="profile-info">
+            <ul>
+                <li><strong>姓名：</strong> 蔡昆佑</li>
+                <li><strong>年齡：</strong> 25</li>
+                <li><strong>生日：</strong> 2002/01/01</li>
+                <li><strong>血型：</strong> O型</li>
+                <li><strong>稱謂：</strong> 新手爸爸</li>
+                <li><strong>身分證字號：</strong> F131420505</li>
+                <li><strong>通訊地址：</strong> 新北市淡水區XX路XX段XX號XX樓</li>
+                <li><strong>連絡電話：</strong> 0900-123-123</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>© 2025 xx醫院 | 版權所有</p>
+        </footer>
+    </div>
+</body>
+    <style>
+        body {
+            font-family: "標楷體", Arial, sans-serif;
+            background-color: #c2aecc;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            flex: 1;  /* 讓此區塊占據剩餘空間 */
+        }
+
+        .right-bottom {
+            width: 90%;
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            overflow-x: auto;
+            position: relative;
+            flex: 2;
+            height: 600px; /* 固定高度 */
+            overflow-y: auto; /* 允許垂直滾動 */
+            margin-left : 50px;
+        }
+
+        .right-top {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            margin-right : 0px;
+            margin-left : 50px;
+            flex :1;
+        }
+        .settings-icon {
+            position: absolute;
+            top: 10px;
+            right: 5px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            transition: color 0.3s;
+        }
+        .settings-icon:hover {
+            color: #4b5563;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #c8b1d7;
+        }
+        .score-low {
+            color: red;
+            font-weight: bold;
+        }
+        .weight-change {
+            color: red;
+        }
+        .love-score {
+            padding: 5px;
+            border-radius: 5px;
+            display: inline-block;
+            width: 40px;
+            text-align: center;
+            color: rgb(3, 3, 3);
+            font-weight: bold;
+        }
+        .btn-info {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 3px 6px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+        .btn-info:hover {
+            background-color: #0056b3;
+        }
+
+        /* 色階設定 */
+        .level-0 { background-color: rgb(253, 255, 144); }
+        .level-1 { background-color: #b1f3ba; }
+        .level-2 { background-color: #7ee77e; }
+        .level-3 { background-color: #07bd07; }
+        .level-4 { background-color: #008000; }
+
+        /* 彈出視窗 */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 300px;
+            width: 80%;
+        }
+        .popup img {
+            width: 100%;
+        }
+        .popup .close-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #565e64;
+        }
+        .buttons-container {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+    }
+    .buttons-container button {
+        flex: 1;
+        margin: 0 5px;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+    }
+    .step-count { background-color: #28a745; }
+    .test-score { background-color: #ffc107; }
+    .analysis-result { background-color: #17a2b8; }
+    .progress-check { background-color: #6c757d; }
+    .goback{background-color: rgb(255, 0, 0);}
+    </style>
+</head>
+<body>
+    <div class="right">
+        <a href="/settings" class="settings-icon">
+           <i class="fas fa-cog"></i>
+        </a>
+        <div class="right-top">
+            <!-- 步數統計按鈕 -->
+            <button class="step-count" onclick="window.location.href='/steps'">步數統計</button>
+            <!-- 測驗分數按鈕 -->
+            <button class="test-score">測驗分數
+            <td>
+                <select name="score-dropdown" onchange="handleSelection(this.value)">
+                    <option value="" selected>產後憂鬱量表</option>
+                    <option value="support_assessment">生產支持知覺量表</option>
+                    <option value="attachment_support">親子依附支持量表</option>
+                    <option value="knowledge">母乳知識量表</option>
+                    <option value="dour">產後憂鬱量表</option>
+                    <option value="hurt">疼痛量表</option>
+                    <option value="sleep">匹茲堡睡眠品質量表</option>
+                </select>
+            </td>
+        </button>
+            
+            <script>
+                function handleSelection(value) {
+                    if (value) {
+                        window.location.href = `/${value}`;
+                    }
+                }
+            </script>
+            
+            
+            <!-- 分析結果按鈕 -->
+            <button class="analysis-result" onclick="window.location.href='/analysis'">分析結果</button>
+            <!-- 進階查詢按鈕 -->
+            <button class="progress-check" onclick="window.location.href='/advanced_search'">進階查詢</button>
+
+            <button class="goback" onclick="window.location.href='/index'">重新查詢</button>
+        </div>
+        <hr style="margin-left: 200px;">
+        
+        <div class="right-bottom">
+        <h2>產後憂鬱量表 </h2>
+        <div class="line"></div>
+        <p class="info">姓名: 蔡昆佑 &nbsp;&nbsp;&nbsp;&nbsp; 患者 ID: 123456</p>
+        <table>
+        <thead>
+            <tr>
+                <th>階段</th>
+                <th>測驗日期</th>
+                <th>壓力指數</th>
+                <th>體重變化</th>
+                <th>憂鬱指數 <button class="btn-info" onclick="showPopup()">?</button></th>
+                <th id="score-section">測驗分數</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>2024/12/01</td>
+                <td>3</td>
+                <td>53</td>
+                <td><span class="love-score level-0">3</span></td>
+                <td>72</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>2024/12/08</td>
+                <td>4</td>
+                <td>57 <span class="weight-change">▲4</span></td>
+                <td><span class="love-score level-0">4</span></td>
+                <td>77</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>2024/12/15</td>
+                <td>7</td>
+                <td>58 <span class="weight-change">▲1</span></td>
+                <td><span class="love-score level-2">11</span></td>
+                <td class="score-low">58</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>2024/12/15</td>
+                <td>7</td>
+                <td>65 <span class="weight-change">▲7</span></td>
+                <td><span class="love-score level-1">7</span></td>
+                <td class="score-low">56</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>2024/12/15</td>
+                <td>7</td>
+                <td>66 <span class="weight-change">▲1</span></td>
+                <td><span class="love-score level-3">19</span></td>
+                <td class="score-low">56</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>2024/12/15</td>
+                <td>9</td>
+                <td>68 <span class="weight-change">▲2</span></td>
+                <td><span class="love-score level-4">23</span></td>
+                <td class="score-low">44</td>
+            </tr>
+
+            <tr>
+                <td>7</td>
+                <td>2024/12/15</td>
+                <td>9</td>
+                <td>68 <span class="weight-change"></span></td>
+                <td><span class="love-score level-4">23</span></td>
+                <td class="score-low">44</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>2024/12/15</td>
+                <td>9</td>
+                <td>68 <span class="weight-change"></span></td>
+                <td><span class="love-score level-4">23</span></td>
+                <td class="score-low">44</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>2024/12/15</td>
+                <td>9</td>
+                <td>68 <span class="weight-change"></span></td>
+                <td><span class="love-score level-4">23</span></td>
+                <td class="score-low">44</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>2024/12/15</td>
+                <td>9</td>
+                <td>68 <span class="weight-change"></span></td>
+                <td><span class="love-score level-4">23</span></td>
+                <td class="score-low">44</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>2024/12/15</td>
+                <td>9</td>
+                <td>68 <span class="weight-change"></span></td>
+                <td><span class="love-score level-4">23</span></td>
+                <td class="score-low">44</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>2024/12/15</td>
+                <td>9</td>
+                <td>68 <span class="weight-change"></span></td>
+                <td><span class="love-score level-4">23</span></td>
+                <td class="score-low">44</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+
+<div id="popup" class="popup">
+    <h3>PHQ-9 (0-27) 評分標準</h3>
+    <img src="PHQ9.png" alt="PHQ-9 色階圖">
+    <br>
+    <button class="close-btn" onclick="closePopup()">關閉</button>
+</div>
+
+<script>
+    function showPopup() {
+        document.getElementById("popup").style.display = "block";
+    }
+
+    function closePopup() {
+        document.getElementById("popup").style.display = "none";
+    }
+    function goBack() {
+        window.location.href = '/scores'; // 返回測驗分數頁面
+    }
+</script>
+</body>
+</html>

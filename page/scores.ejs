@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>測驗分數</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        body {
+            font-family: "標楷體", Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 350px;
+            text-align: center;
+            position: relative; 
+        }
+
+        .settings-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .settings-icon:hover {
+            color: #007bff;
+        }
+
+        .container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .button-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .button-list button {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            background-color: white;
+            color: #007bff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .button-list button:hover {
+            background-color: #007bff;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-list button:active {
+            transform: scale(0.98);
+        }
+        .btn {
+            padding: 12px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #565e64;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="settings-icon" onclick="goToSettings()">⚙️</div>
+
+        <h1>測驗分數</h1>
+        <div class="button-list">
+            <button onclick="goToPage('/support_assessment')">生產支持知覺量表</button>
+            <button onclick="goToPage('/attachment_support')">親子依附支持量表</button>
+            <button onclick="goToPage('/knowledge')">母乳知識量表</button>
+            <button onclick="goToPage('/dour')">產後憂鬱量表</button>
+            <button onclick="goToPage('/hurt')">疼痛量表</button>
+            <button onclick="goToPage('/sleep')">匹茲堡睡眠品質量表</button>
+        </div>
+
+        <br>
+
+        <div class="buttons">
+            <button class="btn btn-secondary" onclick="goBack()">返回個資</button>
+        </div>
+
+        <script>
+            function goBack() {
+            window.location.href = '/result'; // 返回主頁面
+        }
+        </script>
+
+
+    </div>
+
+    <script>
+        function goToSettings() {
+            window.location.href = '/settings'; // 跳轉到設定頁面
+        }
+
+        function goToPage(page) {
+            window.location.href = page;
+        }
+    </script>
+
+</body>
+</html>

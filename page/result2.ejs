@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查詢結果</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+    body {
+        font-family: "標楷體", Arial, sans-serif;
+        background-color: #f3f4f6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+    }
+    .result-container {
+        width: 90%;
+        max-width: 600px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        position: relative;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    .info-group {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    .info-group span.label {
+        font-weight: bold;
+    }
+    .emergency-contact {
+        background-color: #fff7e6;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+    .buttons-container {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+    }
+    .buttons-container button {
+        flex: 1;
+        margin: 0 5px;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+    }
+    .step-count { background-color: #28a745; }
+    .test-score { background-color: #ffc107; }
+    .analysis-result { background-color: #17a2b8; }
+    .progress-check { background-color: #6c757d; }
+    .goback{background-color: rgb(255, 0, 0);}
+    
+    /* 設定圖示 */
+    .settings-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 24px;
+        cursor: pointer;
+    }
+</style>
+
+</head>
+<body>    
+    <div class="result-container">
+            <div class="container">
+                <!-- 設定圖示 -->
+                <div class="settings-icon" onclick="goToSettings()">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <h1>查詢結果</h1>
+
+        <div class="info-group">
+            <span class="label">姓名：</span> 張美麗
+        </div>
+        <div class="info-group">
+            <span class="label">性別：</span> 女
+        </div>
+        <div class="info-group">
+            <span class="label">生日：</span> 91/02/10
+        </div>
+        <div class="info-group">
+            <span class="label">血型：</span> b型
+        </div>
+        <div class="info-group">
+            <span class="label">身分證字號：</span> G230976452
+        </div>
+        <div class="info-group">
+            <span class="label">通訊地址：</span> 宜蘭縣礁溪鄉XX路XX段XX號XX樓
+        </div>
+        <div class="emergency-contact">
+            <b>緊急聯絡人 1：</b><br>
+            姓名：陳哈囉<br>
+            關係：夫妻<br>
+            連絡電話：0934-789-345
+        </div>
+        <div class="emergency-contact">
+            <b>緊急聯絡人 2：</b><br>
+            姓名：張溫馨<br>
+            關係：姊妹<br>
+            連絡電話：0978-000-999
+        </div>
+        
+        <!-- 按鈕區塊 -->
+        <div class="buttons-container">
+            <!-- 步數統計按鈕 -->
+            <button class="step-count" onclick="window.location.href='/steps'">步數統計</button>
+            <!-- 測驗分數按鈕 -->
+            <button class="test-score" onclick="window.location.href='/scores'">測驗分數</button>
+            <!-- 分析結果按鈕 -->
+            <button class="analysis-result" onclick="window.location.href='/analysis'">分析結果</button>
+            <!-- 進階查詢按鈕 -->
+            <button class="progress-check" onclick="window.location.href='/advanced_search'">進階查詢</button>
+
+            <button class="goback" onclick="window.location.href='/index'">重新查詢</button>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        function goToSettings() {
+            window.location.href = '/settings';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.6">
+    <title>進階查詢</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style> 
+        body {
+            background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 漸變效果 */
+            height: 100vh; 
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-family: Arial, sans-serif; 
+            padding : 0; 
+            } 
+        </style> 
+        <style> 
+        body { 
+            background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 漸變效果 */ 
+            height: 100vh; margin: 0; display: flex; justify-content: center; /* 水平居中 */ 
+            align-items: flex-start; /* 改為頂部對齊 */ 
+            font-family: Arial, sans-serif; padding: 10px; /* 增加整體的內邊距 */ 
+            } 
+            .left-bottom { 
+                max-width: 400px; 
+                margin: 40px; /* 減小上下間距 */ 
+                padding: 65px;
+                background-color: #e1d8e1; 
+                border-radius: 8px; 
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+                flex: 1;
+             } 
+                .line { width: 100%; /* 線條寬度 */ 
+                height: 1px; /* 線條高度 */ 
+                background-color: #ccc; /* 線條顏色 */ 
+                margin: 20px 30px 20px 30px;
+
+                } 
+                .left-top { 
+                width: 100%; 
+                border-collapse: collapse; 
+                text-align: center; 
+                margin-right : 70px; 
+                margin-left : 100px; 
+                flex :1; 
+                } 
+                h1 { 
+                    text-align: center; 
+                    color: #333; 
+                } 
+                .profile-header { 
+                    text-align: center; 
+                    margin-bottom: 20px; 
+                } 
+                .profile-header img { 
+                    width: 150px; 
+                    height: 150px; 
+                    border-radius: 50%;
+                } 
+                .profile-header h2 { 
+                    margin: 10px 0; 
+                    color: #333; 
+                } 
+                .profile-header p { 
+                    color: #777;
+                 } 
+                .profile-info { 
+                    margin-top: 20px; 
+                } 
+                .profile-info h3 { 
+                    color: #333;
+                } 
+                .profile-info ul { 
+                    list-style-type: none; 
+                    padding: 0; 
+                } 
+                .profile-info ul li { 
+                    margin: 10px 0; 
+                    color: #555; 
+                } footer { 
+                    text-align: center; 
+                    margin-top: 20px; 
+                    color: #777; 
+                } 
+        </style>
+</head>
+<body>
+    <div class="left-bottom">
+        <div class="profile-header">
+            <h2>個人基本資訊</h2>
+             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrjDKvX46GOpgDflhYQ7KI9fewSC6y552-hA&s" alt="頭像" class="profile-picture">
+        </div>
+        <div class="line"></div>
+        <div class="profile-info">
+            <ul>
+                <li><strong>姓名：</strong> 蔡昆佑</li>
+                <li><strong>年齡：</strong> 25</li>
+                <li><strong>生日：</strong> 2002/01/01</li>
+                <li><strong>血型：</strong> O型</li>
+                <li><strong>稱謂：</strong> 新手爸爸</li>
+                <li><strong>身分證字號：</strong> F131420505</li>
+                <li><strong>通訊地址：</strong> 新北市淡水區XX路XX段XX號XX樓</li>
+                <li><strong>連絡電話：</strong> 0900-123-123</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>© 2025 xx醫院 | 版權所有</p>
+        </footer>
+    </div>
+</body>
+<style>
+    body {
+        font-family: "標楷體", Arial, sans-serif;
+        background-color: #c2aecc;
+        padding: 20px;
+        margin: 0;
+        display: flex;
+        flex: 1;  /* 讓此區塊占據剩餘空間 */
+    }
+
+    .right-bottom {
+        width: 90%;
+        max-width: 900px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        overflow-x: auto;
+        position: relative;
+        flex: 2;
+        height: 600px; /* 固定高度 */
+        overflow-y: auto; /* 允許垂直滾動 */
+        margin-left : 50px;
+    }
+
+    .right-top {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+        margin-right : 0px;
+        margin-left : 50px;
+        flex :1;
+    }
+    .settings-icon {
+        position: absolute;
+        top: 10px;
+        right: 5px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #6b7280;
+        transition: color 0.3s;
+    }
+    .settings-icon:hover {
+        color: #4b5563;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    th {
+        background-color: #c8b1d7;
+    }
+    .score-low {
+        color: red;
+        font-weight: bold;
+    }
+    .weight-change {
+        color: red;
+    }
+    .love-score {
+        padding: 5px;
+        border-radius: 5px;
+        display: inline-block;
+        width: 40px;
+        text-align: center;
+        color: rgb(3, 3, 3);
+        font-weight: bold;
+    }
+    .btn-info {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 3px 6px;
+        font-size: 12px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-left: 5px;
+    }
+    .btn-info:hover {
+        background-color: #0056b3;
+    }
+
+    /* 色階設定 */
+    .level-0 { background-color: rgb(253, 255, 144); }
+    .level-1 { background-color: #b1f3ba; }
+    .level-2 { background-color: #7ee77e; }
+    .level-3 { background-color: #07bd07; }
+    .level-4 { background-color: #008000; }
+
+    /* 彈出視窗 */
+    .popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 300px;
+        width: 80%;
+    }
+    .popup img {
+        width: 100%;
+    }
+    .popup .close-btn {
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-top: 10px;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 12px 20px;
+        font-size: 18px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #565e64;
+    }
+    .buttons-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+.buttons-container button {
+    flex: 1;
+    margin: 0 5px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+.step-count { background-color: #28a745; }
+.test-score { background-color: #ffc107; }
+.analysis-result { background-color: #17a2b8; }
+.progress-check { background-color: #6c757d; }
+.goback{background-color: rgb(255, 0, 0);}
+</style>
+</head>
+<body>
+    <div class="right">
+        <a href="/settings" class="settings-icon">
+           <i class="fas fa-cog"></i>
+        </a>
+        <div class="right-top">
+            <!-- 步數統計按鈕 -->
+            <button class="step-count" onclick="window.location.href='/steps'">步數統計</button>
+            <!-- 測驗分數按鈕 -->
+            <button class="test-score">測驗分數
+            <td>
+                <select name="score-dropdown" onchange="handleSelection(this.value)">
+                    <option value="" selected>請選擇量表</option>
+                    <option value="support_assessment">生產支持知覺量表</option>
+                    <option value="attachment_support">親子依附支持量表</option>
+                    <option value="knowledge">母乳知識量表</option>
+                    <option value="dour">產後憂鬱量表</option>
+                    <option value="hurt">疼痛量表</option>
+                    <option value="sleep">匹茲堡睡眠品質量表</option>
+                </select>
+            </td>
+        </button>
+            
+            <script>
+                function handleSelection(value) {
+                    if (value) {
+                        window.location.href = `/${value}`;
+                    }
+                }
+            </script>
+            
+            
+            <!-- 分析結果按鈕 -->
+            <button class="analysis-result" onclick="window.location.href='/analysis'">分析結果</button>
+            <!-- 進階查詢按鈕 -->
+            <button class="progress-check" onclick="window.location.href='/advanced_search'">進階查詢</button>
+
+            <button class="goback" onclick="window.location.href='/index'">重新查詢</button>
+        </div>
+        <hr style="margin-left: 50px;">
+<br>
+    <style>
+        body {
+            font-family: "標楷體", Arial, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            overflow-x: auto;
+            position: relative;
+            flex: 2;
+            height: 600px; /* 固定高度 */
+            overflow-y: auto; /* 允許垂直滾動 */
+            margin-left : 50px;
+            bottom:20px;
+        }
+        .settings-icon {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .settings-icon:hover {
+            color: #007bff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #c8b1d7;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .toggle-btn, .edit-btn {
+            background: #ddd;
+            border: none;
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            border-radius: 5px;
+            margin-left: 5px;
+        }
+
+        .toggle-btn:hover, .edit-btn:hover {
+            background: #bbb;
+        }
+
+        .toggle-content {
+            display: none;
+            text-align: left;
+            border-top: 1px solid #ddd;
+            background-color: #f9f9f9;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .toggle-content td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #565e64;
+        }
+
+    </style>
+
+    <script>
+        function toggleContent(index) {
+            const content = document.getElementById("content-" + index);
+            const button = document.getElementById("toggle-btn-" + index);
+
+            if (content.style.display === "none" || content.style.display === "") {
+                content.style.display = "table-row";
+                button.innerHTML = "▲";
+            } else {
+                content.style.display = "none";
+                button.innerHTML = "▼";
+            }
+        }
+
+        function editContent(index) {
+    const content = document.getElementById("content-" + index);
+    if (content.style.display === "none") {
+        toggleContent(index);
+    }
+
+    const contentTd = content.querySelector("td");
+    const strongTag = contentTd.querySelector("strong"); // 找到姓名部分
+    const editButton = contentTd.querySelector(".edit-btn"); // 找到編輯按鈕
+
+    // 取出姓名外的內容，去掉多餘空白
+    let otherText = contentTd.innerHTML
+        .replace(strongTag.outerHTML, "") // 移除姓名
+        .replace(editButton.outerHTML, "") // 移除編輯按鈕
+        .trim();
+
+    // 把 <br> 轉換成換行符號，讓 textarea 正確顯示
+    otherText = otherText.replace(/<br>/g, "\n");
+
+    // 創建 textarea
+    const textarea = document.createElement("textarea");
+    textarea.value = otherText;
+    textarea.style.width = "100%";
+    textarea.style.height = "100px";
+    textarea.style.fontSize = "14px";
+
+    // 創建「確定」按鈕
+    const saveButton = document.createElement("button");
+    saveButton.innerText = "確定";
+    saveButton.style.marginTop = "5px";
+    saveButton.onclick = function () {
+        let newText = textarea.value.trim(); // 去掉開頭結尾空格
+        newText = newText.replace(/\n/g, "<br>"); // 保持換行，但不額外增加 <br>
+
+        contentTd.innerHTML = `${strongTag.outerHTML}`; // 先加回姓名
+        if (newText) {
+            contentTd.innerHTML += `<br>${newText}`; // 只有當有內容時才加 <br>
+        }
+        contentTd.appendChild(document.createElement("br"));
+        contentTd.appendChild(editButton); // 保持編輯按鈕
+    };
+
+    // 清空內容並加入編輯區
+    contentTd.innerHTML = "";
+    contentTd.appendChild(strongTag);
+    contentTd.appendChild(document.createElement("br"));
+    contentTd.appendChild(textarea);
+    contentTd.appendChild(document.createElement("br"));
+    contentTd.appendChild(saveButton);
+}
+
+
+
+        function goToSettings() {
+            window.location.href = '/settings'; // 跳轉到設定頁面
+        }
+
+        function goBack() {
+            window.location.href = '/result'; // 返回主頁面
+        }
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>進階查詢</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>小孩排序</th>
+                    <th>姓名</th>
+                    <th>出生年月日</th>
+                    <th>血型</th>
+                    <th>More / 編輯</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>000740077</td>
+                    <td>1</td>
+                    <td>蔡平平(男)</td>
+                    <td>110 / 03 / 11</td>
+                    <td>A</td>
+                    <td>
+                        <button id="toggle-btn-1" class="toggle-btn" onclick="toggleContent(1)">▼</button>
+                    </td>
+                </tr>
+                <tr id="content-1" class="toggle-content">
+                    <td colspan="6">
+                        <strong>姓名：蔡平平</strong><br>
+                        體重 3.2 公斤，身長 49 公分，出生時呼吸順暢，哭聲響亮，皮膚紅潤。<br>
+                        無異常情況，APGAR 評分 9 分，母親生產過程順利。
+                        <button class="edit-btn" onclick="editContent(1)">✏️</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>001512033</td>
+                    <td>2</td>
+                    <td>蔡安安(女)</td>
+                    <td>112 / 07 / 09</td>
+                    <td>B</td>
+                    <td>
+                        <button id="toggle-btn-2" class="toggle-btn" onclick="toggleContent(2)">▼</button>
+                    </td>
+                </tr>
+                <tr id="content-2" class="toggle-content">
+                    <td colspan="6">
+                        <strong>姓名：蔡安安</strong><br>
+                        體重 3.3 公斤，身長 50 公分，哭聲強烈，皮膚紅潤，呼吸正常。<br>
+                        APGAR 評分 9 分，母親生產順利，無異常出血或併發症。
+                        <button class="edit-btn" onclick="editContent(2)">✏️</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>006534557</td>
+                    <td>3</td>
+                    <td>蔡昆佑之女</td>
+                    <td>114 / 05 / 11</td>
+                    <td>AB</td>
+                    <td>
+                        <button id="toggle-btn-3" class="toggle-btn" onclick="toggleContent(3)">▼</button>
+                    </td>
+                </tr>
+                <tr id="content-3" class="toggle-content">
+                    <td colspan="6">
+                        <strong>姓名：蔡昆佑之女</strong><br>
+                        體重 3.5 公斤，身長 51 公分，哭聲響亮，對光與聲音有正常反應。<br>
+                        APGAR 評分 10 分，母嬰健康狀況良好，醫護人員提供常規照護指導。
+                        <button class="edit-btn" onclick="editContent(3)">✏️</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br>
+
+    </div>
+
+</body>
+</html>
