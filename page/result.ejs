@@ -3,210 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>個人檔案</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        body {
-            background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 背景漸層 */
-            margin: 0;
-            font-family: "標楷體", Arial, sans-serif; /* 設置字體 */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+    <title>個人詳細資料</title>
+    <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      background: linear-gradient(to right, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.2)),
+        url('https://via.placeholder.com/1500x1000/87CEFA/ffffff?text=Background+Image') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'DFKai-SB', '標楷體', DFKai-SB, serif;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
 
-        .container {
-            display: flex;
-            gap: 30px;
-            width: 100%;
-            max-width: 1200px;
-        }
+    .container {
+    background-color: #fff;
+      background-size: cover;
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 1200px;
+      width: 90%; 
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      text-align: left;
+      display: flex;
+      height: auto;
+      flex-direction: column;
+      gap: 20px;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
 
-        /* 左側區塊樣式 */
-        .left-section {
-            flex: 1;
-            background-color: #e1d8e1;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 30px;
-            max-width: 400px;
-        }
+    h2 {
+      color: #007bff;
+      font-size: 26px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
 
-        .profile-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    .profile-section {
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 30px;
+      display: grid;
+    grid-template-columns: 1fr 1fr; /* 兩欄佈局 */
+    width: 100%; 
+    }
 
-        .profile-header img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
+    .left-section{
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: stretch; /* 按鈕寬度與區塊匹配 */
+    }
+    .right-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+    }
 
-        .profile-header h2 {
-            margin: 10px 0;
-            color: #333;
-        }
+    .info-card {
+      background: #f9f9f9;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
 
-        .line {
-            width: 100%;
-            height: 1px;
-            background-color: #ccc;
-            margin: 20px 0;
-        }
+    .info-card img {
+      border-radius: 50%;
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
 
-        .profile-info ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
+    .info-card p {
+      font-size: 16px;
+      color: #444;
+      margin: 5px 0;
+    }
 
-        .profile-info ul li {
-            margin: 10px 0;
-            color: #555;
-            font-size: 16px;
-        }
+    .email {
+      white-space: nowrap;
+    }
 
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 14px;
-            color: #777;
-        }
+    details summary {
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      color: #007bff;
+      margin-bottom: 10px;
+    }
 
-        /* 右側按鈕區塊樣式 */
-        .right-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 15px;
-        }
+    details p {
+      margin-left: 15px;
+    }
 
-        .button {
-            width: 100%;
-            max-width: 300px;
-            padding: 15px;
-            font-size: 16px;
-            font-weight: bold;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        /* 設定圖示 */
-        .settings-icon {
-            position: absolute;
-            color: #6b7280;
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .step-count {
-            background-color: #28a745;
-        }
-        .step-count:hover {
-            background-color: #218838;
-        }
-
-        .test-score {
-            background-color: #ffc107;
-        }
-        .test-score:hover {
-            background-color: #e0a800;
-        }
-
-        .analysis-result {
-            background-color: #17a2b8;
-        }
-        .analysis-result:hover {
-            background-color: #138496;
-        }
-
-        .progress-check {
-            background-color: #6c757d;
-        }
-        .progress-check:hover {
-            background-color: #5a6268;
-        }
-
-        .goback {
-            background-color: #dc3545;
-        }
-        .goback:hover {
-            background-color: #c82333;
-        }
-    </style>
+    .button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+    }
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+}
+    .step-count { background: #28a745; }
+    .test-score { background: #ffc107; color: #000; }
+    .analysis-result { background: #17a2b8; }
+    .progress-check { background: #6c757d; }
+    .goback { background: #dc3545; }
+  </style>
 </head>
 <body>
     <div class="container">
-        <!-- 設定圖示 -->
-        <div class="settings-icon" onclick="goToSettings()">
-            <i class="fas fa-cog"></i>
-        </div>
-        <!-- 左側區塊 -->
-        <div class="left-section">
-            <div class="profile-header">
-                <h2>個人基本資訊</h2>
+    <h2>個人基本資訊</h2>
+        <div class="profile-section">
+         <div class="left-section">
+       <!-- 個人資訊區塊，保持展開 -->
+              <div class="info-card always-show">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrjDKvX46GOpgDflhYQ7KI9fewSC6y552-hA&s" alt="頭像">
-            </div>
-            <div class="line"></div>
-            <div class="profile-info">
-                <ul>
-                    <li><strong>姓名：</strong> 蔡昆佑</li>
-                    <li><strong>年齡：</strong> 25</li>
-                    <li><strong>生日：</strong> 2002/01/01</li>
-                    <li><strong>血型：</strong> O型</li>
-                    <li><strong>稱謂：</strong> 新手爸爸</li>
-                    <li><strong>身分證字號：</strong> F131420505</li>
-                    <li><strong>通訊地址：</strong> 新北市淡水區XX路XX段XX號XX樓</li>
-                    <li><strong>連絡電話：</strong> 0900-123-123</li>
-                </ul>
-            </div>
-            <footer>
-                <p>© 2025 xx醫院 | 版權所有</p>
-            </footer>
+                
+                <% let queryStringParam = table === "users" ? "user_id" : "man_user_id"; %>
+                <% let recordId = user.id; %>
+                <p><strong>姓名：</strong><%= user.name || '未提供' %></p>
+                <p><strong>性別：</strong><%= user.gender || '未提供' %></p>
+                <p><strong>生日：</strong><%= user.formattedBirthdate || '未提供' %></p>
+                <p><strong>身高：</strong><%= user.height || '未提供' %></p>
+                <p><strong>電話：</strong><%= user.phone || '未提供' %></p>
+                 </div>
+        <!-- 卡片區塊 1 -->
+        <div class="info-card">
+          <details>
+            <summary>婚姻與健康資訊</summary>
+             <p><strong>婚姻狀況：</strong><%= user.marital_status || '未提供' %></p>
+             <p><strong>慢性病：</strong><%= user.chronic_illness || '未提供' %></p>
+             <p><strong>慢性病詳細資訊：</strong><%= user.chronic_illness_details || '無' %></p>
+          </details>
         </div>
-        <!-- 按鈕區塊 -->
-        <div class="right-section">
-            <!-- 步數統計按鈕 -->
-            <button class="button step-count" onclick="window.location.href='/steps'">步數統計</button>
-            <!-- 測驗分數按鈕 -->
-            <button class="button test-score">
-                測驗分數
-                <select name="score-dropdown" onchange="handleSelection(this.value)">
-                    <option value="" selected>請選擇量表</option>
-                    <option value="support_assessment">生產支持知覺量表</option>
-                    <option value="attachment_support">親子依附支持量表</option>
-                    <option value="knowledge">母乳知識量表</option>
-                    <option value="dour">產後憂鬱量表</option>
-                    <option value="hurt">疼痛量表</option>
-                    <option value="sleep">匹茲堡睡眠品質量表</option>
-                </select>
-            </button>
-            <!-- 分析結果按鈕 -->
-            <button class="button analysis-result" onclick="window.location.href='/analysis'">分析結果</button>
-            <!-- 進階查詢按鈕 -->
-            <button class="button progress-check" onclick="window.location.href='/advanced_search'">進階查詢</button>
-            <!-- 重新查詢按鈕 -->
-            <button class="button goback" onclick="window.location.href='/index'">重新查詢</button>
-        </div>
-    </div>
-    <script>
-        function goToSettings() {
-            window.location.href = '/settings';
-        }
 
-        function handleSelection(value) {
-            if (value) {
-                window.location.href = `/${value}`;
+                    <!-- 卡片區塊 3 -->
+        <div class="info-card">
+          <details>
+            <summary>習慣與聯絡偏好</summary>
+             <p><strong>嚼檳榔習慣：</strong><%= user.betel_nut_habit || '未提供' %></p>
+             <p><strong>吸菸習慣：</strong><%= user.smoking_habit || '未提供' %></p>
+             <p><strong>飲酒習慣：</strong><%= user.drinking_habit || '未提供' %></p>
+             <p><strong>聯絡方式偏好：</strong><%= user.contact_preference || '未提供' %></p>
+          </details>
+        </div>
+        </div>
+<div class="right-section">
+        <!-- 卡片區塊 4 -->
+        <div class="info-card">
+          <details>
+            <summary>其他資料</summary>
+             <% if (user) { %>
+                <p><strong>孕前體重：</strong><%= user.pre_pregnancy_weight || '未提供' %></p>
+             <% } %>
+             <p><strong>目前體重：</strong><%= user.current_weight || '未提供' %></p>
+                 <p><strong>是否新手媽媽：</strong><%= user.user_salutation || '未提供' %></p>
+                <p><strong>使用者帳號：</strong><%= user.user_account || '未提供' %></p>
+                 <p><strong>配對碼：</strong><%= user.pairing_code || '未提供' %></p>
+          </details>
+        </div>
+              <!-- 卡片區塊 2 -->
+        <div class="info-card">
+          <details>
+            <summary>緊急聯絡人</summary>
+                <p><strong>緊急聯絡人姓名：</strong><%= user.emergency_contact_name || '未提供' %></p>
+                <p><strong>聯絡人關係：</strong><%= user.emergency_contact_relation || '未提供' %></p>
+                <p><strong>緊急聯絡人電話：</strong><%= user.emergency_contact_phone || '未提供' %></p>  
+                <p><strong>第二緊急聯絡人姓名：</strong><%= user.emergency_contact_name2 || '未提供' %></p>
+                <p><strong>第二緊急聯絡人關係：</strong><%= user.emergency_contact_relation2 || '未提供' %></p>
+                <p class="emergency_contact_phone2"><strong>第二緊急聯絡人電話：</strong><%= user.emergency_contact_phone2 || '未提供' %></p>
+          </details>
+        </div>
+          
+<div class="button-container">
+<% if (table === "man_users") { %>
+    <button class="button test-score">
+        測驗分數
+        <select name="score-dropdown" onchange="handleSelection('<%= queryStringParam %>', '<%= recordId %>', this.value)">
+            <option value="" selected>請選擇量表</option>
+            <option value="/knowledge">母乳知識量表</option>
+            <option value="/dour">憂鬱量表</option>
+            <option value="/sleep">睡眠評估量表</option>
+        </select>
+    </button>
+    <button class="button analysis-result" onclick="window.location.href='/analysis?<%= queryStringParam %>=<%= recordId %>'">問卷分析結果</button>
+    <button class="button progress-check" onclick="window.location.href='/baby?<%= queryStringParam %>=<%= recordId %>'">嬰兒資料紀錄</button>
+               
+<% } else { %>
+    <!-- 這裡是 users 查詢時的完整按鈕 -->
+      <button class="button step-count" onclick="window.location.href='/steps?<%= queryStringParam %>=<%= recordId %>'">步數統計</button>
+    <button class="button test-score">
+        測驗分數
+        <select name="score-dropdown" onchange="handleSelection('<%= queryStringParam %>', '<%= recordId %>', this.value)">
+            <option value="" selected>請選擇量表</option>
+            <option value="/attachment">親子依附支持量表</option>
+            <option value="/knowledge">母乳知識量表</option>
+            <option value="/dour">憂鬱量表</option>
+            <option value="/painscale">產後傷口疼痛量表</option>
+            <option value="/sleep">睡眠評估量表</option>
+            <option value="/roommate">親子同室量表</option>
+            <option value="/user_question">產前後量表紀錄</option> 
+        </select>
+    </button>
+    <button class="button analysis-result" onclick="window.location.href='/analysis?<%= queryStringParam %>=<%= recordId %>'">問卷分析結果</button>
+    <button class="button progress-check" onclick="window.location.href='/baby?<%= queryStringParam %>=<%= recordId %>'">嬰兒資料紀錄</button>
+<% } %>
+               <button class="button goback" onclick="window.location.href='/index'">返回資料查詢</button>
+            </div>
+            </div>
+ 
+    <script>
+        function handleSelection(queryStringParam, recordId, value) {
+            if (value && recordId) {
+                window.location.href = `${value}?${queryStringParam}=${recordId}`;
             }
         }
     </script>
