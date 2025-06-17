@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
@@ -7,329 +6,193 @@
     <title>基本資料查詢</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&display=swap');
+
         body {
-            background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 漸變效果 */
-            height: 100vh; 
-            margin: 0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            font-family: Arial, sans-serif; 
-            padding : 0; 
-            } 
-        </style> 
-    <style>
-        body {
-            font-family: "標楷體", Arial, sans-serif;
+            background: linear-gradient(to right, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.2)), 
+                        url('https://via.placeholder.com/1500x1000/87CEFA/ffffff?text=Background+Image') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'DFKai-SB', '標楷體', DFKai-SB, serif;
             margin: 0;
-            padding: 0;
-            background-color: #f3f4f6;
+            padding: 40px;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
-        }
-        .container {
-            width: 90%;
-            max-width: 600px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: relative;
-            text-align: center;
-        }
-        .settings-icon {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .settings-icon:hover {
-            color: #007bff;
-        }
-        h1 {
             color: #333;
-            font-weight: bold;
         }
-        form {
+
+        .layout {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: space-between;
+            gap: 30px;
+            justify-content: center;
+            width: 90%;
+            max-width: 1200px;
+            z-index: 1;
         }
+
+        .container {
+            flex: 1;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+            z-index: 2;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 26px;
+            margin-bottom: 25px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
         .form-group {
-            width: 45%;
             display: flex;
             flex-direction: column;
             text-align: left;
+            margin-bottom: 20px;
         }
+
         .form-group label {
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: bold;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: 700;
         }
-        .form-group input,
-        .form-group select {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+
+        .form-group input, .form-group select {
+            padding: 12px;
+            border: 1px solid #dcdcdc;
+            border-radius: 10px;
             font-size: 16px;
-            outline: none;
+            transition: all 0.3s ease;
+            background: #fff;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
         }
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #007bff;
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
         }
-        .form-group .radio-group {
+
+        .radio-group {
             display: flex;
-            gap: 10px;
+            gap: 15px;
+            justify-content: center;
             align-items: center;
         }
+
+        .radio-group input {
+            margin-right: 5px;
+        }
+
         .btn-submit {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
+            padding: 14px;
+            background: linear-gradient(to right, #3498db, #2980b9);
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             font-size: 18px;
             cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 15px;
+            transition: background 0.3s, transform 0.2s;
+            font-weight: bold;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
         }
+
         .btn-submit:hover {
-            background-color: #0056b3;
+            background: linear-gradient(to right, #2980b9, #1f6696);
+            transform: scale(1.05);
         }
-        .error-message {
-            color: red;
-            font-size: 14px;
-            margin-top: 10px;
-            display: none;
+
+        #fuzzySearchContainer {
+            flex: 1;
+            padding: 40px;
+            background: #ecf0f1;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* 增加回應式樣式 */
+        @media (max-width: 768px) {
+            .layout {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .container, #fuzzySearchContainer {
+                width: 100%;
+                max-width: 500px;
+            }
         }
     </style>
     <script>
         function validateForm(event) {
-            event.preventDefault(); // 阻止表單自動提交
-    
-            const name = document.getElementById("user_name").value.trim();
-            
-            if (name === "") {
-                alert("請輸入姓名！");
+            event.preventDefault();
+
+            const user_name = document.getElementById("user_name").value.trim();
+            const user_gender = document.querySelector('input[name="user_gender"]:checked')?.value || "未指定";
+            const user_birthdate = document.getElementById("user_birthdate").value || "未指定";
+            const table = document.getElementById("table_select").value; // 取得選擇的表
+
+            if (!user_name && !user_gender && !user_birthdate) {
+                alert("請至少填寫一個查詢條件！");
                 return;
             }
-    
-            // 跳轉到模糊查詢結果頁面，將姓名帶入 URL
-            window.location.href = `/fuzzy_search?name=${encodeURIComponent(name)}`;
-        }
-        function goToSettings() {
-            window.location.href = '/settings';
+
+            const params = new URLSearchParams({
+                table: table, // 加入查詢表
+                name: user_name,
+                gender: user_gender,
+                birthdate: user_birthdate,
+            });
+
+            fetch(`/fuzzy_search?${params.toString()}`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("fuzzySearchContainer").innerHTML = data;
+                })
+                .catch(error => console.error("查詢失敗:", error));
         }
     </script>
-    
-
 </head>
 <body>
-    <div class="container">
-        <!-- 設定圖示 -->
-        <div class="settings-icon" onclick="goToSettings()">
-            <i class="fas fa-cog"></i>
+    <div class="layout">
+        <div class="container">
+            <h1>基本資料查詢</h1>
+            <form id="userForm" onsubmit="validateForm(event)">
+                
+                <div class="form-group">
+                    <label for="user_name">姓名</label>
+                    <input type="text" id="user_name" name="user_name" placeholder="輸入姓名">
+                </div>
+                <div class="form-group">
+                    <label for="table_select">查詢對象</label>
+                    <select id="table_select" name="table">
+                        <option value="users+man_users">所有使用者</option> <!-- 新增選項 -->
+                        <option value="users">媽媽</option>
+                        <option value="man_users">爸爸</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="user_birthdate">生日</label>
+                    <input type="date" id="user_birthdate" name="user_birthdate">
+                </div>
+                <button type="submit" class="btn-submit">查詢</button>
+            </form>
         </div>
 
-        <h1>基本資料查詢</h1>
-
-        <form id="userForm" onsubmit="validateForm(event)"> <!-- 添加了 id="userForm" -->
-            <div class="form-group">
-                <label for="user_name">姓名</label>
-                <input type="text" id="user_name" name="user_name" placeholder="輸入姓名">
-            </div>
-
-            <div class="form-group">
-                <label>性別</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="user_gender" value="男"> 男</label>
-                    <label><input type="radio" name="user_gender" value="女"> 女</label>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="user_salutation">稱謂</label>
-                <select id="user_salutation" name="user_salutation">
-                    <option value="新手媽媽">新手媽媽</option>
-                    <option value="媽媽">媽媽</ption>
-                    <option value="新手爸爸">新手爸爸</ption>
-                    <option value="爸爸">爸爸</ption>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="user_birthdate">生日</label> <!-- user_birthdate 是正確的 id -->
-                <input type="date" id="user_birthdate" name="user_birthdate"> <!-- 修改了 id -->
-            </div>
-
-            <div class="form-group">
-                <label for="user_email">電子郵件</label>
-                <input type="email" id="user_email" name="user_email" placeholder="輸入電子郵件">
-            </div>
-
-            <div class="error-message" id="errorMessage">⚠️ 查無此人</div>
-
-            <button type="submit" class="btn-submit">查詢</button>
-        </form>
+        <!-- 顯示模糊查詢結果 -->
+        <div id="fuzzySearchContainer"></div>
     </div>
-
-    <script>
-        function validateForm(event) { <!-- 添加了 validateForm 函數 -->
-            event.preventDefault(); // 阻止表單自動提交
-
-            const name = document.getElementById("user_name").value.trim();
-
-            if (name === "") {
-                alert("請輸入姓名！");
-                return;
-            }
-
-            // 跳轉到模糊查詢結果頁面，將姓名帶入 URL
-            window.location.href = `/fuzzy_search?name=${encodeURIComponent(name)}`;
-        }
-
-        function goToSettings() {
-            window.location.href = '/settings';
-        }
-
-        document.getElementById('userForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-           
-            const user_name = document.getElementById('user_name').value;
-            const user_gender = document.querySelector('input[name="user_gender"]:checked').value;
-            const user_salutation = document.getElementById('user_salutation').value;
-            const user_birthdate = document.getElementById('user_birthdate').value; //<!-- user_birthdate 是正確的 id -->
-            const user_email = document.getElementById('user_email').value;
-=======
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>用戶註冊</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <h1>基本資料查詢</h1>
-
-    <form id="userForm">
-        <label for="name">姓名:</label>
-        <input type="text" id="name" name="name" required>
-        <br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <br>
-        <label for="age">年齡:</label>
-        <input type="number" id="age" name="age" required>
-        <br>
-        <label for="address">住址:</label>
-        <input type="text" id="address" name="address" required>
-        <br>
-        <label for="phone">電話號碼:</label>
-        <input type="tel" id="phone" name="phone" required>
-        <br>
-        <label for="id_number">身分證字號:</label>
-        <input type="text" id="id_number" name="id_number" required>
-        <br>
-        <label for="gender">性別:</label>
-        <select id="gender" name="gender" required>
-          <option value="male">男</option>
-          <option value="female">女</option>
-        </select>
-        <br>
-        <label for="birthdate">出生日期:</label>
-        <input type="date" id="birthdate" name="birthdate" required>
-        <br>
-        <label for="height">身高 (cm):</label>
-        <input type="number" step="0.01" id="height" name="height" min="0" required>
-        <br>
-        <label for="weight">體重 (kg):</label>
-        <input type="number" step="0.01" id="weight" name="weight" min="0" required>
-        <br>
-        <label for="blood_type">血型:</label>
-        <select id="blood_type" name="blood_type" required>
-          <option value="A">A</option>
-          <option value="B">B</option>
-          <option value="AB">AB</option>
-          <option value="O">O</option>
-        </select>
-        <br>
-        <label for="emergency_contact_name">緊急聯絡人:</label>
-        <input type="text" id="emergency_contact_name" name="emergency_contact_name" required>
-        <br>
-        <label for="emergency_contact_phone">緊急聯絡人電話:</label>
-        <input type="tel" id="emergency_contact_phone" name="emergency_contact_phone" required>
-        <br>
-        <label for="betel_nut_habit">是否有咀嚼檳榔的習慣:</label>
-        <select id="betel_nut_habit" name="betel_nut_habit" required>
-          <option value="無">無</option>
-          <option value="有">有</option>
-        </select>
-        <br>
-        <label for="allergies">過敏源:</label>
-        <input type="text" id="allergies" name="allergies" placeholder="花粉, 海鮮等" required>
-        <br>
-        <button type="submit">查詢</button>
-    </form>
-
-    <script>
-        document.getElementById('userForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const age = document.getElementById('age').value;
-            const address = document.getElementById('address').value;
-            const phone = document.getElementById('phone').value;
-            const id_number = document.getElementById('id_number').value;
-            const gender = document.getElementById('gender').value;
-            const birthdate = document.getElementById('birthdate').value;
-            const height = document.getElementById('height').value;
-            const weight = document.getElementById('weight').value;
-            const blood_type = document.getElementById('blood_type').value;
-            const emergency_contact_name = document.getElementById('emergency_contact_name').value;
-            const emergency_contact_phone = document.getElementById('emergency_contact_phone').value;
-            const betel_nut_habit = document.getElementById('betel_nut_habit').value;
-            const allergies = document.getElementById('allergies').value;
->>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
-
-            fetch('/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-<<<<<<< HEAD
-                body: JSON.stringify({
-                    user_name, user_gender, user_salutation, user_birthdate, user_email
-                })
-=======
-                body: JSON.stringify({ name, email, age, address, phone, id_number, gender, birthdate, height, weight, blood_type, emergency_contact_name, emergency_contact_phone, betel_nut_habit, allergies })
->>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
-            })
-            .then(response => response.text())
-            .then(data => {
-                alert(data);
-<<<<<<< HEAD
-                window.location.href = '/result'; // 提交成功後跳轉到 fuzzy_search 頁面
-=======
-                window.location.href = '/about'; // 提交成功後跳轉到about頁面
->>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-
-<<<<<<< HEAD
-        document.getElementById('user_birthdate').setAttribute('max', new Date().toISOString().split('T')[0]);
-=======
-        document.getElementById('birthdate').setAttribute('max', new Date().toISOString().split('T')[0]);
->>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
-    </script>
 </body>
 </html>
