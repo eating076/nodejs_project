@@ -1,607 +1,261 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.6">
-    <title>匹茲堡睡眠品質量表</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style> 
-        body {
-            background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 漸變效果 */
-            height: 100vh; 
-            margin: 0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            font-family: Arial, sans-serif; 
-            padding : 0; 
-            } 
-        </style> 
-        <style> 
-        body { 
-            background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 漸變效果 */ 
-            height: 100vh; margin: 0; display: flex; justify-content: center; /* 水平居中 */ 
-            align-items: flex-start; /* 改為頂部對齊 */ 
-            font-family: Arial, sans-serif; padding: 10px; /* 增加整體的內邊距 */ 
-            } 
-            .left-bottom { 
-                max-width: 400px; 
-                margin: 40px; /* 減小上下間距 */ 
-                padding: 65px;
-                background-color: #e1d8e1; 
-                border-radius: 8px; 
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-                flex: 1;
-             } 
-                .line { width: 100%; /* 線條寬度 */ 
-                height: 1px; /* 線條高度 */ 
-                background-color: #ccc; /* 線條顏色 */ 
-                margin: 20px 30px 20px 30px;
-
-                } 
-                .left-top { 
-                width: 100%; 
-                border-collapse: collapse; 
-                text-align: center; 
-                margin-right : 70px; 
-                margin-left : 100px; 
-                flex :1; 
-                } 
-                h1 { 
-                    text-align: center; 
-                    color: #333; 
-                } 
-                .profile-header { 
-                    text-align: center; 
-                    margin-bottom: 20px; 
-                } 
-                .profile-header img { 
-                    width: 150px; 
-                    height: 150px; 
-                    border-radius: 50%;
-                } 
-                .profile-header h2 { 
-                    margin: 10px 0; 
-                    color: #333; 
-                } 
-                .profile-header p { 
-                    color: #777;
-                 } 
-                .profile-info { 
-                    margin-top: 20px; 
-                } 
-                .profile-info h3 { 
-                    color: #333;
-                } 
-                .profile-info ul { 
-                    list-style-type: none; 
-                    padding: 0; 
-                } 
-                .profile-info ul li { 
-                    margin: 10px 0; 
-                    color: #555; 
-                } footer { 
-                    text-align: center; 
-                    margin-top: 20px; 
-                    color: #777; 
-                } 
-        </style>
-</head>
-<body>
-    <div class="left-bottom">
-        <div class="profile-header">
-            <h2>個人基本資訊</h2>
-             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrjDKvX46GOpgDflhYQ7KI9fewSC6y552-hA&s" alt="頭像" class="profile-picture">
-        </div>
-        <div class="line"></div>
-        <div class="profile-info">
-            <ul>
-                <li><strong>姓名：</strong> 蔡昆佑</li>
-                <li><strong>年齡：</strong> 25</li>
-                <li><strong>生日：</strong> 2002/01/01</li>
-                <li><strong>血型：</strong> O型</li>
-                <li><strong>稱謂：</strong> 新手爸爸</li>
-                <li><strong>身分證字號：</strong> F131420505</li>
-                <li><strong>通訊地址：</strong> 新北市淡水區XX路XX段XX號XX樓</li>
-                <li><strong>連絡電話：</strong> 0900-123-123</li>
-            </ul>
-        </div>
-
-        <footer>
-            <p>© 2025 xx醫院 | 版權所有</p>
-        </footer>
-    </div>
-</body>
-<style>
-    body {
-        font-family: "標楷體", Arial, sans-serif;
-        background-color: #c2aecc;
-        padding: 20px;
-        margin: 0;
-        display: flex;
-        flex: 1;  /* 讓此區塊占據剩餘空間 */
-    }
-
-    .right-bottom {
-        width: 90%;
-        max-width: 900px;
-        margin: auto;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        overflow-x: auto;
-        position: relative;
-        flex: 2;
-        height: 600px; /* 固定高度 */
-        overflow-y: auto; /* 允許垂直滾動 */
-        margin-left : 50px;
-    }
-
-    .right-top {
-        width: 100%;
-        border-collapse: collapse;
-        text-align: center;
-        margin-right : 0px;
-        margin-left : 50px;
-        flex :1;
-    }
-    .settings-icon {
-        position: absolute;
-        top: 10px;
-        right: 5px;
-        font-size: 24px;
-        cursor: pointer;
-        color: #6b7280;
-        transition: color 0.3s;
-    }
-    .settings-icon:hover {
-        color: #4b5563;
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-    }
-    th {
-        background-color: #c8b1d7;
-    }
-    .score-low {
-        color: red;
-        font-weight: bold;
-    }
-    .weight-change {
-        color: red;
-    }
-    .love-score {
-        padding: 5px;
-        border-radius: 5px;
-        display: inline-block;
-        width: 40px;
-        text-align: center;
-        color: rgb(3, 3, 3);
-        font-weight: bold;
-    }
-    .btn-info {
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        padding: 3px 6px;
-        font-size: 12px;
-        cursor: pointer;
-        border-radius: 5px;
-        margin-left: 5px;
-    }
-    .btn-info:hover {
-        background-color: #0056b3;
-    }
-
-    /* 色階設定 */
-    .level-0 { background-color: rgb(253, 255, 144); }
-    .level-1 { background-color: #b1f3ba; }
-    .level-2 { background-color: #7ee77e; }
-    .level-3 { background-color: #07bd07; }
-    .level-4 { background-color: #008000; }
-
-    /* 彈出視窗 */
-    .popup {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        text-align: center;
-        max-width: 300px;
-        width: 80%;
-    }
-    .popup img {
-        width: 100%;
-    }
-    .popup .close-btn {
-        background-color: red;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        font-size: 14px;
-        cursor: pointer;
-        border-radius: 5px;
-        margin-top: 10px;
-    }
-
-    .buttons {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 30px;
-    }
-
-    .btn {
-        padding: 12px 20px;
-        font-size: 18px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    .btn-secondary {
-        background-color: #6c757d;
-        color: white;
-    }
-
-    .btn-secondary:hover {
-        background-color: #565e64;
-    }
-    .buttons-container {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-}
-.buttons-container button {
-    flex: 1;
-    margin: 0 5px;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-}
-.step-count { background-color: #28a745; }
-.test-score { background-color: #ffc107; }
-.analysis-result { background-color: #17a2b8; }
-.progress-check { background-color: #6c757d; }
-.goback{background-color: rgb(255, 0, 0);}
-</style>
-</head>
-<body>
-    <div class="right">
-        <a href="/settings" class="settings-icon">
-           <i class="fas fa-cog"></i>
-        </a>
-        <div class="right-top">
-            <!-- 步數統計按鈕 -->
-            <button class="step-count" onclick="window.location.href='/steps'">步數統計</button>
-            <!-- 測驗分數按鈕 -->
-            <button class="test-score">測驗分數
-            <td>
-                <select name="score-dropdown" onchange="handleSelection(this.value)">
-                    <option value="" selected>匹茲堡睡眠品質量表</option>
-                    <option value="support_assessment">生產支持知覺量表</option>
-                    <option value="attachment_support">親子依附支持量表</option>
-                    <option value="knowledge">母乳知識量表</option>
-                    <option value="dour">產後憂鬱量表</option>
-                    <option value="hurt">疼痛量表</option>
-                    <option value="sleep">匹茲堡睡眠品質量表</option>
-                </select>
-            </td>
-        </button>
-            
-            <script>
-                function handleSelection(value) {
-                    if (value) {
-                        window.location.href = `/${value}`;
-                    }
-                }
-            </script>
-            
-            
-            <!-- 分析結果按鈕 -->
-            <button class="analysis-result" onclick="window.location.href='/analysis'">分析結果</button>
-            <!-- 進階查詢按鈕 -->
-            <button class="progress-check" onclick="window.location.href='/advanced_search'">進階查詢</button>
-
-            <button class="goback" onclick="window.location.href='/index'">重新查詢</button>
-        </div>
-        <hr style="margin-left: 0px;">
-        
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>睡眠測試記錄</title>
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f5f5f5;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 20px 30px;
-            width: 400px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: relative;
-            height: 550px; /* 固定高度 */
-            overflow-y: auto; /* 允許垂直滾動 */
-        }
-        h2 {
-            text-align: center;
-            margin: 0;
-        }
-        .item {
-            display: flex;
-            justify-content: space-between;
-            margin: 10px 0;
-        }
-        .item label {
-            flex: 1;
-        }
-        .item span {
-            white-space: nowrap;
-        }
-        .line {
-            border-bottom: 1px solid black;
-            margin: 5px 0;
-            flex-grow: 1;
-        }
-        .bottom-section {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        .date {
-            font-size: 14px;
-        }
-        .total {
-            font-size: 14px;
-        }
-        .question {
-            margin-top: 10px;
-            font-size: 14px;
-        }
-        .question label {
-            margin-right: 10px;
-        }
-        .buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
+            background: linear-gradient(to right, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.2)), 
+                        url('https://via.placeholder.com/1500x1000/87CEFA/ffffff?text=Background+Image') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'DFKai-SB', '標楷體', DFKai-SB, serif;
+            color: #333;
         }
 
-        .btn {
-            padding: 12px 20px;
-            font-size: 18px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
+        .container {
+            margin-top: 50px;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .btn-secondary {
-            background-color: #6c757d;
+
+        /* 外層的白框，增加陰影和圓角 */
+        .white-box {
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            overflow: hidden; /* 防止內容溢出白框 */
+        }
+
+        .table {
+            background-color: #ffffff;
+            border-radius: 10px;
+            width: 100%; /* 讓表格充滿整個容器 */
+            word-break: break-word; /* 防止文字超出格子 */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .table th {
+            background-color: #343a40;
             color: white;
         }
-        .btn-secondary:hover {
-            background-color: #565e64;
+
+        .table td {
+            vertical-align: middle;
+            padding: 12px; /* 給表格增加內邊距，避免內容擠在一起 */
         }
-        .settings-icon {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 20px;
-            cursor: pointer;
-            color: #6b7280;
-            transition: color 0.3s;
+
+        .highlight {
+            font-weight: bold;
+            color: #d9534f; /* 高分數標註紅色 */
         }
-        .settings-icon:hover {
-            color: #4b5563;
+
+        h2 {
+            font-size: 30px;
+            color: #4e73df;
+            margin-bottom: 20px;
+            font-weight: 700;
         }
+
+        p {
+            font-size: 18px;
+            color: #333;
+        }
+
+        /* 新增的 hover 效果 */
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* 小螢幕樣式 */
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .table th, .table td {
+                font-size: 14px;
+            }
+        }
+
+        /* 左右滾動條的樣式 */
+        .table-responsive {
+            overflow-x: auto;  /* 顯示左右滾動條 */
+            overflow-y: hidden; /* 禁止上下滾動條 */
+            -webkit-overflow-scrolling: touch; /* 平滑滾動效果 */
+            margin-top: 20px;
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>睡眠品質量表</h2>
-        <p class="info">姓名: 蔡昆佑 &nbsp;&nbsp;&nbsp;&nbsp; 患者 ID: 123456</p>
 
-        <div id="sleepData">
-            
-            <div class="sleep-record" data-score="11">
-                <div class="item">
-                    <label>1. 睡眠品質</label>
-                    <div class="line"></div>
-                    <span>(2分)</span>
-                </div>
-                <div class="item">
-                    <label>2. 睡眠潛伏期</label>
-                    <div class="line"></div>
-                    <span>(1分)</span>
-                </div>
-                <div class="item">
-                    <label>3. 睡眠時數</label>
-                    <div class="line"></div>
-                    <span>(3分)</span>
-                </div>
-                <div class="item">
-                    <label>4. 睡眠效率</label>
-                    <div class="line"></div>
-                    <span>(2分)</span>
-                </div>
-                <div class="item">
-                    <label>5. 睡眠困擾</label>
-                    <div class="line"></div>
-                    <span>(1分)</span>
-                </div>
-                <div class="item">
-                    <label>6. 安眠藥物使用</label>
-                    <div class="line"></div>
-                    <span>(0分)</span>
-                </div>
-                <div class="item">
-                    <label>7. 日間活動失能</label>
-                    <div class="line"></div>
-                    <span>(2分)</span>
-                </div>
-                <div class="bottom-section">
-                    <div class="date">日期：2025/01/20</div>
-                    <div class="total">總分：11分</div>
-                </div>
-            </div>
+<div class="container">
+    <div class="white-box">
+        <h2 class="text-center mb-4">睡眠評估量表記錄</h2>
 
-            
-            <div class="sleep-record" data-score="13">
-                <div class="item">
-                    <label>1. 睡眠品質</label>
-                    <div class="line"></div>
-                    <span>(3分)</span>
-                </div>
-                <div class="item">
-                    <label>2. 睡眠潛伏期</label>
-                    <div class="line"></div>
-                    <span>(2分)</span>
-                </div>
-                <div class="item">
-                    <label>3. 睡眠時數</label>
-                    <div class="line"></div>
-                    <span>(3分)</span>
-                </div>
-                <div class="item">
-                    <label>4. 睡眠效率</label>
-                    <div class="line"></div>
-                    <span>(2分)</span>
-                </div>
-                <div class="item">
-                    <label>5. 睡眠困擾</label>
-                    <div class="line"></div>
-                    <span>(2分)</span>
-                </div>
-                <div class="item">
-                    <label>6. 安眠藥物使用</label>
-                    <div class="line"></div>
-                    <span>(0分)</span>
-                </div>
-                <div class="item">
-                    <label>7. 日間活動失能</label>
-                    <div class="line"></div>
-                    <span>(1分)</span>
-                </div>
-                <div class="bottom-section">
-                    <div class="date">日期：2025/01/21</div>
-                    <div class="total">總分：13分</div>
-                </div>
-            </div>
+        <% let queryStringParam = table === "users" ? "user_id" : "man_user_id"; %>
+        <% let recordId = userId || manUserId; %>
 
-            
-            <div class="sleep-record" data-score="9">
-                <div class="item">
-                    <label>1. 睡眠品質</label>
-                    <div class="line"></div>
-                    <span>(1分)</span>
-                </div>
-                <div class="item">
-                    <label>2. 睡眠潛伏期</label>
-                    <div class="line"></div>
-                    <span>(1分)</span>
-                </div>
-                <div class="item">
-                    <label>3. 睡眠時數</label>
-                    <div class="line"></div>
-                    <span>(2分)</span>
-                </div>
-                <div class="item">
-                    <label>4. 睡眠效率</label>
-                    <div class="line"></div>
-                    <span>(1分)</span>
-                </div>
-                <div class="item">
-                    <label>5. 睡眠困擾</label>
-                    <div class="line"></div>
-                    <span>(2分)</span>
-                </div>
-                <div class="item">
-                    <label>6. 安眠藥物使用</label>
-                    <div class="line"></div>
-                    <span>(1分)</span>
-                </div>
-                <div class="item">
-                    <label>7. 日間活動失能</label>
-                    <div class="line"></div>
-                    <span>(1分)</span>
-                </div>
-                <div class="bottom-section">
-                    <div class="date">日期：2025/01/22</div>
-                    <div class="total">總分：9分</div>
-                </div>
-            </div>
+
+        <!-- 顯示使用者資訊 -->
+        <p><strong>ID：</strong> <%= recordId || '未提供' %></p>
+        <p><strong>名字：</strong> <%= user_name || '未提供' %></p>
+
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>欄位名稱</th>
+                        <% assessmentsData.forEach((_, index) => { %>
+                            <th>紀錄 <%= index + 1 %></th>
+                        <% }); %>
+                    </tr>
+                </thead>
+<tbody>
+    <tr>
+        <td>ID</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.sleep_id %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>測試日期</td>
+        <% assessmentsData.forEach(item => { %>
+            <td>
+                <%= new Date(item.sleep_test_date).toLocaleDateString('zh-TW', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                }) %>
+            </td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>測驗量表</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.sleep_question_content %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>過去一個月來，您通常何時上床</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.sleep_answer_1_am_pm + ' ' + item.sleep_answer_1_a + '時' + item.sleep_answer_1_b + '分' %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>過去一個月來，您通常多久才能入睡</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.sleep_answer_2 + '分' %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>過去一個月來，您通常何時起床</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.sleep_answer_3_am_pm + ' ' + item.sleep_answer_3_a + '時' + item.sleep_answer_3_b + '分' %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>過去一個月來，您通常實際睡眠可以入睡幾小時</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.sleep_answer_4 + '時' %></td>
+        <% }); %>
+    </tr>
+
+    <% const sleepQuestions = [
+        "過去一個月內，您多常服用藥物幫助入睡",
+        "過去一個月內，您多常在用餐、開車或社交場合活動時感到困倦，難以保持清醒",
+        "過去一個月內，保持足夠的熱情去完成事情對您來說有多大問題",
+        "過去一個月來，整體而言，您覺得自己的睡眠品質如何",
+        "無法在30分鐘內入睡",
+        "半夜或凌晨便清醒",
+        "必須起來上廁所",
+        "無法舒適呼吸",
+        "大聲打呼或咳嗽",
+        "會覺得冷",
+        "覺得燥熱",
+        "睡覺時常會做惡夢",
+        "身上有疼痛"
+    ]; %>
+
+    <% sleepQuestions.forEach((question, index) => { %>
+        <tr>
+            <td><%= question %></td>
+            <% assessmentsData.forEach(item => { %>
+                <td><%= item[`sleep_answer_${index + 5}`] %></td>
+            <% }); %>
+        </tr>
+    <% }); %>
+
+    <tr>
+        <td>睡眠困難分數</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.sleep_score_sleep_difficulty %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>睡眠時間分數</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.sleep_score_duration %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>睡眠效率分數</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.sleep_score_efficiency %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>睡眠干擾分數</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.sleep_score_disturbance %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>睡眠用藥分數</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.sleep_score_medication %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>白天功能分數</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.sleep_score_daytime_function %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>主觀睡眠品質分數</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.sleep_score_subjective_quality %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>總分</td>
+        <% assessmentsData.forEach(item => { %>
+            <td class="<%= item.sleep_score_total >= 80 ? 'highlight' : '' %>">
+                <%= item.sleep_score_total %>
+            </td>
+        <% }); %>
+    </tr>
+</tbody>
+
+
+
+            </table>
         </div>
 
-        <div class="question">
-            是否有睡眠品質障礙
-            <label><input type="checkbox" id="sleepDisorderYes"> 是</label>
-            <label><input type="checkbox" id="sleepDisorderNo"> 否</label>
-        </div>
-
-        <div class="buttons">
-            <button class="btn btn-secondary" onclick="prevPage()">上一頁</button>
-            <button class="btn btn-secondary" onclick="nextPage()">下一頁</button>
-        </div>
+        <a href="/result?<%= queryStringParam %>=<%= recordId %>" class="btn btn-secondary mt-3">返回個人詳細資料</a>
     </div>
+</div>
 
-    <script>
-        let currentPage = 0;
-        const records = document.querySelectorAll('.sleep-record');
-        const sleepDisorderYes = document.getElementById('sleepDisorderYes');
-        const sleepDisorderNo = document.getElementById('sleepDisorderNo');
-
-        function showPage(pageIndex) {
-            // 隱藏所有資料
-            records.forEach((record, index) => {
-                record.style.display = index === pageIndex ? 'block' : 'none';
-            });
-
-            // 獲取該頁面的總分
-            const totalScore = parseInt(records[pageIndex].getAttribute('data-score'), 10);
-            
-            // 根據總分設置框框的狀態
-            if (totalScore < 10) {
-                sleepDisorderYes.checked = true;
-                sleepDisorderNo.checked = false;
-            } else {
-                sleepDisorderYes.checked = false;
-                sleepDisorderNo.checked = true;
-            }
-        }
-
-        function nextPage() {
-            if (currentPage < records.length - 1) {
-                currentPage++;
-                showPage(currentPage);
-            }
-        }
-
-        function prevPage() {
-            if (currentPage > 0) {
-                currentPage--;
-                showPage(currentPage);
-            }
-        }
-
-        function goBack() {
-            window.location.href = '/scores'; // 返回測驗分數頁面
-        }
-
-        // 初始化頁面顯示
-        showPage(currentPage);
-    </script>
 </body>
 </html>
