@@ -1,117 +1,84 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>設定</title>
-    <style> 
-        body {
-            background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 漸變效果 */
-            height: 100vh; 
-            margin: 0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            font-family: Arial, sans-serif; 
-            padding : 0; 
-            } 
-        </style>
+    <title>登入頁面</title>
     <style>
         body {
-            font-family: "標楷體", Arial, sans-serif;
+            background: linear-gradient(to right, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.2)), 
+                        url('https://via.placeholder.com/1500x1000/87CEFA/ffffff?text=Background+Image') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'DFKai-SB', '標楷體', DFKai-SB, serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f9f9f9;
             margin: 0;
         }
-        .login-box {
-            width: 320px;
-            padding: 30px;
-            background-color: white;
+        .container {
+            background: #fff;
+            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
             text-align: center;
         }
-        .login-box h2 {
-            margin-bottom: 20px;
-            font-size: 22px;
-        }
-        .login-box input {
-            width: 90%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
+        h1 { margin-bottom: 20px; color: #007bff; }
+        form { display: flex; flex-direction: column; }
+        input {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
-            text-align: center;
         }
-        .login-box button {
-            width: 100%;
-            padding: 12px;
+        button {
             background-color: #007bff;
             color: white;
+            padding: 10px;
             border: none;
             border-radius: 5px;
-            font-size: 16px;
             cursor: pointer;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         }
-        .login-box button:hover {
-            background-color: #0056b3;
-        }
+        button:hover { background-color: #0056b3; }
+        .options { margin-top: 15px; }
     </style>
 </head>
 <body>
-    <div class="login-box">
-        <h2>設定</h2>
-        <input type="text" id="username" placeholder="帳號">
-        <input type="password" id="password" placeholder="密碼">
-        <br><br>
-        <button onclick="login()">登入</button>
+    <div class="container">
+        <% if (!userRole) { %>
+            <h1>登入</h1>
+            <form action="/settings/login" method="POST">
+                <input type="text" name="employee_name" placeholder="帳號" required>
+                <input type="password" name="employee_password" placeholder="密碼" required>
+                <button type="submit">登入</button>
+            </form>
+
+            <% if (typeof loginError !== 'undefined' && loginError) { %>
+                <p style="color: red;">❌ <%= loginError %></p>
+            <% } %>
+
+        <% } else if (typeof passwordResetRequired !== 'undefined' && passwordResetRequired) { %>
+            <h1>需要重設密碼</h1>
+            <form action="/reset_password" method="POST">
+                <input type="hidden" name="settings_id" value="<%= settingsId %>">
+                <input type="password" name="new_password" placeholder="新密碼" required>
+                <button type="submit">更新密碼</button>
+            </form>
+        <% } else { %>
+            <h1>歡迎，人員：<%= userRole %></h1>
+            <div class="options">
+                <% if (userRole === '管理者') { %>
+                    <button onclick="window.location.href='/dashboard?settings_id=<%= settingsId %>&user_role=<%= userRole %>'">進入 Dashboard</button>
+                <% } else if (userRole === '研究人員修改者' || userRole === '臨床人員修改者') { %>
+                    <button onclick="window.location.href='/index'">進入資料查詢</button>
+                <% } else { %>
+                    <p>🔒 您沒有權限執行其他操作</p>
+                <% } %>
+            </div>
+        <% } %>
     </div>
-
-    <script>
-        function login() {
-            let username = document.getElementById("username").value;
-            let password = document.getElementById("password").value;
-
-            if (username === "yoyo" && password === "1234") {
-                alert("登入成功！");
-                window.location.href = '/dashboard'; // 登入後跳轉回主控
-            } else {
-                alert("帳號或密碼錯誤！");
-            }
-        }
-    </script>
 </body>
 </html>
-=======
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>設定介面</title>
-    <link rel="stylesheet" href="settings.css">
-</head>
-<body>
-    <h1>設定介面</h1>
-    
-    <h2>管理員權限</h2>
-    <ul>
-        <li><a href="/add1">權限新增</a></li>
-        <li><a href="/edit1">權限修改</a></li>
-        <li><a href="/delete1">權限刪除</a></li>
-    </ul>
-
-    <h2>編輯頁面</h2>
-    <ul>
-        <li><a href="/add2">新增項目</a></li>
-        <li><a href="/edit2">修改項目</a></li>
-        <li><a href="/delete2">刪除項目</a></li>
-    </ul>
-</body>
-</html>
->>>>>>> 52f26e00f401ee33308441c48b0276c36ece463c
