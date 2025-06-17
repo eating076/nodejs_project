@@ -1,0 +1,129 @@
+<!DOCTYPE html> 
+<html lang="zh-TW"> 
+    <head> 
+     <meta charset="UTF-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <title>嬰兒資料紀錄</title> 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> 
+<style> 
+     body { background: linear-gradient(to right, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.2)), 
+     url('https://via.placeholder.com/1500x1000/87CEFA/ffffff?text=Background+Image') no-repeat center center fixed;
+      background-size: cover; 
+      font-family: 'DFKai-SB', '標楷體', DFKai-SB, serif; min-height: 100vh;
+       } 
+       .container {
+         margin-top: 50px;
+          background-color: #ffffff;
+           border-radius: 10px;
+            padding: 30px; 
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); 
+            max-width: 950px; margin-left: auto;
+             margin-right: auto; 
+             } 
+             h2 { 
+                text-align: center; 
+                color: #007bff; 
+                } 
+                .table 
+                { background-color: #ffffff;
+                 border-radius: 10px;
+                  overflow: hidden; 
+                  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                   } 
+                   .highlight { 
+                    font-weight: bold;
+                     color: #d9534f;
+                      } .edit-form { 
+                        display: none; 
+                        margin-top: 10px;
+                         padding: 10px; 
+                         border: 1px solid #ddd; 
+                         background-color: #f9f9f9; 
+                         border-radius: 5px; 
+                         } 
+                         .edit-form input, .edit-form select { 
+                            width: 100%;
+                             margin-bottom: 10px;
+                              padding: 8px; 
+                              } 
+                              </style>  
+                        </head>
+                         <body>
+                             <div class="container">
+                                 <h2 class="text-center mb-4">嬰兒資料紀錄</h2> 
+                                 <% let queryStringParam = userId ? "user_id" : "man_user_id"; %> 
+                                 <% let recordId = userId || manUserId; %> 
+                                 <p><strong><%= userId ? "母親 ID：" : "父親 ID：" %></strong>
+                                     <%= recordId || '未提供' %></p>
+                                      <p><strong>名字：</strong> <%= userId ? (user_name || "未提供") : (man_user_name || "未提供") %></p> 
+                                      <table class="table table-bordered table-striped"> 
+                                        <thead class="table-dark"> 
+                                            <tr> 
+                                                <th>ID</th>
+                                                 <th>嬰兒姓名</th> 
+                                                 <th>父親姓名</th> 
+                                                 <th>母親姓名</th> 
+                                                 <th>出生日期</th> 
+                                                 <th>性別</th> 
+                                                 <th>出生體重 (kg)</th> 
+                                                 <th>出生身高 (cm)</th> 
+                                                 <th>特殊狀況</th> 
+                                                 <th>狀況詳情</th> 
+                                                 <% if (userRole === '管理者' || userRole === '研究人員修改者' || userRole === '臨床人員修改者') { %>
+                                                     <th>操作</th>
+                                                      <% } %>
+                                                     </tr> 
+                                                    </thead>
+                                                     <tbody>
+                                                         <% babiesData.forEach(item => { %> 
+                                                            <tr>
+                                                                 <td><%= item.baby_id %></td>
+                                                                  <td><%= item.baby_name %></td> 
+                                                                  <td><%= item.man_user_name || '未提供' %></td> 
+                                                                  <td><%= item.user_name || '未提供' %></td> 
+                                                                  <td><%= new Date(item.baby_birthdate).toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>
+                                                                   <td><%= item.baby_gender %></td> 
+                                                                   <td><%= item.baby_weight %></td> 
+                                                                   <td><%= item.baby_height %></td> 
+                                                                   <td class="<%= item.baby_solution === '有' ? 'highlight' : '' %>"><%= item.baby_solution %></td> 
+                                                                   <td><%= item.baby_solution_details || '無' %></td> 
+                                                                   <% if (userRole === '管理者' || userRole === '研究人員修改者' || userRole === '臨床人員修改者') { %>
+                                                                     <td>
+                                                                         <button onclick="toggleEdit('<%= item.baby_id %>')" style="border: none; background: none; cursor: pointer;"> 
+                                                                            <img src="https://cdn-icons-png.flaticon.com/512/1159/1159633.png" alt="編輯" width="20px" height="20px"> 
+                                                                        </button>
+                                                                         <div id="edit-form-<%= item.baby_id %>" class="edit-form"> 
+                                                                            <form action="/baby/edit?<%= queryStringParam %>=<%= encodeURIComponent(recordId) %>" method="POST"> 
+                                                                                <input type="hidden" name="baby_id" value="<%= item.baby_id %>"> 
+                                                                                <input type="hidden" name="user_id" value="<%= item.user_id || '' %>"> 
+                                                                                <input type="hidden" name="man_user_id" value="<%= item.man_user_id || '' %>"> 
+                                                                                <p>嬰兒姓名</p><input type="text" name="baby_name" value="<%= item.baby_name %>"> 
+                                                                                <p>出生日期</p><input type="date" name="baby_birthdate" value="<%= item.baby_birthdate %>"> 
+                                                                                <p>性別</p><select name="baby_gender"> 
+                                                                                    <option value="男" <%= item.baby_gender === '男' ? 'selected' : '' %>>男</option> 
+                                                                                    <option value="女" <%= item.baby_gender === '女' ? 'selected' : '' %>>女</option> 
+                                                                                </select> 
+                                                                                <p>出生體重(kg)</p><input type="number" name="baby_weight" value="<%= item.baby_weight %>"> 
+                                                                                <p>出生身高(cm)</p><input type="number" name="baby_height" value="<%= item.baby_height %>"> 
+                                                                                <p>特殊狀況</p><input type="text" name="baby_solution" value="<%= item.baby_solution %>"> 
+                                                                                <p>狀況詳情</p><input type="text" name="baby_solution_details" value="<%= item.baby_solution_details || '' %>"> 
+                                                                                <button type="submit">更新</button> 
+                                                                            </form> 
+                                                                        </div> 
+                                                                    </td> 
+                                                                    <% } %> 
+                                                                </tr> 
+                                                                <% }); %> 
+                                                            </tbody> 
+                                                        </table>
+                                                         <a href="/result?<%= queryStringParam %>=<%= encodeURIComponent(recordId) %>" class="btn btn-secondary mt-3">返回個人詳細資料</a> 
+                                                         <a href="/index" class="btn btn-secondary mt-3">返回資料查詢</a>
+                                                         </div> 
+                                                         <script> 
+                                                         function toggleEdit(babyId) { 
+                                                            const form = document.getElementById(`edit-form-${babyId}`); 
+                                                         form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none'; 
+                                                         } 
+                                                         </script> 
+                                                         </body>
+                                                          </html>
