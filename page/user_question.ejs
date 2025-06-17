@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>孕期問卷記錄</title>
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.2)),
+                        url('https://via.placeholder.com/1500x1000/87CEFA/ffffff?text=Background+Image') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'DFKai-SB', '標楷體', DFKai-SB, serif;
+            color: #333;
+        }
+
+        .container {
+            margin-top: 50px;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .white-box {
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .table {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            table-layout: fixed; /* 設定表格寬度固定，這樣每一格都會擴展 */
+            word-break: break-word; /* 防止文字撐出欄位 */
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: #d9534f;
+        }
+        
+        .table th {
+            background-color: #343a40;
+            color: white;
+        }
+
+        h2 {
+            font-size: 30px;
+            color: #4e73df;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            color: #333;
+        }
+
+        /* 小螢幕樣式 */
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            h2 {
+                font-size: 24px;
+            }
+            .table th, .table td {
+                font-size: 14px;
+            }
+        }
+
+        /* 左右滾動條的樣式 */
+        .table-responsive {
+            overflow-x: auto;  /* 顯示左右滾動條 */
+            overflow-y: hidden; /* 禁止上下滾動條 */
+            -webkit-overflow-scrolling: touch; /* 平滑滾動效果 */
+            max-height: 80vh; /* 最大高度，避免內容溢出 */
+            margin-top: 20px;
+        }
+
+        /* 每一列的寬度設置 */
+        .table th, .table td {
+            padding: 15px; /* 增加每個格子的間距 */
+            width: 120px;  /* 為每一個格子設定固定寬度 */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="white-box">
+        <h2 class="mb-4">產前後量表記錄</h2>
+
+        <p><strong>ID：</strong> <%= userId || '未提供' %></p>
+        <p><strong>名字：</strong> <%= user_name || '未提供' %></p>
+
+        <script>
+            console.log("🔍 EJS 前端收到的 userId:", "<%= userId %>");
+        </script>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>欄位名稱</th>
+                        <% questionsData.forEach((_, index) => { %>
+                            <th>紀錄 <%= index + 1 %></th>
+                        <% }); %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ID</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.question_id %></td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>懷孕寶寶數</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.pregnancy_babies_count || '未提供' %></td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>妊娠合併症</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.pregnancy_complications || '無' %></td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>願意哺乳</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.willing_to_breastfeed || '未回答' %></td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>懷孕次數</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.pregnancy_count || '未提供' %></td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>生產次數</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.delivery_count || '未提供' %></td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>首次哺乳</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.first_time_breastfeeding || '未提供' %></td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>預期哺乳月數</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.expected_breastfeeding_months || '未提供' %></td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>首次生產</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.first_time_delivery || '未提供' %></td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>前次哺乳月數</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.previous_breastfeeding_duration_months || '未提供' %></td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>停止哺乳原因</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.breastfeeding_stop_reason || '無' %></td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>寶寶是否出生</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.baby_born || '未提供' %></td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>目前哺乳</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.currently_breastfeeding || '未提供' %></td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>純母乳哺乳</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.exclusive_breastfeeding || '未提供' %></td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>乳頭疼痛指數</td>
+                        <% questionsData.forEach(item => { %>
+                            <td class="<%= item.previous_nipple_pain_level >= 7 ? 'highlight' : '' %>">
+                                <%= item.previous_nipple_pain_level || '未提供' %>
+                            </td>
+                        <% }); %>
+                    </tr>
+                    <tr>
+                        <td>乳頭破皮狀況</td>
+                        <% questionsData.forEach(item => { %>
+                            <td><%= item.nipple_cracking || '未提供' %></td>
+                        <% }); %>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <a href="/result?user_id=<%= userId %>" class="btn btn-secondary mt-3">返回個人詳細資料</a>
+    </div>
+</div>
+
+</body>
+</html>
