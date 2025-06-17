@@ -1,504 +1,149 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.6">
-    <title>母乳知識量表</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style> 
-        body {
-            background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 漸變效果 */
-            height: 100vh; 
-            margin: 0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            font-family: Arial, sans-serif; 
-            padding : 0; 
-            } 
-        </style> 
-        <style> 
-        body { 
-            background: linear-gradient(to right, #b9c2cd, #9dbce7); /* 漸變效果 */ 
-            height: 100vh; margin: 0; display: flex; justify-content: center; /* 水平居中 */ 
-            align-items: flex-start; /* 改為頂部對齊 */ 
-            font-family: Arial, sans-serif; padding: 10px; /* 增加整體的內邊距 */ 
-            } 
-            .left-bottom { 
-                max-width: 400px; 
-                margin: 40px; /* 減小上下間距 */ 
-                padding: 65px;
-                background-color: #e1d8e1; 
-                border-radius: 8px; 
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-                flex: 1;
-             } 
-                .line { width: 100%; /* 線條寬度 */ 
-                height: 1px; /* 線條高度 */ 
-                background-color: #ccc; /* 線條顏色 */ 
-                margin: 20px 30px 20px 30px;
-
-                } 
-                .left-top { 
-                width: 100%; 
-                border-collapse: collapse; 
-                text-align: center; 
-                margin-right : 70px; 
-                margin-left : 100px; 
-                flex :1; 
-                } 
-                h1 { 
-                    text-align: center; 
-                    color: #333; 
-                } 
-                .profile-header { 
-                    text-align: center; 
-                    margin-bottom: 20px; 
-                } 
-                .profile-header img { 
-                    width: 150px; 
-                    height: 150px; 
-                    border-radius: 50%;
-                } 
-                .profile-header h2 { 
-                    margin: 10px 0; 
-                    color: #333; 
-                } 
-                .profile-header p { 
-                    color: #777;
-                 } 
-                .profile-info { 
-                    margin-top: 20px; 
-                } 
-                .profile-info h3 { 
-                    color: #333;
-                } 
-                .profile-info ul { 
-                    list-style-type: none; 
-                    padding: 0; 
-                } 
-                .profile-info ul li { 
-                    margin: 10px 0; 
-                    color: #555; 
-                } footer { 
-                    text-align: center; 
-                    margin-top: 20px; 
-                    color: #777; 
-                } 
-        </style>
-</head>
-<body>
-    <div class="left-bottom">
-        <div class="profile-header">
-            <h2>個人基本資訊</h2>
-             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrjDKvX46GOpgDflhYQ7KI9fewSC6y552-hA&s" alt="頭像" class="profile-picture">
-        </div>
-        <div class="line"></div>
-        <div class="profile-info">
-            <ul>
-                <li><strong>姓名：</strong> 蔡昆佑</li>
-                <li><strong>年齡：</strong> 25</li>
-                <li><strong>生日：</strong> 2002/01/01</li>
-                <li><strong>血型：</strong> O型</li>
-                <li><strong>稱謂：</strong> 新手爸爸</li>
-                <li><strong>身分證字號：</strong> F131420505</li>
-                <li><strong>通訊地址：</strong> 新北市淡水區XX路XX段XX號XX樓</li>
-                <li><strong>連絡電話：</strong> 0900-123-123</li>
-            </ul>
-        </div>
-
-        <footer>
-            <p>© 2025 xx醫院 | 版權所有</p>
-        </footer>
-    </div>
-</body>
-<style>
-    body {
-        font-family: "標楷體", Arial, sans-serif;
-        background-color: #c2aecc;
-        padding: 20px;
-        margin: 0;
-        display: flex;
-        flex: 1;  /* 讓此區塊占據剩餘空間 */
-    }
-
-    .right-bottom {
-        width: 90%;
-        max-width: 900px;
-        margin: auto;
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        overflow-x: auto;
-        position: relative;
-        flex: 2;
-        height: 600px; /* 固定高度 */
-        overflow-y: auto; /* 允許垂直滾動 */
-        margin-left : 50px;
-    }
-
-    .right-top {
-        width: 100%;
-        border-collapse: collapse;
-        text-align: center;
-        margin-right : 0px;
-        margin-left : 50px;
-        flex :1;
-    }
-    .settings-icon {
-        position: absolute;
-        top: 10px;
-        right: 5px;
-        font-size: 24px;
-        cursor: pointer;
-        color: #6b7280;
-        transition: color 0.3s;
-    }
-    .settings-icon:hover {
-        color: #4b5563;
-    }
-    th, td {
-        border: 1px solid #ddd;
-        padding: 8px;
-    }
-    th {
-        background-color: #c8b1d7;
-    }
-    .score-low {
-        color: red;
-        font-weight: bold;
-    }
-    .weight-change {
-        color: red;
-    }
-    .love-score {
-        padding: 5px;
-        border-radius: 5px;
-        display: inline-block;
-        width: 40px;
-        text-align: center;
-        color: rgb(3, 3, 3);
-        font-weight: bold;
-    }
-    .btn-info {
-        background-color: #007BFF;
-        color: white;
-        border: none;
-        padding: 3px 6px;
-        font-size: 12px;
-        cursor: pointer;
-        border-radius: 5px;
-        margin-left: 5px;
-    }
-    .btn-info:hover {
-        background-color: #0056b3;
-    }
-
-    /* 色階設定 */
-    .level-0 { background-color: rgb(253, 255, 144); }
-    .level-1 { background-color: #b1f3ba; }
-    .level-2 { background-color: #7ee77e; }
-    .level-3 { background-color: #07bd07; }
-    .level-4 { background-color: #008000; }
-
-    /* 彈出視窗 */
-    .popup {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        text-align: center;
-        max-width: 300px;
-        width: 80%;
-    }
-    .popup img {
-        width: 100%;
-    }
-    .popup .close-btn {
-        background-color: red;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        font-size: 14px;
-        cursor: pointer;
-        border-radius: 5px;
-        margin-top: 10px;
-    }
-
-    .buttons {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 30px;
-    }
-
-    .btn {
-        padding: 12px 20px;
-        font-size: 18px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    .btn-secondary {
-        background-color: #6c757d;
-        color: white;
-    }
-
-    .btn-secondary:hover {
-        background-color: #565e64;
-    }
-    .buttons-container {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-}
-.buttons-container button {
-    flex: 1;
-    margin: 0 5px;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-}
-.step-count { background-color: #28a745; }
-.test-score { background-color: #ffc107; }
-.analysis-result { background-color: #17a2b8; }
-.progress-check { background-color: #6c757d; }
-.goback{background-color: rgb(255, 0, 0);}
-</style>
-</head>
-<body>
-    <div class="right">
-        <a href="/settings" class="settings-icon">
-           <i class="fas fa-cog"></i>
-        </a>
-        <div class="right-top">
-            <!-- 步數統計按鈕 -->
-            <button class="step-count" onclick="window.location.href='/steps'">步數統計</button>
-            <!-- 測驗分數按鈕 -->
-            <button class="test-score">測驗分數
-            <td>
-                <select name="score-dropdown" onchange="handleSelection(this.value)">
-                    <option value="" selected>母乳知識量表</option>
-                    <option value="support_assessment">生產支持知覺量表</option>
-                    <option value="attachment_support">親子依附支持量表</option>
-                    <option value="knowledge">母乳知識量表</option>
-                    <option value="dour">產後憂鬱量表</option>
-                    <option value="hurt">疼痛量表</option>
-                    <option value="sleep">匹茲堡睡眠品質量表</option>
-                </select>
-            </td>
-        </button>
-            
-            <script>
-                function handleSelection(value) {
-                    if (value) {
-                        window.location.href = `/${value}`;
-                    }
-                }
-            </script>
-            
-            
-            <!-- 分析結果按鈕 -->
-            <button class="analysis-result" onclick="window.location.href='/analysis'">分析結果</button>
-            <!-- 進階查詢按鈕 -->
-            <button class="progress-check" onclick="window.location.href='/advanced_search'">進階查詢</button>
-
-            <button class="goback" onclick="window.location.href='/index'">重新查詢</button>
-        </div>
-        <hr style="margin-left: 0px;">
-        
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知識測驗記錄</title>
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
         body {
-            font-family: "標楷體", Arial, sans-serif;
-            background-color: #c2aecc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            background: linear-gradient(to right, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.2)), 
+                        url('https://via.placeholder.com/1500x1000/87CEFA/ffffff?text=Background+Image') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'DFKai-SB', '標楷體', DFKai-SB, serif;
             margin: 0;
+            padding: 0;
+            min-height: 100vh;
         }
         .container {
-            width: 90%;
-            max-width: 800px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: relative;
-        }
-        .title {
-            text-align: left;  /* 標題靠左 */
-            font-weight: bold;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        .settings-icon {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #6b7280;
-            transition: color 0.3s;
-        }
-        .settings-icon:hover {
-            color: #4b5563;
-        }
-        table {
+            margin-top: 50px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             width: 100%;
-            border-collapse: collapse;
+            max-width: 950px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h2 {
             text-align: center;
+            color: #007bff;
         }
-        table th, table td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            font-size: 18px;
+        .table {
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        table th {
-            background-color: #c8b1d7;
+        .highlight {
             font-weight: bold;
+            color: #d9534f;
         }
-        table td {
-            background-color: #fff;
+        .table-responsive-wrapper {
+            overflow-x: auto;
         }
-        .check-icon {
-            color: red;
-            font-size: 24px;
-        }
-        .cross-icon {
-            color: black;
-            font-size: 24px;
-        }
-        /* 分數低於 60 顯示紅色 */
-        .low-score {
-            color: red;
-            font-weight: bold;
-        }
-
-        .buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-        }
-
-        .btn {
-            padding: 12px 20px;
-            font-size: 18px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background-color: #565e64;
-        }
-
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 設定圖示，點擊後跳轉到 settings.html -->
-        <a href="settings.html" class="settings-icon">
-            <i class="fas fa-cog"></i>
-        </a>
 
-        <h1 class="title">母乳知識量表</h1>
-        <p class="info">姓名: 蔡昆佑 &nbsp;&nbsp;&nbsp;&nbsp; 患者 ID: 123456</p>
-        <table>
-            <thead>
+<div class="container">
+    <h2 class="text-center mb-4">母乳知識量表記錄</h2>
+
+    <% let queryStringParam = table === "users" ? "user_id" : "man_user_id"; %>
+    <% let recordId = userId || manUserId; %>
+
+    <p><strong>ID：</strong> <%= recordId || '未提供' %></p>
+    <p><strong>名字：</strong> <%= user_name || '未提供' %></p>
+
+    <div class="table-responsive-wrapper">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
                 <tr>
-                    <th>編號</th>
-                    <th>日期</th>
-                    <th>分數 <button class="question-icon" onclick="showScoreInfo()">
-                        <i class="fas fa-question-circle"></i></button>
-                    </th>
-                    <th>是否需進一步追蹤</th>
+                    <th>欄位名稱</th>
+                    <% assessmentsData.forEach((_, index) => { %>
+                        <th>紀錄 <%= index + 1 %></th>
+                    <% }); %>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>2024/12/01</td>
-                    <td class="low-score">56</td>
-                    <td><i class="fas fa-check check-icon"></i></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>2024/12/08</td>
-                    <td>76</td>
-                    <td><i class="fas fa-times cross-icon"></i></td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>2024/12/15</td>
-                    <td>80</td>
-                    <td><i class="fas fa-times cross-icon"></i></td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>2024/12/22</td>
-                    <td>64</td>
-                    <td><i class="fas fa-times cross-icon"></i></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>2024/12/29</td>
-                    <td>76</td>
-                    <td><i class="fas fa-times cross-icon"></i></td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>2025/01/05</td>
-                    <td>72</td>
-                    <td><i class="fas fa-times cross-icon"></i></td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>2025/01/12</td>
-                    <td>80</td>
-                    <td><i class="fas fa-times cross-icon"></i></td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>2025/01/19</td>
-                    <td class="low-score">52</td>
-                    <td><i class="fas fa-check check-icon"></i></td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td>2025/01/26</td>
-                    <td>68</td>
-                    <td><i class="fas fa-times cross-icon"></i></td>
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td>2025/02/02</td>
-                    <td>76</td>
-                    <td><i class="fas fa-times cross-icon"></i></td>
-                </tr>
-            </tbody>
+           <tbody>
+    <tr>
+        <td>ID</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.knowledge_id %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>測驗量表</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.knowledge_question_content %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>測驗日期</td>
+        <% assessmentsData.forEach(item => { %>
+            <td>
+                <%= new Date(item.knowledge_test_date).toLocaleDateString('zh-TW', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                }) %>
+            </td>
+        <% }); %>
+    </tr>
+
+    <% const knowledgeQuestions = [
+        "產後所分泌的初乳，無論量多量少都能增加嬰兒的免疫力",
+        "母親乳房的大小會影響乳汁分泌的多寡",
+        "母親過度疲倦、緊張、心情不好會使乳汁分泌減少",
+        "母親的水分攝取不足會使乳汁減少，只要飲用大量的水就能使乳汁分泌持續增加",
+        "產後初期母親應該訂定餵奶時間表，幫助嬰兒於固定的時間吸奶",
+        "為促進乳汁的分泌，每次餵奶前都要做乳房的熱敷與按摩",
+        "哺餵母乳時當嬰兒只含住乳頭，母親需重新調整姿勢，盡量讓嬰兒含住全部或部分乳暈",
+        "為了幫助嬰兒成功含乳，母親可以手掌支托乳房，支托乳房的手指應遠離乳暈",
+        "餵奶前後，母親不須用肥皂以及清水清洗乳頭",
+        "即使母親的乳頭是平的或凹陷的，嬰兒還是可以吃到足夠的母乳",
+        "產後初期當母親乳汁還沒來之前，嬰兒還是可以吃到足夠的母乳",
+        "當母親感到乳頭有受傷或輕微破皮時，可以在哺餵完母乳後擠一些乳汁塗抹乳頭",
+        "哺餵母乳時嬰兒嗜睡或哭鬧是母親乳汁不夠的徵象",
+        "為避免嬰兒呼吸不順暢，哺餵母乳時母親需要用手指壓住嬰兒鼻子附近的乳房部位",
+        "乳汁的分泌量主要是受到嬰兒的吸吮次數與吸吮時間所影響，當嬰兒吸吮次數越多、吸吮時間越久，母親的乳汁分泌量也會越多",
+        "當母親感覺脹奶時，多讓嬰兒吸吮乳房是最佳的處理方式",
+        "嬰兒生病的時候，為了讓嬰兒獲得適當的休息，母親應該暫停哺餵母乳",
+        "當嬰兒體力較差或吸吮力弱，母親可以在嬰兒吸吮時同時用支托乳房的手擠乳協助",
+        "產後初期混合哺餵配方奶，母親的乳汁分泌量會受到影響",
+        "產後初期混合哺餵配方奶，會讓嬰兒在學習直接吸吮母親乳房時，需要花長一點的時間適應",
+        "當哺餵母乳時嬰兒嗜睡，母親可以試著鬆開包巾或輕搓嬰兒四肢或耳朵",
+        "沒有到病嬰室(嬰兒隔離病房)親餵嬰兒時，母親也需要規律地擠出乳汁",
+        "擠乳時母親的手放在乳暈的位置，往乳頭方向來回擠壓",
+        "嬰兒已經吃過的那瓶奶水，應該於當餐吃完，沒有吃完的話就需要丟掉",
+        "產後初期乳汁未大量分泌前，母親應進行親自哺餵或擠奶，一天至少每三小時一次，每次至少十五分鐘"
+    ]; %>
+
+    <% knowledgeQuestions.forEach((question, index) => { %>
+        <tr>
+            <td><%= question %></td>
+            <% assessmentsData.forEach(item => { %>
+                <td><%= item[`knowledge_answer_${index + 1}`] %></td>
+            <% }); %>
+        </tr>
+    <% }); %>
+
+    <tr>
+        <td>總分</td>
+        <% assessmentsData.forEach(item => { %>
+            <td class="<%= item.knowledge_score >= 20 ? 'highlight' : '' %>">
+                <%= item.knowledge_score %>
+            </td>
+        <% }); %>
+    </tr>
+</tbody>
+
         </table>
     </div>
-    <script>
-        function goBack() {
-            window.location.href = '/scores'; // 返回測驗分數頁面
-        }
-        function showScoreInfo() {
-            alert("滿分100，答對得 4 分，答錯或不知道不給分，分數低於 60 則顯示紅色");
-        }
-    </script>
+
+    <a href="/result?<%= queryStringParam %>=<%= recordId %>" class="btn btn-secondary mt-3">返回個人詳細資料</a>
+</div>
+
+
 </body>
 </html>
