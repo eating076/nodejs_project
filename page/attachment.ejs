@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>親子依附支持量表</title>
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.2)),
+                        url('https://via.placeholder.com/1500x1000/87CEFA/ffffff?text=Background+Image') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'DFKai-SB', '標楷體', DFKai-SB, serif;
+            color: #333;
+        }
+        .container {
+            margin-top: 50px;
+            max-width: 95%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .white-box {
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .table {
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .table th {
+            background-color: #343a40;
+            color: white;
+        }
+        .table td {
+            vertical-align: middle;
+        }
+        h2 {
+            font-size: 30px;
+            color: #4e73df;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        p {
+            font-size: 18px;
+            color: #333;
+        }
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            h2 {
+                font-size: 24px;
+            }
+            .table th, .table td {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="white-box">
+        <h2 class="text-center mb-4">親子依附支持量表紀錄</h2>
+
+        <!-- 顯示使用者資訊 -->
+        <p><strong>ID：</strong> <%= userId || '未提供' %></p>
+        <p><strong>名字：</strong> <%= user_name || '未提供' %></p>
+
+
+            <!-- Console 確認 userId -->
+            <script>
+                console.log("🔍 EJS 前端收到的 userId:", "<%= userId %>");
+            </script>
+
+            <% if (attachmentData && attachmentData.length > 0) { %>
+                <table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>欄位名稱</th>
+            <% attachmentData.forEach((_, index) => { %>
+                <th>紀錄 <%= index + 1 %></th>
+            <% }); %>
+        </tr>
+    </thead>
+<tbody>
+    <tr>
+        <td>測驗 ID</td>
+        <% attachmentData.forEach(data => { %>
+            <td><%= data.attachment_id %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>測驗量表</td>
+        <% attachmentData.forEach(data => { %>
+            <td><%= data.attachment_question_content %></td>
+        <% }); %>
+    </tr>
+    <tr>
+        <td>測驗日期</td>
+        <% attachmentData.forEach(data => { %>
+            <td><%= data.formattedTestDate %></td>
+        <% }); %>
+    </tr>
+
+    <% const attachmentQuestions = [
+        "看到孩子，我就會覺得心情好",
+        "我喜歡陪伴著孩子",
+        "和孩子在一起是一種享受",
+        "我喜歡抱著孩子的感覺",
+        "孩子加入我的生活，讓我感到幸福",
+        "陪在孩子身邊，讓我感到滿足",
+        "我喜歡欣賞孩子的表情或動作"
+    ]; %>
+
+    <% attachmentQuestions.forEach((question, index) => { %>
+        <tr>
+            <td><%= question %></td>
+            <% attachmentData.forEach(data => { %>
+                <td><%= data[`attachment_answer_${index + 1}`] %></td>
+            <% }); %>
+        </tr>
+    <% }); %>
+
+    <tr>
+        <td>親近分數</td>
+        <% attachmentData.forEach(data => { %>
+            <td><%= data.attachment_score_a %></td>
+        <% }); %>
+    </tr>
+
+    <% const attachmentQuestionsB = [
+        "我在照顧孩子的時候，會感到不耐煩",
+        "時時要滿足孩子的需求，讓我感到沮喪",
+        "如果孩子干擾到我的休息，我會感到討厭",
+        "我覺得自己像是個照顧孩子的機器",
+        "照顧孩子讓我感到筋疲力盡",
+        "我會對孩子生氣"
+    ]; %>
+
+    <% attachmentQuestionsB.forEach((question, index) => { %>
+        <tr>
+            <td><%= question %></td>
+            <% attachmentData.forEach(data => { %>
+                <td><%= data[`attachment_answer_${index + 8}`] %></td>
+            <% }); %>
+        </tr>
+    <% }); %>
+
+    <tr>
+        <td>親職適應分數</td>
+        <% attachmentData.forEach(data => { %>
+            <td><%= data.attachment_score_b %></td>
+        <% }); %>
+    </tr>
+
+    <% const attachmentQuestionsC = [
+        "我要保留自己的最佳精力給孩子",
+        "我看重孩子的需求甚過自己的",
+        "如果孩子受苦，我願意替他承受",
+        "即使我有其他重要事情，我還是以照顧孩子爲第一",
+        "我願意因爲孩子而減少自己的自由",
+        "對我而言，孩子是世界上最重要的"
+    ]; %>
+
+    <% attachmentQuestionsC.forEach((question, index) => { %>
+        <tr>
+            <td><%= question %></td>
+            <% attachmentData.forEach(data => { %>
+                <td><%= data[`attachment_answer_${index + 14}`] %></td>
+            <% }); %>
+        </tr>
+    <% }); %>
+
+    <tr>
+        <td>承諾分數</td>
+        <% attachmentData.forEach(data => { %>
+            <td><%= data.attachment_score_c %></td>
+        <% }); %>
+    </tr>
+
+    <% const attachmentQuestionsD = [
+        "我能察覺孩子「想睡覺」的訊號",
+        "我會由孩子的表情或動作，來猜測他的需求",
+        "我知道孩子的需求和情緒",
+        "我能有效地安撫孩子",
+        "我會依照孩子的反應，來調整照顧他的方式",
+        "我對照顧孩子的方式有信心"
+    ]; %>
+
+    <% attachmentQuestionsD.forEach((question, index) => { %>
+        <tr>
+            <td><%= question %></td>
+            <% attachmentData.forEach(data => { %>
+                <td><%= data[`attachment_answer_${index + 20}`] %></td>
+            <% }); %>
+        </tr>
+    <% }); %>
+
+    <tr>
+        <td>回應信心分數</td>
+        <% attachmentData.forEach(data => { %>
+            <td><%= data.attachment_score_d %></td>
+        <% }); %>
+    </tr>
+</tbody>
+
+
+</table>
+
+            <% } else { %>
+                <p class="text-center">目前沒有測驗結果。</p>
+            <% } %>
+
+            <a href="/result?user_id=<%= userId %>" class="btn btn-secondary mt-3">返回個人詳細資料</a>
+        </div>
+    </div>
+</body>
+</html>
