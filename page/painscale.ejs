@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -80,7 +81,7 @@
     <div class="white-box">
         <h2 class="text-center mb-4">產後傷口疼痛量表記錄</h2>
 
-        <p><strong>ID：</strong> <%= userId || '未提供' %></p>
+        <p><strong>使用者 ID：</strong> <%= userId || '未提供' %></p>
         <p><strong>名字：</strong> <%= user_name || '未提供' %></p>
 
         <script>
@@ -99,7 +100,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>ID</td>
+                        <td>量表 ID</td>
                         <% painscaleData.forEach(item => { %>
                             <td><%= item.painscale_id %></td>
                         <% }); %>
