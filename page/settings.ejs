@@ -71,7 +71,7 @@
             <h1>歡迎，人員：<%= userRole %></h1>
             <div class="options">
                 <% if (userRole === '管理者') { %>
-                    <button onclick="window.location.href='/dashboard?settings_id=<%= settingsId %>&user_role=<%= userRole %>'">進入 Dashboard</button>
+                    <button onclick="window.location.href='/dashboard?settings_id=<%= settingsId %>&user_role=<%= userRole %>'">進入人員管理系統</button>
                 <% } else if (userRole === '研究人員修改者' || userRole === '臨床人員修改者') { %>
                     <button onclick="window.location.href='/index'">進入資料查詢</button>
                 <% } else { %>
