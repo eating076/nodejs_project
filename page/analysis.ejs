@@ -1,241 +1,206 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>分析報告</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <style>
-        body {
-            background: linear-gradient(to right, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.3)), 
-                        url('https://via.placeholder.com/1500x1000/87CEFA/ffffff?text=Background+Image') no-repeat center center fixed;
-            background-size: cover;
-            font-family: 'DFKai-SB', '標楷體', DFKai-SB, serif;
-            color: #333;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>分析報告</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <style>
+    body {
+      background: linear-gradient(to right, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.3)),
+                  url('https://via.placeholder.com/1500x1000/87CEFA/ffffff?text=Background+Image') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'DFKai-SB', '標楷體', serif;
+      color: #333;
+    }
 
-        .container {
-            max-width: 900px;
-            margin-top: 40px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+    .container {
+      max-width: 900px;
+      margin-top: 40px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
 
-        h2 {
-            text-align: center;
-            color: #343a40;
-            margin-bottom: 20px;
-            font-weight: 700;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    h2 {
+      text-align: center;
+      color: #343a40;
+      margin-bottom: 20px;
+      font-weight: 700;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .info-icon {
-            margin-left: 10px;
-            cursor: pointer;
-            color: #007bff;
-            font-size: 20px;
-        }
+    h4 {
+      margin-top: 30px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #007bff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-        .highlight {
-            font-weight: bold;
-            color: #d9534f;
-        }
+    h4::before {
+      content: "📊";
+      font-size: 1.2em;
+    }
 
-        .warning {
-            font-weight: bold;
-            color: #f0ad4e;
-        }
+    .info-icon {
+      margin-left: 10px;
+      cursor: pointer;
+      color: #007bff;
+      font-size: 20px;
+      transition: transform 0.2s;
+    }
 
-        .back-button {
-            display: block;
-            margin: 20px auto 0;
-            padding: 10px 20px;
-            background-color: #6c757d;
-            color: white;
-            text-align: center;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            width: 200px;
-        }
+    .info-icon:hover {
+      transform: scale(1.2);
+    }
 
-        .back-button:hover {
-            background-color: #5a6268;
-        }
+    .highlight {
+      background-color: #f8d7da;
+      font-weight: bold;
+    }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
+    .warning {
+      background-color: #fff3cd;
+      font-weight: bold;
+    }
 
-            h2 {
-                font-size: 24px;
-            }
+    .success {
+      background-color: #d4edda;
+      font-weight: bold;
+    }
 
-            .table th, .table td {
-                font-size: 14px;
-            }
+    .table-responsive {
+      overflow-x: auto;
+    }
 
-            .back-button {
-                width: 100%;
-            }
-        }
-    </style>
+    .btn-secondary i {
+      margin-right: 6px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      h2 {
+        font-size: 24px;
+      }
+      .table th, .table td {
+        font-size: 14px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-     <div class="container">
-        <h2>分析報告
-            <span id="info-icon" class="info-icon">
-                <i class="bi bi-info-circle-fill"></i>
-            </span>
-        </h2>
+<div class="container">
+  <h2>分析報告
+    <span id="info-icon" class="info-icon">
+      <i class="bi bi-info-circle-fill"></i>
+    </span>
+  </h2>
 
-<% let queryStringParam = table === "users" ? "user_id" : "man_user_id"; %>
-<% let recordId = userId || manUserId; %>
-   <!-- 評分標示模態框 -->
-    <div class="modal fade" id="scoreModal" tabindex="-1" aria-labelledby="scoreModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="scoreModalLabel">親子依附支持量表評分標示</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>親近分量表：</strong><br> >34分：母嬰親近狀況良好<br> <34分：母嬰親近狀況不佳</p>
-                    <p><strong>親職適應分量表：</strong><br> <18分：母親親職適應良好<br> >18分：母親親職適應不佳</p>
-                    <p><strong>承諾分量表：</strong><br> >24分：母親較願意負起照顧孩子的責任。<br> <24分：母親較不願負起照顧孩子的責任。</p>
-                    <p><strong>回應信心分量表：</strong><br> >22分：母親有信心了解嬰兒的需求並給予回應。<br> <22分：母親無信心了解嬰兒的需求並給予回應。</p>
-                    <p><strong>憂鬱量表：</strong><br> 0-6分：無或極輕微憂鬱<br> 7-13分：輕度憂鬱<br> 14-19分：中度憂鬱<br> 19-30分：嚴重憂鬱症</p>
-                    <p><strong>睡眠評估量表：</strong><br> PSQI 總分範圍 0-21，通常大於 5 分視為睡眠質量有問題。</p>
-                    <p><strong>知識量表：</strong><br> (暫無資料)</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-                </div>
-            </div>
-        </div>
-    </div>
+  <% let queryStringParam = isUser ? "user_id" : "man_user_id"; %>
+  <% let recordId = userId || manUserId; %>
+  <% const { attachment, knowledge, sleep, dour } = analysisData; %>
 
+  <p><i class="bi bi-person-badge-fill me-1"></i><strong>ID：</strong> <%= recordId || '尚未提供' %></p>
+  <p><i class="bi bi-person-fill me-1"></i><strong>名字：</strong> <%= user_name || '尚未提供' %></p>
 
-         <p><strong>ID：</strong> <%= userId || '未提供' %></p>
-        <p><strong>名字：</strong> <%= user_name || '未提供' %></p>
-
-        <% if (table === "man_users") { %>
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr><th>評估項目</th><th>分數</th><th>評語</th></tr>
-        </thead>
-        <tbody>
-            <% analysisData.forEach(data => { %>
-                <tr>
-                    <td>知識測驗</td>
-                    <td class="<%= data.knowledge_score >= 80 ? '' : (data.knowledge_score >= 60 ? 'warning' : 'highlight') %>">
-                        <%= data.knowledge_score %>
-                    </td>
-                    <td>
-                        <% if (data.knowledge_score >= 80) { %> 優秀
-                        <% } else if (data.knowledge_score >= 60) { %> 普通
-                        <% } else { %> 需要加強 <% } %>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>憂鬱指數</td>
-                    <td class="<%= data.dour_score <= 6 ? '' : (data.dour_score <= 13 ? 'warning' : 'highlight') %>">
-                        <%= data.dour_score %>
-                    </td>
-                    <td><%= data.dour_comment %></td>
-                </tr>
-
-                <tr>
-                    <td>睡眠品質</td>
-                    <td class="<%= data.sleep_score_total <= 5 ? '' : 'highlight' %>">
-                        <%= data.sleep_score_total %>
-                    </td>
-                    <td><%= data.sleep_comment %></td>
-                </tr>
-            <% }); %>
-        </tbody>
+  <% if (isUser) { %>
+  <h4>親密依附四量表</h4>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <% if (attachment) { %>
+      <tr>
+        <td>母嬰親近狀況</td>
+        <td class="<%= attachment.attachment_score_a >= 34 ? 'success' : 'highlight' %>"><%= attachment.attachment_score_a ?? '-' %></td>
+        <td><%= attachment.attachment_score_a >= 34 ? '母嬰親近狀況良好' : '母嬰親近狀況不佳' %></td>
+      </tr>
+      <tr>
+        <td>親職適應</td>
+        <td class="<%= attachment.attachment_score_b < 18 ? 'success' : 'highlight' %>"><%= attachment.attachment_score_b ?? '-' %></td>
+        <td><%= attachment.attachment_score_b < 18 ? '母親親職適應良好' : '母親親職適應不佳' %></td>
+      </tr>
+      <tr>
+        <td>照顧責任</td>
+        <td class="<%= attachment.attachment_score_c >= 24 ? 'success' : 'highlight' %>"><%= attachment.attachment_score_c ?? '-' %></td>
+        <td><%= attachment.attachment_score_c >= 24 ? '願意照顧孩子' : '不太願意照顧孩子' %></td>
+      </tr>
+      <tr>
+        <td>回應信心</td>
+        <td class="<%= attachment.attachment_score_d >= 22 ? 'success' : 'highlight' %>"><%= attachment.attachment_score_d ?? '-' %></td>
+        <td><%= attachment.attachment_score_d >= 22 ? '有信心了解嬰兒需求' : '缺乏信心了解嬰兒需求' %></td>
+      </tr>
+      <% } else { %>
+      <tr><td colspan="3" class="warning">尚無親密依附資料</td></tr>
+      <% } %>
     </table>
-<% } else { %>
-    <!-- 這裡是 `users` 查詢時的完整評估項目 -->
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr><th>評估項目</th><th>分數</th><th>評語</th></tr>
-        </thead>
-        <tbody>
-            <% analysisData.forEach(data => { %>
-                <tr>
-                    <td>母嬰親近狀況</td>
-                    <td class="<%= data.attachment_score_a >= 34 ? '' : 'highlight' %>">
-                        <%= data.attachment_score_a %>
-                    </td>
-                    <td><%= data.attachment_comment_a %></td>
-                </tr>
+  </div>
+  <% } %>
 
-                <tr>
-                    <td>母親親職適應</td>
-                    <td class="<%= data.attachment_score_b < 18 ? '' : 'highlight' %>">
-                        <%= data.attachment_score_b %>
-                    </td>
-                    <td><%= data.attachment_comment_b %></td>
-                </tr>
-
-                <tr>
-                    <td>母親照顧孩子的責任</td>
-                    <td class="<%= data.attachment_score_c >= 24 ? '' : 'highlight' %>">
-                        <%= data.attachment_score_c %>
-                    </td>
-                    <td><%= data.attachment_comment_c %></td>
-                </tr>
-
-                <tr>
-                    <td>母親對嬰兒需求的信心</td>
-                    <td class="<%= data.attachment_score_d >= 22 ? '' : 'highlight' %>">
-                        <%= data.attachment_score_d %>
-                    </td>
-                    <td><%= data.attachment_comment_d %></td>
-                </tr>
-
-                <tr>
-                    <td>知識測驗</td>
-                    <td class="<%= data.knowledge_score >= 80 ? '' : (data.knowledge_score >= 60 ? 'warning' : 'highlight') %>">
-                        <%= data.knowledge_score %>
-                    </td>
-                    <td>
-                        <% if (data.knowledge_score >= 80) { %> 優秀
-                        <% } else if (data.knowledge_score >= 60) { %> 普通
-                        <% } else { %> 需要加強 <% } %>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>憂鬱指數</td>
-                    <td class="<%= data.dour_score <= 6 ? '' : (data.dour_score <= 13 ? 'warning' : 'highlight') %>">
-                        <%= data.dour_score %>
-                    </td>
-                    <td><%= data.dour_comment %></td>
-                </tr>
-
-                <tr>
-                    <td>睡眠品質</td>
-                    <td class="<%= data.sleep_score_total <= 5 ? '' : 'highlight' %>">
-                        <%= data.sleep_score_total %>
-                    </td>
-                    <td><%= data.sleep_comment %></td>
-                </tr>
-            <% }); %>
-        </tbody>
+  <h4>知識量表 (總分+評語)</h4>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <% if (knowledge && knowledge.knowledge_score !== undefined) { %>
+      <tr>
+        <td class="<%= knowledge.knowledge_score >= 80 ? 'success' : (knowledge.knowledge_score >= 60 ? 'warning' : 'highlight') %>">
+          <%= knowledge.knowledge_score %>
+        </td>
+        <td>
+          <% if (knowledge.knowledge_score >= 80) { %> 優秀
+          <% } else if (knowledge.knowledge_score >= 60) { %> 普通
+          <% } else { %> 需要加強 <% } %>
+        </td>
+      </tr>
+      <% } else { %>
+      <tr><td colspan="2" class="warning">尚無知識測驗資料</td></tr>
+      <% } %>
     </table>
-<% } %>
+  </div>
 
+  <h4>睡眠品質</h4>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <% if (sleep && sleep.sleep_score_total !== undefined) { %>
+      <tr>
+        <td class="<%= sleep.sleep_score_total <= 5 ? 'success' : 'highlight' %>"><%= sleep.sleep_score_total %></td>
+        <td><%= sleep.sleep_score_total <= 5 ? '睡眠品質正常' : '睡眠品質不佳' %></td>
+      </tr>
+      <% } else { %>
+      <tr><td colspan="2" class="warning">尚無睡眠評估資料</td></tr>
+      <% } %>
+    </table>
+  </div>
+
+<h4>憂鬱量表</h4>
+<table class="table table-bordered">
+    <% if (dour && dour.dour_score !== undefined) { %>
+    <tr>
+        <td class="<%= dour.dour_score <= 6 ? '' : (dour.dour_score <= 13 ? 'warning' : 'highlight') %>">
+            <%= dour.dour_score %>
+        </td>
+        <td>
+            <% if (dour.dour_score <= 6) { %>
+                無或極輕微憂鬱
+            <% } else if (dour.dour_score <= 13) { %>
+                輕度憂鬱
+            <% } else if (dour.dour_score <= 19) { %>
+                中度憂鬱
+            <% } else { %>
+                嚴重憂鬱症
+            <% } %>
+        </td>
+    </tr>
+    <% } else { %>
+    <tr><td colspan="2" class="warning">尚無憂鬱指數資料</td></tr>
+    <% } %>
+</table>
 
         <a href="/result?<%= queryStringParam %>=<%= recordId %>" class="btn btn-secondary mt-3">返回個人詳細資料</a>
         <a href="/index" class="btn btn-secondary mt-3">返回資料查詢</a>
