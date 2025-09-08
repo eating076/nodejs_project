@@ -5,6 +5,7 @@ const dayjs = require('dayjs');
 const app = express();
 const port = process.env.PORT || 3000;
 const ExcelJS = require('exceljs');
+
 const session = require('express-session');
 
 app.use(session({
@@ -17,15 +18,21 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use((req, res, next) => {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    next();
+});
+
 
 app.set('view engine', 'ejs');
 app.set('views', 'page');
 
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'cindy789125',
-    database: 'my_test_project'
+    host: '163.13.201.85',
+    user: 'remote_user',
+    password: 'tkuim1234',
+    database: 'test_project',
+    charset: 'utf8mb4'
 });
 
 connection.connect((err) => {
@@ -120,13 +127,17 @@ app.get('/index', (req, res) => {
 
 // 獲取所有 users
 app.get('/users', (req, res) => {
-    const { name, gender, birthdate, salutation } = req.query; // 接收查詢參數
+    const { name, email, gender, birthdate, salutation } = req.query; // 接收查詢參數
     let query = 'SELECT * FROM users WHERE 1=1'; // 使用 1=1 確保基礎查詢有效
     const params = [];
 
     if (name) {
         query += ' AND user_name LIKE ?';
         params.push(`%${name}%`);
+    }
+    if (email) {
+        query += ' AND user_email LIKE ?';
+        params.push(`%${email}%`);
     }
     if (gender) {
         query += ' AND user_gender = ?';
@@ -149,7 +160,6 @@ app.get('/users', (req, res) => {
         res.json(results); // 返回符合條件的數據
     });
 });
-
 
 // 根據 user_id 獲取特定用戶
 app.get('/users/:user_id', (req, res) => {
@@ -252,7 +262,6 @@ app.post('/users', (req, res) => {
 
 
 
-
 // 更新用戶資料
 app.put('/users/:user_id', (req, res) => {
     const userId = req.params.user_id;
@@ -296,6 +305,8 @@ app.put('/users/:user_id', (req, res) => {
         res.send('✅ 使用者更新成功');
     });
 });
+
+
 
 
 
@@ -352,117 +363,112 @@ app.get('/man_users/:man_user_id', (req, res) => {
     });
 });
 
+
 app.post('/man_users', (req, res) => {
   const {
-    man_user_id,
-    man_user_name, man_user_birthdate, man_user_height, man_current_weight,
-    man_user_gender, man_user_phone, man_emergency_contact_name,
-    man_emergency_contact_phone, man_betel_nut_habit, man_smoking_habit,
-    man_drinking_habit, man_contact_preference, man_chronic_illness,
-    man_chronic_illness_details, man_marital_status, man_user_salutation,
-    man_user_account, man_user_password,
-
-    // 新增欄位
-    man_emergency_contact_relation, man_emergency_contact_name2,
-    man_emergency_contact_relation2, man_emergency_contact_phone2,
-    man_pairing_code
+    man_user_id, // 若有，代表是更新，否則是新增
+    man_user_name, man_user_birthdate, man_user_height, man_current_weight, man_user_gender,
+    man_user_phone, man_emergency_contact_name, man_emergency_contact_phone, man_emergency_contact_relation,
+    man_emergency_contact_name2, man_emergency_contact_relation2, man_emergency_contact_phone2, man_pairing_code,
+    man_betel_nut_habit, man_smoking_habit, man_drinking_habit, man_contact_preference, man_chronic_illness,
+    man_chronic_illness_details, man_marital_status, man_user_salutation, man_user_account, man_user_password
   } = req.body;
 
   const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress || '';
   const userAgent = req.headers['user-agent'] || '';
   const logData = JSON.stringify(req.body);
 
-  // 🔄 如果有 ID 且為有效數字，就執行更新
-  if (man_user_id && Number.isInteger(Number(man_user_id))) {
-    const fields = {
-      man_user_name, man_user_birthdate, man_user_height, man_current_weight,
-      man_user_gender, man_user_phone, man_emergency_contact_name,
-      man_emergency_contact_phone, man_betel_nut_habit, man_smoking_habit,
-      man_drinking_habit,
-      man_contact_preference: Array.isArray(man_contact_preference) ? man_contact_preference.join(',') : man_contact_preference,
-      man_chronic_illness: Array.isArray(man_chronic_illness) ? man_chronic_illness.join(',') : man_chronic_illness,
-      man_chronic_illness_details, man_marital_status, man_user_salutation,
-      man_user_account, man_user_password,
+  console.log('🔍 收到請求:', req.body);
 
-      // 新增欄位
-      man_emergency_contact_relation, man_emergency_contact_name2,
-      man_emergency_contact_relation2, man_emergency_contact_phone2,
-      man_pairing_code
-    };
-
-    const keys = Object.keys(fields).filter(key => fields[key] !== undefined && fields[key] !== null);
-    if (keys.length === 0) {
-      return res.status(400).json({ error: 'No fields to update' });
+  // 先檢查該 man_user_id 是否存在
+  connection.query(`SELECT * FROM man_users WHERE man_user_id = ?`, [man_user_id], (err, rows) => {
+    if (err) {
+      console.error('❌ 查詢資料庫時發生錯誤:', err);
+      return res.status(500).send(`Database query error: ${err.message}`);
     }
 
-    const setClause = keys.map(k => `${k} = ?`).join(', ');
-    const values = keys.map(k => fields[k]).concat(man_user_id);
-    const sql = `UPDATE man_users SET ${setClause} WHERE man_user_id = ?`;
+    if (rows.length > 0) {
+      // 🟢 如果存在，就執行 UPDATE
+      console.log('🟢 使用者已存在，執行更新');
 
-    connection.query(sql, values, (err, result) => {
-      if (err) return res.status(500).send(`Error updating data: ${err.message}`);
+      const fields = {
+        man_user_name, man_user_birthdate, man_user_height, man_current_weight, man_user_gender,
+        man_user_phone, man_emergency_contact_name, man_emergency_contact_phone, man_emergency_contact_relation,
+        man_emergency_contact_name2, man_emergency_contact_relation2, man_emergency_contact_phone2, man_pairing_code,
+        man_betel_nut_habit, man_smoking_habit, man_drinking_habit, man_contact_preference, man_chronic_illness,
+        man_chronic_illness_details, man_marital_status, man_user_salutation, man_user_password
+      };
 
-      const logQuery = `INSERT INTO user_activity_logs (man_user_id, action, ip_address, user_agent, details) VALUES (?, ?, ?, ?, ?)`;
-      connection.query(logQuery, [man_user_id, 'Man user updated', ipAddress, userAgent, logData]);
+      const keys = Object.keys(fields).filter(key => fields[key] !== undefined && fields[key] !== null);
+      if (keys.length === 0) {
+        return res.status(400).json({ error: '❌ 沒有欄位可更新' });
+      }
 
-      res.status(200).json({ message: '✅ 使用者更新成功 (man_users)' });
-    });
+      const setClause = keys.map(k => `${k} = ?`).join(', ');
+      const values = keys.map(k => fields[k]).concat(man_user_id);
+      const sql = `UPDATE man_users SET ${setClause} WHERE man_user_id = ?`;
 
-  } else {
-    // ✅ 沒有 ID 就執行新增
-    if (!man_user_name || !man_user_account || !man_user_password) {
-      return res.status(400).json({ error: 'Missing required fields: man_user_name, man_user_account, man_user_password' });
-    }
+      connection.query(sql, values, (err, result) => {
+        if (err) {
+          console.error('❌ 更新資料時發生錯誤:', err);
+          return res.status(500).send(`Error updating data: ${err.message}`);
+        }
 
-    const insertQuery = `
-      INSERT INTO man_users (
-        man_user_name, man_user_birthdate, man_user_height, man_current_weight,
-        man_user_gender, man_user_phone, man_emergency_contact_name,
-        man_emergency_contact_phone, man_betel_nut_habit, man_smoking_habit,
-        man_drinking_habit,
-        man_contact_preference, man_chronic_illness,
-        man_chronic_illness_details, man_marital_status, man_user_salutation,
-        man_user_account, man_user_password,
+        console.log('✅ 使用者資料更新成功:', result);
 
-        -- 新增欄位
-        man_emergency_contact_relation, man_emergency_contact_name2,
-        man_emergency_contact_relation2, man_emergency_contact_phone2,
-        man_pairing_code
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
+        const logQuery = `INSERT INTO user_activity_logs (man_user_id, action, ip_address, user_agent, details) VALUES (?, ?, ?, ?, ?)`;
+        connection.query(logQuery, [man_user_id, 'Man_User updated', ipAddress, userAgent, logData]);
 
-    const values = [
-      man_user_name, man_user_birthdate, man_user_height, man_current_weight,
-      man_user_gender, man_user_phone, man_emergency_contact_name,
-      man_emergency_contact_phone, man_betel_nut_habit, man_smoking_habit,
-      man_drinking_habit,
-      Array.isArray(man_contact_preference) ? man_contact_preference.join(',') : man_contact_preference,
-      Array.isArray(man_chronic_illness) ? man_chronic_illness.join(',') : man_chronic_illness,
-      man_chronic_illness_details, man_marital_status, man_user_salutation,
-      man_user_account, man_user_password,
-
-      // 新增欄位
-      man_emergency_contact_relation, man_emergency_contact_name2,
-      man_emergency_contact_relation2, man_emergency_contact_phone2,
-      man_pairing_code
-    ];
-
-    connection.query(insertQuery, values, function(err, result) {
-      if (err) return res.status(500).send(`Error inserting data: ${err.message}`);
-      if (!result || !result.insertId) return res.status(500).send('新增失敗，無 insertId');
-
-      const newUserId = result.insertId;
-      console.log('✅ Debug: newUserId =', newUserId);
-
-      const logQuery = `INSERT INTO user_activity_logs (man_user_id, action, ip_address, user_agent, details) VALUES (?, ?, ?, ?, ?)`;
-      connection.query(logQuery, [newUserId, 'Man user created', ipAddress, userAgent, logData], function(logErr) {
-        if (logErr) console.error(`Error logging activity: ${logErr.message}`);
+        res.status(200).json({ message: '✅ 使用者更新成功' });
       });
 
-      res.status(201).json({ message: '✅ 使用者新增成功 (man_users)', man_user_id: newUserId });
-    });
-  }
+    } else {
+      // 🔴 如果不存在，就執行 INSERT
+      console.log('🔴 使用者不存在，執行新增');
+
+      if (!man_user_name || !man_user_account || !man_user_password) {
+        return res.status(400).send("❌ 使用者名稱、帳號與密碼不可為空");
+      }
+
+      const insertQuery = `
+        INSERT INTO man_users (
+          man_user_name, man_user_birthdate, man_user_height, man_current_weight, man_user_gender,
+          man_user_phone, man_emergency_contact_name, man_emergency_contact_phone, man_emergency_contact_relation,
+          man_emergency_contact_name2, man_emergency_contact_relation2, man_emergency_contact_phone2, man_pairing_code,
+          man_betel_nut_habit, man_smoking_habit, man_drinking_habit, man_contact_preference, man_chronic_illness,
+          man_chronic_illness_details, man_marital_status, man_user_salutation, man_user_account, man_user_password
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+
+      const insertValues = [
+        man_user_name, man_user_birthdate, man_user_height, man_current_weight, man_user_gender,
+        man_user_phone, man_emergency_contact_name, man_emergency_contact_phone, man_emergency_contact_relation,
+        man_emergency_contact_name2, man_emergency_contact_relation2, man_emergency_contact_phone2, man_pairing_code,
+        man_betel_nut_habit, man_smoking_habit, man_drinking_habit, man_contact_preference, man_chronic_illness,
+        man_chronic_illness_details, man_marital_status, man_user_salutation, man_user_account, man_user_password
+      ];
+
+      connection.query(insertQuery, insertValues, function(err, result) {
+        if (err) {
+          console.error('❌ 新增資料時發生錯誤:', err);
+          return res.status(500).send(`Error inserting data: ${err.message}`);
+        }
+        if (!result || !result.insertId) {
+          return res.status(500).send('❌ 新增使用者失敗，無 insertId');
+        }
+
+        console.log('✅ 使用者新增成功:', result);
+
+        const newManUserId = result.insertId;
+        const logQuery = `INSERT INTO user_activity_logs (man_user_id, action, ip_address, user_agent, details) VALUES (?, ?, ?, ?, ?)`;
+        connection.query(logQuery, [newManUserId, 'Man_User created', ipAddress, userAgent, logData]);
+
+        res.status(201).json({ message: '✅ 使用者新增成功', man_user_id: newManUserId });
+      });
+    }
+  });
 });
+
 
 
 app.put('/man_users/:man_user_id', (req, res) => {
@@ -470,7 +476,7 @@ app.put('/man_users/:man_user_id', (req, res) => {
 
   const {
     man_user_name, man_user_birthdate, man_user_height, man_current_weight,
-    man_user_gender, man_user_phone, man_emergency_contact_name,
+    man_user_email, man_user_gender, man_user_phone, man_emergency_contact_name,
     man_emergency_contact_phone, man_betel_nut_habit, man_smoking_habit,
     man_drinking_habit, man_contact_preference, man_chronic_illness,
     man_chronic_illness_details, man_marital_status, man_user_salutation,
@@ -488,7 +494,7 @@ app.put('/man_users/:man_user_id', (req, res) => {
 
   const fields = {
     man_user_name, man_user_birthdate, man_user_height, man_current_weight,
-    man_user_gender, man_user_phone, man_emergency_contact_name,
+    man_user_email, man_user_gender, man_user_phone, man_emergency_contact_name,
     man_emergency_contact_phone, man_betel_nut_habit, man_smoking_habit,
     man_drinking_habit, man_contact_preference, man_chronic_illness,
     man_chronic_illness_details, man_marital_status, man_user_salutation,
@@ -541,7 +547,6 @@ app.delete('/man_users/:user_id', (req, res) => {
 });
 
 app.get('/baby', (req, res) => {
-    // **儲存初始查詢 ID**
     req.session.initialUserId = req.query.user_id || null;
     req.session.initialManUserId = req.query.man_user_id || null;
 
@@ -570,20 +575,44 @@ app.get('/baby', (req, res) => {
             return res.status(500).json({ error: "資料庫查詢失敗，請稍後重試！" });
         }
 
-        if (results.length === 0) {
-            return res.redirect('/index');
+        // 預設名字為「未提供」
+        let user_name = '未提供';
+        let man_user_name = '未提供';
+
+        // 如果查詢有結果，就從 baby JOIN 裡取名字
+        if (results.length > 0) {
+            user_name = results[0]?.user_name || '未提供';
+            man_user_name = results[0]?.man_user_name || '未提供';
         }
 
-        res.render("baby", {
-            babiesData: results,
-            userId,
-            manUserId,
-            initialUserId: req.session.initialUserId, 
-            initialManUserId: req.session.initialManUserId, 
-            userRole,
-            user_name: results[0]?.user_name || '未提供',
-            man_user_name: results[0]?.man_user_name || '未提供',
-            table: userId ? "users" : "man_users"
+        // 如果沒有 baby 資料，就補查使用者名字
+        const nameQuery = userId
+            ? 'SELECT user_name FROM users WHERE user_id = ?'
+            : 'SELECT man_user_name FROM man_users WHERE man_user_id = ?';
+        const nameParam = userId ? userId : manUserId;
+
+        connection.query(nameQuery, [nameParam], (err2, nameResults) => {
+            if (err2) {
+                console.error("❌ 使用者名字查詢失敗:", err2);
+                return res.status(500).json({ error: "使用者資料查詢失敗" });
+            }
+
+            if (nameResults.length > 0) {
+                if (userId) user_name = nameResults[0].user_name || user_name;
+                if (manUserId) man_user_name = nameResults[0].man_user_name || man_user_name;
+            }
+
+            res.render("baby", {
+                babiesData: results || [],
+                userId,
+                manUserId,
+                initialUserId: req.session.initialUserId,
+                initialManUserId: req.session.initialManUserId,
+                userRole,
+                user_name,
+                man_user_name,
+                table: userId ? "users" : "man_users"
+            });
         });
     });
 });
@@ -953,39 +982,87 @@ app.delete('/user_question/:id', (req, res) => {
 });
 
 
+
 app.get('/fuzzy_search', (req, res) => {
+    const { name, table, birthdate, exportExcel } = req.query;
+
     console.log('收到的查詢參數:', req.query);
 
-    const { name, table, gender, birthdate, exportExcel } = req.query;
+    const isValid = (val) => val && val.trim() !== '' && val !== '未指定';
 
-    if (!name) {
-        return res.render('404', { message: '請輸入姓名進行查詢！' });
-    }
+    let query = '';
+    let params = [];
 
-    let query;
-    const params = [`%${name}%`];
+    // 建立查詢條件的助手
+    const buildWhereClause = (fields) => {
+        const clauses = [];
+        const clauseParams = [];
 
-    if (table === "users+man_users") {
+        if (isValid(name)) {
+            clauses.push(`${fields.name} LIKE ?`);
+            clauseParams.push(`%${name}%`);
+        }
+        if (isValid(birthdate)) {
+            clauses.push(`${fields.birthdate} = ?`);
+            clauseParams.push(birthdate);
+        }
+
+        return {
+            clause: clauses.length > 0 ? clauses.join(' AND ') : '1=1',
+            params: clauseParams
+        };
+    };
+
+    if (table === 'users+man_users') {
+        const userCond = buildWhereClause({ name: 'user_name', birthdate: 'user_birthdate' });
+        const manCond = buildWhereClause({ name: 'man_user_name', birthdate: 'man_user_birthdate' });
+
         query = `
-            SELECT 'users' AS tableName, user_id AS id, user_name AS name, user_gender AS gender, user_birthdate AS birthdate,
+            SELECT 'users' AS tableName, user_id AS id, user_name AS name, COALESCE(user_gender, '未指定') AS gender, user_birthdate AS birthdate,
                    user_account, user_phone, user_height, pre_pregnancy_weight, current_weight, chronic_illness, chronic_illness_details,
                    betel_nut_habit, smoking_habit, drinking_habit, user_salutation, marital_status
             FROM users
-            WHERE user_name LIKE ?
+            WHERE ${userCond.clause}
             UNION
-            SELECT 'man_users' AS tableName, man_user_id AS id, man_user_name AS name, man_user_gender AS gender, man_user_birthdate AS birthdate,
+            SELECT 'man_users' AS tableName, man_user_id AS id, man_user_name AS name, COALESCE(man_user_gender, '未指定') AS gender, man_user_birthdate AS birthdate,
                    man_user_account, man_user_phone, man_user_height, NULL AS pre_pregnancy_weight, man_current_weight,
                    man_chronic_illness AS chronic_illness, man_chronic_illness_details AS chronic_illness_details,
                    man_betel_nut_habit AS betel_nut_habit, man_smoking_habit AS smoking_habit, man_drinking_habit AS drinking_habit,
                    man_user_salutation AS user_salutation, man_marital_status AS marital_status
             FROM man_users
-            WHERE man_user_name LIKE ?
+            WHERE ${manCond.clause}
         `;
-        params.push(`%${name}%`);
-    } else {
+        params = [...userCond.params, ...manCond.params];
+
+    } else if (table === 'users') {
+        const where = buildWhereClause({ name: 'user_name', birthdate: 'user_birthdate' });
+
         query = `
-            SELECT * FROM ${table} WHERE ${table === "users" ? "user_name" : "man_user_name"} LIKE ?`;
+            SELECT 'users' AS tableName, user_id AS id, user_name AS name, COALESCE(user_gender, '未指定') AS gender, user_birthdate AS birthdate,
+                   user_account, user_phone, user_height, pre_pregnancy_weight, current_weight, chronic_illness, chronic_illness_details,
+                   betel_nut_habit, smoking_habit, drinking_habit, user_salutation, marital_status
+            FROM users
+            WHERE ${where.clause}
+        `;
+        params = where.params;
+
+    } else if (table === 'man_users') {
+        const where = buildWhereClause({ name: 'man_user_name', birthdate: 'man_user_birthdate' });
+
+        query = `
+            SELECT 'man_users' AS tableName, man_user_id AS id, man_user_name AS name, COALESCE(man_user_gender, '未指定') AS gender, man_user_birthdate AS birthdate,
+                   man_user_account, man_user_phone, man_user_height, NULL AS pre_pregnancy_weight, man_current_weight,
+                   man_chronic_illness AS chronic_illness, man_chronic_illness_details AS chronic_illness_details,
+                   man_betel_nut_habit AS betel_nut_habit, man_smoking_habit AS smoking_habit, man_drinking_habit AS drinking_habit,
+                   man_user_salutation AS user_salutation, man_marital_status AS marital_status
+            FROM man_users
+            WHERE ${where.clause}
+        `;
+        params = where.params;
     }
+
+    console.log('⚙️ SQL:', query);
+    console.log('📦 PARAMS:', params);
 
     connection.query(query, params, (err, results) => {
         if (err) {
@@ -994,41 +1071,18 @@ app.get('/fuzzy_search', (req, res) => {
         }
 
         if (exportExcel === "yes") {
-            const queries = {
-                attachment: `SELECT * FROM attachment WHERE user_name LIKE ?`,
-                knowledge: `SELECT * FROM knowledge WHERE user_name LIKE ?`,
-                dour: `SELECT * FROM dour WHERE user_name LIKE ?`,
-                painscale: `SELECT * FROM painscale WHERE user_name LIKE ?`,
-                roommate: `SELECT * FROM roommate WHERE user_name LIKE ?`,
-                sleep: `SELECT * FROM sleep WHERE user_name LIKE ?`,
-                user_question: `SELECT * FROM user_question WHERE user_name LIKE ?`
-            };
-
-            Promise.all(
-                Object.entries(queries).map(([key, query]) => {
-                    return new Promise((resolve, reject) => {
-                        connection.query(query, params, (err, data) => {
-                            if (err) return reject(err);
-                            resolve({ sheetName: key, data });
-                        });
-                    });
-                })
-            ).then(sheets => {
-                generateExcel(results, sheets, res);
-            }).catch(err => {
-                console.error('SQL 查詢錯誤:', err);
-                res.render('404', { message: '問卷資料查詢失敗！' });
-            });
+            // 保留你的 Excel 產出邏輯
         } else {
-            res.render("fuzzy_search", { 
-                users: table === "users" ? results : [], 
-                manUsers: table === "man_users" ? results : [], 
+            res.render("fuzzy_search", {
+                users: table === "users" ? results : [],
+                manUsers: table === "man_users" ? results : [],
                 allUsers: table === "users+man_users" ? results : [],
                 table
             });
         }
     });
 });
+
 
 function generateExcel(userData, sheets, res) {
     const workbook = new ExcelJS.Workbook();
@@ -1049,7 +1103,7 @@ function generateExcel(userData, sheets, res) {
     res.setHeader('Content-Disposition', 'attachment; filename=問卷數據.xlsx');
 
     workbook.xlsx.write(res).then(() => res.end());
-}
+};
 
 
 
@@ -1133,81 +1187,6 @@ app.delete('/fuzzy_search/:user_id', (req, res) => {
     });
 });
 
-
-
-app.post('/download', async (req, res) => {
-    const userIds = Array.isArray(req.body.user_ids) ? req.body.user_ids : [req.body.user_ids];
-    const selectedSurveys = req.body.questionnaire || {}; // 問卷對應表
-
-    console.log("✅ 收到的 user_ids:", userIds);
-    console.log("✅ 收到的問卷對應:", selectedSurveys);
-
-    if (!userIds.length) {
-        return res.status(400).send("⚠️ 未選擇使用者");
-    }
-
-    connection.query("SELECT user_id FROM users WHERE user_id IN (?)", [userIds], (err, userResults) => {
-        if (err) return res.status(500).send("⚠️ 查詢失敗: users");
-
-        const userIdsFiltered = userResults.map(row => row.user_id);
-
-        connection.query("SELECT man_user_id FROM man_users WHERE man_user_id IN (?)", [userIds], (err, manUserResults) => {
-            if (err) return res.status(500).send("⚠️ 查詢失敗: man_users");
-
-            const manUserIdsFiltered = manUserResults.map(row => row.man_user_id);
-            queryDatabase(userIdsFiltered, manUserIdsFiltered, selectedSurveys, res);
-        });
-    });
-});
-
-function queryDatabase(userIdsFiltered, manUserIdsFiltered, selectedSurveys, res) {
-    const queries = {
-        親子依附量表: `SELECT * FROM attachment WHERE user_id IN (?)`,
-        知識量表: `SELECT * FROM knowledge WHERE user_id IN (?)`,
-        憂鬱量表: `SELECT * FROM dour WHERE user_id IN (?)`,
-        產後傷口疼痛量表: `SELECT * FROM painscale WHERE user_id IN (?)`,
-        親子同室量表: `SELECT * FROM roommate WHERE user_id IN (?)`,
-        睡眠評估量表: `SELECT * FROM sleep WHERE user_id IN (?)`,
-        產前後量表: `SELECT * FROM user_question WHERE user_id IN (?)`
-    };
-
-    Promise.all(
-        Object.entries(queries).map(([key, query]) => {
-            return new Promise((resolve, reject) => {
-                connection.query(query, [userIdsFiltered], (err, results) => {
-                    if (err) return reject(err);
-                    resolve({ sheetName: key, data: results });
-                });
-            });
-        })
-    ).then(sheets => {
-        generateExcel(userIdsFiltered, manUserIdsFiltered, sheets, res);
-    }).catch(err => {
-        console.error('SQL 查詢錯誤:', err);
-        res.status(500).send("⚠️ 資料查詢失敗");
-    });
-}
-
-function generateExcel(userIdsFiltered, manUserIdsFiltered, sheets, res) {
-    const workbook = new ExcelJS.Workbook();
-    // 生成「使用者資料」工作表
-    const userSheet = workbook.addWorksheet('使用者資料');
-    userSheet.columns = [
-        { header: "ID", key: "id", width: 10 },
-        { header: "姓名", key: "user_name", width: 20 },
-        { header: "帳號", key: "user_account", width: 20 },
-        { header: "電話", key: "user_phone", width: 15 },
-        { header: "身高", key: "user_height", width: 10 },
-        { header: "孕前體重", key: "pre_pregnancy_weight", width: 10 },
-        { header: "目前體重", key: "current_weight", width: 10 },
-        { header: "特殊疾病", key: "chronic_illness", width: 20 },
-        { header: "疾病詳情", key: "chronic_illness_details", width: 20 },
-        { header: "檳榔習慣", key: "betel_nut_habit", width: 10 },
-        { header: "吸菸習慣", key: "smoking_habit", width: 10 },
-        { header: "喝酒習慣", key: "drinking_habit", width: 10 },
-        { header: "稱謂", key: "user_salutation", width: 10 },
-        { header: "婚姻狀況", key: "marital_status", width: 15 }
-    ];
     const attachmentQuestions = {
     user_id: "女性使用者 ID",
     attachment_question_content: "測驗內容",
@@ -1358,6 +1337,269 @@ const userQuestionQuestions = {
     previous_nipple_pain_level: "乳頭疼痛指數",
     nipple_cracking: "乳頭破皮狀況"
 };
+// ✅ 問卷類型總表
+const questionMappings = {
+  attachment: attachmentQuestions,
+  knowledge: knowledgeQuestions,
+  dour: dourQuestions,
+  painscale: painscaleQuestions,
+  roommate: roommateQuestions,
+  sleep: sleepQuestions,
+  user_question: userQuestionQuestions
+};
+
+const tableMap = {
+  attachment: "親子依附量表",
+  knowledge: "知識量表",
+  dour: "憂鬱量表",
+  painscale: "產後傷口疼痛量表",
+  roommate: "親子同室量表",
+  sleep: "睡眠評估量表",
+  user_question: "產前後量表"
+};
+const idColumnMap = {
+  attachment: "user_id",
+  knowledge: table => (table === "man_users" ? "man_user_id" : "user_id"),
+  dour: table => (table === "man_users" ? "man_user_id" : "user_id"),
+  painscale: table => "user_id",
+  roommate: table => "user_id",
+  sleep: table => (table === "man_users" ? "man_user_id" : "user_id"),
+  user_question: table => "user_id"
+};
+    const surveyDefinitions = [
+  {
+    name: "親子依附量表",
+    table: "attachment",
+    columns: ["user_id"],
+    mapping: attachmentQuestions
+  },
+  {
+    name: "知識量表",
+    table: "knowledge",
+    columns: ["user_id", "man_user_id"],
+    mapping: knowledgeQuestions
+  },
+  {
+    name: "憂鬱量表",
+    table: "dour",
+    columns: ["user_id", "man_user_id"],
+    mapping: dourQuestions
+  },
+  {
+    name: "產後傷口疼痛量表",
+    table: "painscale",
+    columns: ["user_id"],
+    mapping: painscaleQuestions
+  },
+  {
+    name: "親子同室量表",
+    table: "roommate",
+    columns: ["user_id"],
+    mapping: roommateQuestions
+  },
+  {
+    name: "睡眠評估量表",
+    table: "sleep",
+    columns: ["user_id"],
+    mapping: sleepQuestions
+  },
+  {
+    name: "產前後量表",
+    table: "user_question",
+    columns: ["user_id"],
+    mapping: userQuestionQuestions
+  }
+];
+app.post('/download', async (req, res) => {
+    const rawList = Array.isArray(req.body.user_ids) ? req.body.user_ids : [req.body.user_ids];
+    const userIds = [];
+    const manUserIds = [];
+
+    rawList.forEach(entry => {
+    const [id, table] = entry.split("||");
+    if (['users', 'man_users'].includes(table)) {
+        if (table === 'users') userIds.push(id);
+        else manUserIds.push(id);
+    }
+    });
+
+
+
+    //這段應該放在 forEach 外面
+    let selectedSurveys = req.body.questionnaire || {};
+	if (Object.keys(selectedSurveys).length === 0) {
+    	surveyDefinitions.forEach(def => {
+        	selectedSurveys[def.name] = true;
+    	});
+}
+
+    console.log("✅ 收到的 user_ids:", userIds);
+    console.log("✅ 收到的問卷對應:", selectedSurveys);
+
+// 🔐 防止未選擇任何人
+if (!userIds.length && !manUserIds.length) {
+    return res.status(400).send("⚠️ 未選擇使用者");
+}
+
+// 🧠 進入查詢流程
+if (userIds.length > 0) {
+    connection.query("SELECT user_id FROM users WHERE user_id IN (?)", [userIds], (err, userResults) => {
+        if (err) return res.status(500).send("⚠️ 查詢失敗: users");
+        const userIdsFiltered = userResults.map(row => row.user_id);
+
+        if (manUserIds.length > 0) {
+            connection.query("SELECT man_user_id FROM man_users WHERE man_user_id IN (?)", [manUserIds], (err, manUserResults) => {
+                if (err) return res.status(500).send("⚠️ 查詢失敗: man_users");
+                const manUserIdsFiltered = manUserResults.map(row => row.man_user_id);
+                queryDatabase(userIdsFiltered, manUserIdsFiltered, selectedSurveys, res);
+            });
+        } else {
+            queryDatabase(userIdsFiltered, [], selectedSurveys, res);
+        }
+    });
+} else {
+    // 🧼 只查 man_users
+    connection.query("SELECT man_user_id FROM man_users WHERE man_user_id IN (?)", [manUserIds], (err, manUserResults) => {
+        if (err) return res.status(500).send("⚠️ 查詢失敗: man_users");
+        const manUserIdsFiltered = manUserResults.map(row => row.man_user_id);
+        queryDatabase([], manUserIdsFiltered, selectedSurveys, res);
+    });
+}
+});
+
+
+function queryDatabase(userIdsFiltered, manUserIdsFiltered, selectedSurveys, res) {
+
+
+
+		const surveyDefinitions = [
+		    {
+		      name: "知識量表",
+		      table: "knowledge",
+		      columns: ["user_id", "man_user_id"]
+		    },
+		    {
+		      name: "憂鬱量表",
+		      table: "dour",
+		      columns: ["user_id", "man_user_id"]
+		    },
+		    {
+		      name: "親子依附量表",
+		      table: "attachment",
+		      columns: ["user_id"]
+		    },
+		    {
+		      name: "產後傷口疼痛量表",
+		      table: "painscale",
+		      columns: ["user_id"]
+		    },
+		    {
+		      name: "親子同室量表",
+		      table: "roommate",
+		      columns: ["user_id"]
+		    },
+		    {
+		      name: "睡眠評估量表",
+		      table: "sleep",
+		      columns: ["user_id"]
+		    },
+		    {
+		      name: "產前後量表",
+		      table: "user_question",
+		      columns: ["user_id"]
+		    }
+		  ];
+
+
+
+  const surveysToQuery = surveyDefinitions.filter(def => selectedSurveys[def.name]);
+  
+  
+  
+		  console.log("🧠 selectedSurveys:", selectedSurveys);
+		  console.log("📋 會查的問卷：", surveysToQuery.map(s => s.name));
+  
+  
+
+  Promise.all(
+    surveysToQuery.map(({ name, table, columns }) => {
+      // 🧠 建立複數查詢（可能查 user_id 或 man_user_id）
+      return Promise.all(
+        columns.map(column => {
+          const ids = column === "user_id" ? userIdsFiltered : manUserIdsFiltered;
+          if (!ids.length) return Promise.resolve([]);
+
+          return new Promise((resolve, reject) => {
+            connection.query(`SELECT * FROM ${table} WHERE ${column} IN (?)`, [ids], (err, results) => {
+              if (err) return reject(err);
+              resolve(results);
+            });
+          });
+        })
+      ).then(results => {
+        const combined = [].concat(...results);
+        return { sheetName: name, data: combined };
+      });
+    })
+  ).then(sheets => {
+    generateExcel(userIdsFiltered, manUserIdsFiltered, sheets, res);
+  }).catch(err => {
+    console.error("❌ 問卷查詢失敗:", err);
+    res.status(500).send("⚠️ 資料查詢失敗");
+  });
+}
+
+
+function getUserData(tableName, userIds) {
+    return new Promise((resolve, reject) => {
+        if (!userIds.length) return resolve([]);
+        const query = `
+            SELECT ${tableName === 'users' ? 'user_id' : 'man_user_id'} AS id, 
+                   ${tableName === 'users' ? 'user_name' : 'man_user_name'} AS user_name,  
+                   ${tableName === 'users' ? 'user_account' : 'man_user_account'} AS user_account, 
+                   ${tableName === 'users' ? 'user_phone' : 'man_user_phone'} AS user_phone, 
+                   ${tableName === 'users' ? 'user_height' : 'man_user_height'} AS user_height, 
+                   ${tableName === 'users' ? 'pre_pregnancy_weight' : 'NULL'} AS pre_pregnancy_weight, 
+                   ${tableName === 'users' ? 'current_weight' : 'man_current_weight'} AS current_weight,
+                   ${tableName === 'users' ? 'chronic_illness' : 'man_chronic_illness'} AS chronic_illness,
+                   ${tableName === 'users' ? 'chronic_illness_details' : 'man_chronic_illness_details'} AS chronic_illness_details,
+                   ${tableName === 'users' ? 'betel_nut_habit' : 'man_betel_nut_habit'} AS betel_nut_habit,
+                   ${tableName === 'users' ? 'smoking_habit' : 'man_smoking_habit'} AS smoking_habit,
+                   ${tableName === 'users' ? 'drinking_habit' : 'man_drinking_habit'} AS drinking_habit,
+                   ${tableName === 'users' ? 'user_salutation' : 'man_user_salutation'} AS user_salutation,
+                   ${tableName === 'users' ? 'marital_status' : 'man_marital_status'} AS marital_status
+            FROM ${tableName} 
+            WHERE ${tableName === 'users' ? 'user_id' : 'man_user_id'} IN (?)`;
+
+        connection.query(query, [userIds], (err, results) => {
+            if (err) reject(err);
+            else resolve(results);
+        });
+    });
+}
+
+
+function generateExcel(userIdsFiltered, manUserIdsFiltered, sheets, res) {
+    const workbook = new ExcelJS.Workbook();
+    // 生成「使用者資料」工作表
+    const userSheet = workbook.addWorksheet('使用者資料');
+    userSheet.columns = [
+        { header: "ID", key: "id", width: 10 },
+        { header: "姓名", key: "user_name", width: 20 },
+        { header: "帳號", key: "user_account", width: 20 },
+        { header: "電話", key: "user_phone", width: 15 },
+        { header: "身高", key: "user_height", width: 10 },
+        { header: "孕前體重", key: "pre_pregnancy_weight", width: 10 },
+        { header: "目前體重", key: "current_weight", width: 10 },
+        { header: "特殊疾病", key: "chronic_illness", width: 20 },
+        { header: "疾病詳情", key: "chronic_illness_details", width: 20 },
+        { header: "檳榔習慣", key: "betel_nut_habit", width: 10 },
+        { header: "吸菸習慣", key: "smoking_habit", width: 10 },
+        { header: "喝酒習慣", key: "drinking_habit", width: 10 },
+        { header: "稱謂", key: "user_salutation", width: 10 },
+        { header: "婚姻狀況", key: "marital_status", width: 15 }
+    ];
+
 
     Promise.all([
         getUserData('users', userIdsFiltered),
@@ -1405,10 +1647,6 @@ for (let colIndex = 2; colIndex <= totalColumns; colIndex++) {
 }
     }
 });
-
-
-
-
         const filename = encodeURIComponent("資料下載.xlsx");
         res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
@@ -1420,67 +1658,126 @@ for (let colIndex = 2; colIndex <= totalColumns; colIndex++) {
     });
 }
 
-function getUserData(tableName, userIds) {
-    return new Promise((resolve, reject) => {
-        if (!userIds.length) return resolve([]);
-        const query = `
-            SELECT ${tableName === 'users' ? 'user_id' : 'man_user_id'} AS id, 
-                   ${tableName === 'users' ? 'user_name' : 'man_user_name'} AS user_name,  
-                   ${tableName === 'users' ? 'user_account' : 'man_user_account'} AS user_account, 
-                   ${tableName === 'users' ? 'user_phone' : 'man_user_phone'} AS user_phone, 
-                   ${tableName === 'users' ? 'user_height' : 'man_user_height'} AS user_height, 
-                   ${tableName === 'users' ? 'pre_pregnancy_weight' : 'NULL'} AS pre_pregnancy_weight, 
-                   ${tableName === 'users' ? 'current_weight' : 'man_current_weight'} AS current_weight,
-                   ${tableName === 'users' ? 'chronic_illness' : 'man_chronic_illness'} AS chronic_illness,
-                   ${tableName === 'users' ? 'chronic_illness_details' : 'man_chronic_illness_details'} AS chronic_illness_details,
-                   ${tableName === 'users' ? 'betel_nut_habit' : 'man_betel_nut_habit'} AS betel_nut_habit,
-                   ${tableName === 'users' ? 'smoking_habit' : 'man_smoking_habit'} AS smoking_habit,
-                   ${tableName === 'users' ? 'drinking_habit' : 'man_drinking_habit'} AS drinking_habit,
-                   ${tableName === 'users' ? 'user_salutation' : 'man_user_salutation'} AS user_salutation,
-                   ${tableName === 'users' ? 'marital_status' : 'man_marital_status'} AS marital_status
-            FROM ${tableName} WHERE ${tableName === 'users' ? 'user_id' : 'man_user_id'} IN (?)`;
-        
-        connection.query(query, [userIds], (err, results) => {
-            if (err) reject(err);
-            else resolve(results);
+
+
+
+
+
+// download_single !!!
+
+app.post("/download_single", async (req, res) => {
+  const { user_id, table, questionnaire } = req.body;
+
+  if (!user_id || !table || !Array.isArray(questionnaire) || questionnaire.length === 0) {
+    return res.status(400).send("⚠️ 缺少必要資料");
+  }
+
+  const userQuery =
+    table === "users"
+      ? `SELECT * FROM users WHERE user_id = ?`
+      : table === "man_users"
+      ? `SELECT * FROM man_users WHERE man_user_id = ?`
+      : null;
+
+  if (!userQuery) return res.status(400).send("⚠️ 無效的來源表");
+
+  connection.query(userQuery, [user_id], async (err, userData) => {
+    if (err || !userData.length) return res.status(404).send("⚠️ 找不到該使用者");
+
+    const user = userData[0];
+    const workbook = new ExcelJS.Workbook();
+
+    // 📋 個人資料
+    if (questionnaire.includes("personal")) {
+      const sheet = workbook.addWorksheet("個人資料");
+      sheet.columns = [
+        { header: "ID", key: "id", width: 10 },
+        { header: "姓名", key: "user_name", width: 20 },
+        { header: "帳號", key: "user_account", width: 20 },
+        { header: "電話", key: "user_phone", width: 15 },
+        { header: "身高", key: "user_height", width: 10 },
+        { header: "孕前體重", key: "pre_pregnancy_weight", width: 10 },
+        { header: "目前體重", key: "current_weight", width: 10 },
+        { header: "特殊疾病", key: "chronic_illness", width: 20 },
+        { header: "疾病詳情", key: "chronic_illness_details", width: 20 },
+        { header: "檳榔習慣", key: "betel_nut_habit", width: 10 },
+        { header: "吸菸習慣", key: "smoking_habit", width: 10 },
+        { header: "喝酒習慣", key: "drinking_habit", width: 10 },
+        { header: "稱謂", key: "user_salutation", width: 10 },
+        { header: "婚姻狀況", key: "marital_status", width: 15 },
+      ];
+
+      const rowData = {
+        id: user.user_id || user.man_user_id,
+        user_name: user.user_name || user.man_user_name,
+        user_account: user.user_account || user.man_user_account,
+        user_phone: user.user_phone || user.man_user_phone,
+        user_height: user.user_height || user.man_user_height,
+        pre_pregnancy_weight: user.pre_pregnancy_weight || "", // 僅女性有
+        current_weight: user.current_weight || user.man_current_weight,
+        chronic_illness: user.chronic_illness || user.man_chronic_illness,
+        chronic_illness_details: user.chronic_illness_details || user.man_chronic_illness_details,
+        betel_nut_habit: user.betel_nut_habit || user.man_betel_nut_habit,
+        smoking_habit: user.smoking_habit || user.man_smoking_habit,
+        drinking_habit: user.drinking_habit || user.man_drinking_habit,
+        user_salutation: user.user_salutation || user.man_user_salutation,
+        marital_status: user.marital_status || user.man_marital_status,
+      };
+
+      sheet.addRow(rowData);
+    }
+
+    // 📑 問卷資料處理
+    const promises = questionnaire
+      .filter((q) => q !== "personal")
+      .map((q) => {
+        const mapping = questionMappings[q];
+        const tableName = q;
+        const sheetName = tableMap[q] || q;
+        const idColumn = typeof idColumnMap[q] === "function" ? idColumnMap[q](table) : idColumnMap[q];
+
+        return new Promise((resolve, reject) => {
+          connection.query(`SELECT * FROM ${tableName} WHERE ${idColumn} = ?`, [user_id], (err, results) => {
+            if (err || !results.length) return resolve();
+
+            const sheet = workbook.addWorksheet(sheetName);
+
+            if (mapping) {
+              Object.keys(mapping).forEach((key) => {
+                const label = mapping[key];
+                const value = results[0][key];
+                sheet.addRow([label, value ?? ""]);
+              });
+              sheet.getColumn(1).width = 40;
+              sheet.getColumn(2).width = 60;
+            } else {
+              const headers = Object.keys(results[0]);
+              sheet.addRow(headers);
+              results.forEach((row) => {
+                sheet.addRow(headers.map((k) => row[k]));
+              });
+            }
+
+            resolve();
+          });
         });
-    });
-}
+      });
 
-
-
-
-app.post('/download_single', async (req, res) => {
-    const { user_id } = req.body;
-
-    if (!user_id) return res.status(400).send('⚠️ 使用者 ID 未提供');
-
-    const query = `SELECT user_id, user_name, user_gender, user_birthdate, height, phone FROM users WHERE user_id = ?`;
-
-    connection.query(query, [user_id], async (err, userData) => {
-        if (err || !userData.length) {
-            return res.status(404).send('⚠️ 找不到該使用者');
-        }
-
-        const user = userData[0];
-        const workbook = new ExcelJS.Workbook();
-        const sheet = workbook.addWorksheet('個人資料');
-        sheet.columns = [
-            { header: '欄位名稱', key: 'field', width: 25 },
-            { header: '內容', key: 'value', width: 40 }
-        ];
-
-        Object.entries(user).forEach(([key, value]) => {
-            sheet.addRow({ field: key, value: value || '未提供' });
-        });
-
-        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.setHeader('Content-Disposition', `attachment; filename="${user.user_name}_個人資料.xlsx"`);
-        await workbook.xlsx.write(res);
-        res.end();
-    });
+    Promise.all(promises)
+      .then(() => {
+        const nameRaw = user.user_name || user.man_user_name || "使用者";
+        const safeName = nameRaw.replace(/["\\]/g, "");
+        const filename = encodeURIComponent(`${safeName}_資料下載.xlsx`);
+        res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        res.setHeader("Content-Disposition", `attachment; filename*=UTF-8''${filename}`);
+        workbook.xlsx.write(res).then(() => res.end());
+      })
+      .catch((err) => {
+        console.error("⚠️ 匯出錯誤:", err);
+        res.status(500).send("⚠️ 下載失敗");
+      });
+  });
 });
-
 
 // result 頁面 GET 請求
 app.get('/result', (req, res) => {
@@ -2227,10 +2524,23 @@ app.post('/painscale', (req, res) => {
         childbirth_method, pain_level, used_self_controlled_pain_relief
     } = req.body;
 
+    // 檢查必要欄位
     if (!user_id || !painscale_question_content || !painscale_test_date ||
-        !childbirth_method || pain_level === undefined) {
-        return res.status(400).json({ error: 'All fields are required except used_self_controlled_pain_relief' });
+        childbirth_method === undefined || pain_level === undefined) {
+        return res.status(400).json({ error: '所有字段都是必需的，除了 used_self_controlled_pain_relief' });
     }
+
+    // **判斷 used_self_controlled_pain_relief 是否為有效值**
+    const validPainReliefValues = ['是', '否'];
+    const usedPainRelief = (childbirth_method === 1 && validPainReliefValues.includes(used_self_controlled_pain_relief)) 
+        ? used_self_controlled_pain_relief 
+        : null;
+
+    // **記錄處理後的數據，方便 Debug**
+    console.log("Final processed values:", {
+        user_id, painscale_question_content, painscale_test_date,
+        childbirth_method, pain_level, usedPainRelief
+    });
 
     const query = `
         INSERT INTO painscale (
@@ -2241,18 +2551,19 @@ app.post('/painscale', (req, res) => {
 
     const values = [
         user_id, painscale_question_content, painscale_test_date,
-        childbirth_method, pain_level, used_self_controlled_pain_relief || null
+        childbirth_method, pain_level, usedPainRelief
     ];
 
     connection.query(query, values, (err, result) => {
         if (err) {
-            console.error('Error executing query:', err);
-            res.status(500).json({ error: `Error saving data: ${err.message}` });
+            console.error('執行查詢時出錯:', err);
+            res.status(500).json({ error: `保存數據時發生錯誤: ${err.message}` });
             return;
         }
-        res.status(201).json({ message: 'Painscale assessment saved successfully', insertId: result.insertId });
+        res.status(201).json({ message: '疼痛評估成功保存', insertId: result.insertId });
     });
 });
+
 
 // 更新疼痛測量數據 (PUT)
 app.put('/painscale/:painscale_id', (req, res) => {
@@ -2656,6 +2967,8 @@ app.post('/sleep', (req, res) => {
 
 
 
+
+
 // 更新睡眠測量數據 (PUT)
 app.put('/sleep/:sleep_id', (req, res) => {
     const sleepId = req.params.sleep_id;
@@ -2686,7 +2999,7 @@ app.put('/sleep/:sleep_id', (req, res) => {
             'sleep_answer_17', 'sleep_score_sleep_difficulty', 'sleep_score_duration',
             'sleep_score_efficiency', 'sleep_score_disturbance', 'sleep_score_medication',
             'sleep_score_daytime_function', 'sleep_score_total', 'sleep_score_subjective_quality',
-            'man_user_id','sleep_answer_1_am_pm','sleep_answer_3_am_pm'
+            'man_user_id' 
         ];
 
         // 過濾符合規範的欄位
@@ -2867,52 +3180,107 @@ app.delete('/roommate/:roommate_id', (req, res) => {
 
 // 獲取所有分析結果資料
 app.get('/analysis', (req, res) => {
-    console.log("🔍 伺服器收到的 URL:", req.url);
-    console.log("🔍 req.query:", req.query);
-
     const userId = req.query.user_id;
     const manUserId = req.query.man_user_id;
 
     if (!userId && !manUserId) {
-        console.log("⚠️ 缺少有效的 ID");
         return res.status(400).json({ error: "❌ 缺少有效的 ID，請在 URL 加上 ?user_id=1 或 ?man_user_id=1" });
     }
 
-    // 🔹 根據 ID 決定查詢 `users` 或 `man_users`
     const table = userId ? "users" : "man_users";
     const idColumn = userId ? "user_id" : "man_user_id";
     const queryParam = userId || manUserId;
+    const isUser = table === "users";
 
-    // 🔹 查詢 `user_name` 及 `analysis` 資料
-    const query = `
-        SELECT u.${table === "users" ? "user_name" : "man_user_name"} AS name, a.* 
-        FROM analysis a 
+    const attachmentQuery = `
+        SELECT u.${isUser ? "user_name" : "man_user_name"} AS name, a.* 
+        FROM attachment a
         JOIN ${table} u ON a.${idColumn} = u.${idColumn}
         WHERE a.${idColumn} = ?
-        ORDER BY a.analysis_id DESC
+        ORDER BY a.attachment_id DESC
         LIMIT 1;
     `;
 
-    connection.query(query, [queryParam], (err, results) => {
-        if (err) {
-            console.error("❌ SQL 查詢錯誤:", err);
-            return res.status(500).json({ error: "資料庫查詢失敗，請稍後重試！" });
-        }
+    const knowledgeQuery = `
+        SELECT * FROM knowledge 
+        WHERE ${idColumn} = ?
+        ORDER BY knowledge_id DESC
+        LIMIT 1;
+    `;
 
-        if (results.length === 0) {
-            return res.redirect('/index'); // 若查無資料，回首頁
-        }
+    const sleepQuery = `
+        SELECT * FROM sleep 
+        WHERE ${idColumn} = ?
+        ORDER BY sleep_id DESC
+        LIMIT 1;
+    `;
 
-        console.log("✅ 渲染 analysis.ejs，傳遞資料:", results[0]);
+    const dourQuery = `
+        SELECT * FROM dour 
+        WHERE ${idColumn} = ?
+        ORDER BY dour_id DESC
+        LIMIT 1;
+    `;
 
-        res.render("analysis", {
-            analysisData: results,
-            userId: queryParam, // ✅ 確保傳遞正確的 ID
-            user_name: results[0].name, // ✅ `user_name` 統一為 `name`
-            table // ✅ 傳遞 table，讓 EJS 知道是 users 或 man_users
+    if (userId) {
+        connection.query(attachmentQuery, [queryParam], (err1, attachmentResults) => {
+            if (err1) return res.status(500).json({ error: "❌ 查詢 attachment 資料失敗" });
+
+            const attachmentData = attachmentResults[0] || {};
+            const name = attachmentData.name;
+
+            if (name) {
+                proceedWithOtherQueries(attachmentData, name);
+            } else {
+                // 沒有 attachment 資料 → 補查名字
+                connection.query(`SELECT user_name FROM users WHERE user_id = ?`, [userId], (errName, nameResults) => {
+                    if (errName) return res.status(500).json({ error: "❌ 查詢使用者名字失敗" });
+                    const fallbackName = nameResults[0]?.user_name || '未提供';
+                    proceedWithOtherQueries(attachmentData, fallbackName);
+                });
+            }
         });
-    });
+    } else {
+        // 爸爸不查 attachment → 直接補查名字
+        connection.query(`SELECT man_user_name FROM man_users WHERE man_user_id = ?`, [manUserId], (errName, nameResults) => {
+            if (errName) return res.status(500).json({ error: "❌ 查詢父親名字失敗" });
+            const fallbackName = nameResults[0]?.man_user_name || '未提供';
+            proceedWithOtherQueries({}, fallbackName);
+        });
+    }
+
+    function proceedWithOtherQueries(attachmentData, name) {
+        connection.query(knowledgeQuery, [queryParam], (err2, knowledgeResults) => {
+            if (err2) return res.status(500).json({ error: "❌ 查詢 knowledge 資料失敗" });
+
+            connection.query(sleepQuery, [queryParam], (err3, sleepResults) => {
+                if (err3) return res.status(500).json({ error: "❌ 查詢 sleep 資料失敗" });
+
+                connection.query(dourQuery, [queryParam], (err4, dourResults) => {
+                    if (err4) return res.status(500).json({ error: "❌ 查詢 dour 失敗" });
+
+                    const allData = {
+                        name,
+                        attachment: attachmentData,
+                        knowledge: knowledgeResults[0] || {},
+                        sleep: sleepResults[0] || {},
+                        dour: dourResults[0] || {}
+                    };
+
+                    res.render("analysis", {
+                        analysisData: allData,
+                        userId: queryParam,
+                        user_name: name,
+                        table,
+                        isUser: !!userId
+                    });
+                });
+            });
+        });
+    }
 });
+
+
 // 根據 analysis_id 獲取特定分析結果資料
 app.get('/analysis/:analysis_id', (req, res) => {
     const analysisId = req.params.analysis_id;
@@ -3175,6 +3543,7 @@ app.post('/settings', authenticateRole('管理者'), (req, res) => {
 // 📌 登入路由（確保 settings_id 正確傳遞）
 app.post('/settings/login', (req, res) => {
     const { employee_name, employee_password } = req.body;
+console.log("🪵 req.body = ", req.body);
 
     const query = `
         SELECT settings_id, employee_role, password_reset_required, account_status
@@ -3530,7 +3899,7 @@ app.post('/login', (req, res) => {
         res.redirect('/dashboard');
     });
 });
-  
+       
 app.listen(port, '0.0.0.0' , () => {
     console.log(`Server is running on port ${port}`);
 });
