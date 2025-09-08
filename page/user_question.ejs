@@ -34,8 +34,9 @@
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            table-layout: fixed; /* 設定表格寬度固定，這樣每一格都會擴展 */
+            table-layout: auto; /* 設定表格寬度固定，這樣每一格都會擴展 */
             word-break: break-word; /* 防止文字撐出欄位 */
+            min-width: max-content;
         }
 
         .highlight {
@@ -77,10 +78,10 @@
 
         /* 左右滾動條的樣式 */
         .table-responsive {
-            overflow-x: auto;  /* 顯示左右滾動條 */
+            overflow-x: auto !important;  /* 顯示左右滾動條 */
             overflow-y: hidden; /* 禁止上下滾動條 */
             -webkit-overflow-scrolling: touch; /* 平滑滾動效果 */
-            max-height: 80vh; /* 最大高度，避免內容溢出 */
+            max-height: none; /* 最大高度，避免內容溢出 */
             margin-top: 20px;
         }
 
@@ -98,7 +99,7 @@
     <div class="white-box">
         <h2 class="mb-4">產前後量表記錄</h2>
 
-        <p><strong>ID：</strong> <%= userId || '未提供' %></p>
+        <p><strong>使用者 ID：</strong> <%= userId || '未提供' %></p>
         <p><strong>名字：</strong> <%= user_name || '未提供' %></p>
 
         <script>
@@ -117,7 +118,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>ID</td>
+                        <td>量表 ID</td>
                         <% questionsData.forEach(item => { %>
                             <td><%= item.question_id %></td>
                         <% }); %>
