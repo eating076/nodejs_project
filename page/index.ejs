@@ -1,198 +1,308 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>基本資料查詢</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&display=swap');
+  <meta charset="UTF-8" />
+  <title>基本資料查詢</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        body {
-            background: linear-gradient(to right, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.2)), 
-                        url('https://via.placeholder.com/1500x1000/87CEFA/ffffff?text=Background+Image') no-repeat center center fixed;
-            background-size: cover;
-            font-family: 'DFKai-SB', '標楷體', DFKai-SB, serif;
-            margin: 0;
-            padding: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            color: #333;
-        }
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <style>
+    body {
+      background: linear-gradient(to right, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.2)),
+                  url('https://via.placeholder.com/1500x1000/87CEFA/ffffff?text=Background+Image') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'DFKai-SB', serif;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      color: #333;
+    }
 
-        .layout {
-            display: flex;
-            gap: 30px;
-            justify-content: center;
-            width: 90%;
-            max-width: 1200px;
-            z-index: 1;
-        }
+    .layout {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      width: 90%;
+      max-width: 1200px;
+      z-index: 1;
+    }
 
-        .container {
-            flex: 1;
-            background: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            text-align: center;
-            transition: transform 0.3s ease-in-out;
-            z-index: 2;
-        }
+    .container {
+      flex: 1;
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      transition: transform 0.3s ease-in-out;
+      z-index: 2;
+    }
 
-        .container:hover {
-            transform: translateY(-5px);
-        }
+    .container:hover {
+      transform: translateY(-5px);
+    }
 
-        h1 {
-            color: #2c3e50;
-            font-size: 26px;
-            margin-bottom: 25px;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
+    h1 {
+      color: #2c3e50;
+      font-size: 26px;
+      margin-bottom: 25px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-            margin-bottom: 20px;
-        }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      margin-bottom: 20px;
+    }
 
-        .form-group label {
-            margin-bottom: 8px;
-            color: #34495e;
-            font-weight: 700;
-        }
+    .form-group label {
+      margin-bottom: 8px;
+      color: #34495e;
+      font-weight: 700;
+    }
 
-        .form-group input, .form-group select {
-            padding: 12px;
-            border: 1px solid #dcdcdc;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: #fff;
-            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
+    .form-group input, .form-group select {
+      padding: 12px;
+      border: 1px solid #dcdcdc;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: #fff;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
 
-        .form-group input:focus, .form-group select:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
-        }
+    .form-group input:focus, .form-group select:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
+    }
 
-        .radio-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            align-items: center;
-        }
+    .btn-submit {
+      padding: 14px;
+      background: linear-gradient(to right, #3498db, #2980b9);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      font-weight: bold;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+    }
 
-        .radio-group input {
-            margin-right: 5px;
-        }
+    .btn-submit:hover {
+      background: linear-gradient(to right, #2980b9, #1f6696);
+      transform: scale(1.05);
+    }
 
-        .btn-submit {
-            padding: 14px;
-            background: linear-gradient(to right, #3498db, #2980b9);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-            font-weight: bold;
-            width: 100%;
-            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
-        }
+    #fuzzySearchContainer {
+      flex: 1;
+      padding: 40px;
+      background: #ecf0f1;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease-in-out;
+    }
 
-        .btn-submit:hover {
-            background: linear-gradient(to right, #2980b9, #1f6696);
-            transform: scale(1.05);
-        }
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+        align-items: center;
+      }
 
-        #fuzzySearchContainer {
-            flex: 1;
-            padding: 40px;
-            background: #ecf0f1;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease-in-out;
-        }
-
-        /* 增加回應式樣式 */
-        @media (max-width: 768px) {
-            .layout {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .container, #fuzzySearchContainer {
-                width: 100%;
-                max-width: 500px;
-            }
-        }
-    </style>
-    <script>
-        function validateForm(event) {
-            event.preventDefault();
-
-            const user_name = document.getElementById("user_name").value.trim();
-            const user_gender = document.querySelector('input[name="user_gender"]:checked')?.value || "未指定";
-            const user_birthdate = document.getElementById("user_birthdate").value || "未指定";
-            const table = document.getElementById("table_select").value; // 取得選擇的表
-
-            if (!user_name && !user_gender && !user_birthdate) {
-                alert("請至少填寫一個查詢條件！");
-                return;
-            }
-
-            const params = new URLSearchParams({
-                table: table, // 加入查詢表
-                name: user_name,
-                gender: user_gender,
-                birthdate: user_birthdate,
-            });
-
-            fetch(`/fuzzy_search?${params.toString()}`)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("fuzzySearchContainer").innerHTML = data;
-                })
-                .catch(error => console.error("查詢失敗:", error));
-        }
-    </script>
+      .container, #fuzzySearchContainer {
+        width: 100%;
+        max-width: 500px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="layout">
-        <div class="container">
-            <h1>基本資料查詢</h1>
-            <form id="userForm" onsubmit="validateForm(event)">
-                
-                <div class="form-group">
-                    <label for="user_name">姓名</label>
-                    <input type="text" id="user_name" name="user_name" placeholder="輸入姓名">
-                </div>
-                <div class="form-group">
-                    <label for="table_select">查詢對象</label>
-                    <select id="table_select" name="table">
-                        <option value="users+man_users">所有使用者</option> <!-- 新增選項 -->
-                        <option value="users">媽媽</option>
-                        <option value="man_users">爸爸</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="user_birthdate">生日</label>
-                    <input type="date" id="user_birthdate" name="user_birthdate">
-                </div>
-                <button type="submit" class="btn-submit">查詢</button>
-            </form>
+  <div class="layout">
+    <div class="container">
+      <h1>基本資料查詢</h1>
+      <form id="userForm" onsubmit="validateForm(event)">
+        <div class="form-group">
+          <label for="user_name">姓名</label>
+          <input type="text" id="user_name" name="user_name" placeholder="輸入姓名">
         </div>
 
-        <!-- 顯示模糊查詢結果 -->
-        <div id="fuzzySearchContainer"></div>
+        <div class="form-group">
+          <label for="table_select">查詢對象</label>
+          <select id="table_select" name="table">
+            <option value="users+man_users">所有使用者</option>
+            <option value="users">媽媽</option>
+            <option value="man_users">爸爸</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="user_birthdate">生日</label>
+          <input type="date" id="user_birthdate" name="user_birthdate">
+        </div>
+
+        <button type="submit" class="btn-submit">查詢</button>
+      </form>
     </div>
+
+    <div id="fuzzySearchContainer"></div> <!-- AJAX 載入 fuzzy_search 的位置 -->
+  </div>
+
+  <!-- Modal 移到 index.ejs -->
+<div class="modal fade" id="downloadModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">選擇下載內容</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+      </div>
+      <div class="modal-body">
+        <form id="downloadForm">
+          <input type="hidden" id="modalUserId" />
+          <input type="hidden" id="modalUserTable" />
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="questionnaire" value="personal" id="q0">
+            <label class="form-check-label" for="q0">個人資料</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="questionnaire" value="attachment" id="q1">
+            <label class="form-check-label" for="q1">親子依附量表</label>
+          </div>
+         <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="questionnaire" value="knowledge" id="q2">
+            <label class="form-check-label" for="q2">母乳知識量表</label>
+          </div>
+                    <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="questionnaire" value="dour" id="q3">
+            <label class="form-check-label" for="q3">憂鬱量表</label>
+          </div>
+                    <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="questionnaire" value="painscale" id="q4">
+            <label class="form-check-label" for="q4">產後傷口疼痛量表</label>
+          </div>
+                    <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="questionnaire" value="sleep" id="q5">
+            <label class="form-check-label" for="q5">睡眠評估量表</label>
+          </div>
+                    <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="questionnaire" value="roommate" id="q6">
+            <label class="form-check-label" for="q6">親子同室量表</label>
+          </div>
+                    <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="questionnaire" value="user_question" id="q7">
+            <label class="form-check-label" for="q7">產前後量表紀錄</label>
+          </div>
+          <!-- 其餘表單項目照樣加上 -->
+          <button type="button" class="btn btn-success w-100 mt-3" onclick="confirmModalDownload()">確定下載</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+function validateForm(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("user_name").value.trim();
+  const birthdate = document.getElementById("user_birthdate").value.trim();
+  const table = document.getElementById("table_select").value;
+
+  const params = new URLSearchParams();
+  if (name) params.append("name", name);
+  if (birthdate) params.append("birthdate", birthdate);
+  if (table) params.append("table", table);
+  params.append("gender", "未指定"); // 留下以防未來擴充
+
+  fetch(`/fuzzy_search?${params.toString()}`)
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("fuzzySearchContainer").innerHTML = data;
+      initFuzzySearchEvents();
+    })
+    .catch(err => console.error("查詢失敗:", err));
+}
+
+  function updateSelectedCount() {
+    const count = document.querySelectorAll('input.user-box:checked').length;
+    const indicator = document.getElementById("selectedCount");
+    if (indicator) indicator.textContent = count;
+  }
+
+  function toggleSelectAll() {
+    const checked = document.getElementById("selectAll")?.checked;
+    document.querySelectorAll("input.user-box").forEach(cb => cb.checked = checked);
+    updateSelectedCount();
+  }
+
+  function prepareModal(userId, table) {
+    document.getElementById("modalUserId").value = userId;
+    document.getElementById("modalUserTable").value = table;
+    document.querySelectorAll('#downloadForm input[type="checkbox"]').forEach(cb => cb.checked = false);
+    const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById("downloadModal"));
+    modal.show();
+  }
+
+  function confirmModalDownload() {
+    const userId = document.getElementById("modalUserId")?.value;
+    const table = document.getElementById("modalUserTable")?.value;
+    const selected = Array.from(document.querySelectorAll('#downloadForm input[name="questionnaire"]:checked')).map(cb => cb.value);
+    if (!selected.length) return alert("請至少選擇一項資料");
+
+    fetch("/download_single", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: userId, table, questionnaire: selected })
+    })
+    .then(res => res.blob())
+    .then(blob => {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "單筆下載.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      bootstrap.Modal.getInstance(document.getElementById("downloadModal")).hide();
+    })
+    .catch(err => {
+      alert("⚠️ 下載失敗");
+      console.error(err);
+    });
+  }
+
+  function initFuzzySearchEvents() {
+    const selectAll = document.getElementById("selectAll");
+    if (selectAll) selectAll.addEventListener("change", toggleSelectAll);
+
+    document.getElementById("userList")?.addEventListener("change", (e) => {
+      if (e.target.matches("input.user-box")) {
+        updateSelectedCount();
+        const total = document.querySelectorAll("input.user-box").length;
+        const checked = document.querySelectorAll("input.user-box:checked").length;
+        if (selectAll) selectAll.checked = total === checked;
+      }
+    });
+
+    document.querySelectorAll(".arrow").forEach(el => {
+      el.addEventListener("click", () => {
+        const userId = el.dataset.userId;
+        const table = el.dataset.table;
+        prepareModal(userId, table);
+      });
+    });
+
+    updateSelectedCount();
+  }
+</script>
+
+
 </body>
 </html>
