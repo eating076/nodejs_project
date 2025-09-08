@@ -127,6 +127,7 @@
   </style>
 </head>
 <body>
+
     <div class="container">
     <h2>個人基本資訊</h2>
         <div class="profile-section">
@@ -135,12 +136,13 @@
               <div class="info-card always-show">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrjDKvX46GOpgDflhYQ7KI9fewSC6y552-hA&s" alt="頭像">
                 
-                <% let queryStringParam = table === "users" ? "user_id" : "man_user_id"; %>
                 <% let recordId = user.id; %>
+		<% let queryStringParam = "user_id"; %>
+
                 <p><strong>姓名：</strong><%= user.name || '未提供' %></p>
                 <p><strong>性別：</strong><%= user.gender || '未提供' %></p>
                 <p><strong>生日：</strong><%= user.formattedBirthdate || '未提供' %></p>
-                <p><strong>身高：</strong><%= user.height || '未提供' %></p>
+                <p><strong>身高：</strong><%= user.height || '未提供' %>cm</p>
                 <p><strong>電話：</strong><%= user.phone || '未提供' %></p>
                  </div>
         <!-- 卡片區塊 1 -->
@@ -170,9 +172,9 @@
           <details>
             <summary>其他資料</summary>
              <% if (user) { %>
-                <p><strong>孕前體重：</strong><%= user.pre_pregnancy_weight || '未提供' %></p>
+                <p><strong>孕前體重：</strong><%= user.pre_pregnancy_weight || '未提供' %>kg</p>
              <% } %>
-             <p><strong>目前體重：</strong><%= user.current_weight || '未提供' %></p>
+             <p><strong>目前體重：</strong><%= user.current_weight || '未提供' %>kg</p>
                  <p><strong>是否新手媽媽：</strong><%= user.user_salutation || '未提供' %></p>
                 <p><strong>使用者帳號：</strong><%= user.user_account || '未提供' %></p>
                  <p><strong>配對碼：</strong><%= user.pairing_code || '未提供' %></p>
@@ -193,6 +195,11 @@
           
 <div class="button-container">
 <% if (table === "man_users") { %>
+
+	<% let recordId = user.id; %>
+	<% let queryStringParam = "man_user_id"; %>
+
+
     <button class="button test-score">
         測驗分數
         <select name="score-dropdown" onchange="handleSelection('<%= queryStringParam %>', '<%= recordId %>', this.value)">
@@ -206,6 +213,11 @@
     <button class="button progress-check" onclick="window.location.href='/baby?<%= queryStringParam %>=<%= recordId %>'">嬰兒資料紀錄</button>
                
 <% } else { %>
+
+	<% let recordId = user.id; %>
+	<% let queryStringParam = "user_id"; %>
+
+
     <!-- 這裡是 users 查詢時的完整按鈕 -->
       <button class="button step-count" onclick="window.location.href='/steps?<%= queryStringParam %>=<%= recordId %>'">步數統計</button>
     <button class="button test-score">
