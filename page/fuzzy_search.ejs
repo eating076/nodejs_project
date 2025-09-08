@@ -1,256 +1,42 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <title>模糊查詢結果</title>
-    <style>
-       /* 遮罩背景，讓 `modal` 更明顯 */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
-
-/* 彈出視窗樣式 */
-.modal-content {
-    background: #fff;
-    padding: 25px;
-    border-radius: 12px;
-    width: 40%;
-    max-width: 500px;
-    text-align: center;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-    position: relative;
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-/* 淡入動畫 */
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-/* 關閉按鈕樣式 */
-.close {
-    position: absolute;
-    top: 12px; right: 12px;
-    font-size: 20px;
-    cursor: pointer;
-    color: #555;
-    transition: color 0.2s ease;
-}
-
-.close:hover {
-    color: #e74c3c;
-}
-
-/* 下載選項樣式 */
-#modalUserList {
-    list-style: none;
-    padding: 0;
-    max-height: 200px;
-    overflow-y: auto;
-    text-align: left;
-}
-
-#modalUserList li {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 16px;
-}
-
-#modalUserList input {
-    transform: scale(1.2);
-}
-
-/* 問卷選擇區塊 */
-#surveyOptions {
-    background: #f8f8f8;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 8px;
-}
-
-/* 按鈕美化 */
-button {
-    background: #3498db;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    font-size: 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    margin-top: 10px;
-}
-
-button:hover {
-    background: #2980b9;
-}
-
-.arrow {
-    cursor: pointer;
-    font-size: 18px;
-    color: #3498db;
-    transition: color 0.3s ease;
-    margin-left: 5px;
-}
-
-.arrow:hover {
-    color: #2980b9;
-}
-    </style>
-    <script>
-// **監聽手動變更**
-document.addEventListener("DOMContentLoaded", () => {
-    const selectAllCheckbox = document.getElementById("selectAll");
-
-    function toggleSelectAll() {
-        const userCheckboxes = document.querySelectorAll('input[name="user_ids"]');
-        userCheckboxes.forEach(checkbox => {
-            checkbox.checked = selectAllCheckbox.checked;
-        });
-    }
-
-    function updateSelectAll() {
-        const userCheckboxes = document.querySelectorAll('input[name="user_ids"]');
-        selectAllCheckbox.checked = [...userCheckboxes].every(cb => cb.checked);
-    }
-
-    selectAllCheckbox.addEventListener("change", toggleSelectAll);
-    document.querySelectorAll('input[name="user_ids"]').forEach(checkbox => {
-        checkbox.addEventListener("change", updateSelectAll);
-    });
-});
-
-
-        let selectedUserId = null; // 儲存點擊的下載 ID
-
-function openDownloadOptions(userId, target) {
-    selectedUserId = userId;
-    console.log("✅ 點擊的使用者 ID:", userId);
-
-    const modal = document.getElementById("downloadModal");
-    modal.style.display = "block";
-
-    // **計算箭頭 (`▶`) 的位置**
-    const rect = target.getBoundingClientRect();
-    modal.style.position = "absolute";
-    modal.style.top = `${rect.bottom + window.scrollY}px`; 
-    modal.style.left = `${rect.left + window.scrollX}px`;
-}
-
-        function closeModal() {
-           document.getElementById("downloadModal").style.display = "none";
-
-        }
-
-        function confirmDownload() {
-            if (!selectedUserId) {
-                alert("⚠️ 未選擇下載項目！");
-                return;
-            }
-
-            fetch("/download", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ user_ids: [selectedUserId] })
-            }).then(response => {
-                if (!response.ok) {
-                    alert("下載失敗，請稍後重試！");
-                    return;
-                }
-                return response.blob();
-            }).then(blob => {
-                const a = document.createElement("a");
-                a.href = URL.createObjectURL(blob);
-                a.download = "下載結果.xlsx";
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            });
-
-            closeModal();
-        }
-    </script>
-</head>
-<body>
-    <div class="container">
-        <h1>模糊查詢結果</h1>
-
-        <% if (users.length > 0 || manUsers.length > 0 || allUsers.length > 0) { %>
-
-            <form method="POST" action="/download">
-                <li>
-    <input type="checkbox" id="selectAll" onchange="toggleSelectAll()"> <strong>全選</strong>
-</li>
-
-                <ul id="userList">
-                    <% let queryStringParam = table === "users" ? "user_id" : "man_user_id"; %>
-
-                    <% if (users.length > 0) { %>
-                        <% users.forEach(user => { %>
-                            <li>
-                                <input type="checkbox" name="user_ids" value="<%= user.id %>">
-                                <a href="/result?<%= queryStringParam %>=<%= user.id %>"><%= user.name %> - <%= user.gender %></a>
-                                <span class="arrow" onclick="openDownloadOptions('<%= user.id %>', this)">▶</span>
-                            </li>
-                        <% }) %>
-                    <% } else if (table === "users") { %>
-                        <p class="no-result">⚠️ 查無使用者資料</p>
-                    <% } %>
-
-                    <% if (manUsers.length > 0) { %>
-                        <% manUsers.forEach(manUser => { %>
-                            <li>
-                                <input type="checkbox" name="user_ids" value="<%= manUser.id %>">
-                                <a href="/result?<%= queryStringParam %>=<%= manUser.id %>"><%= manUser.name %> - <%= manUser.gender %></a>
-                                <span class="arrow" onclick="openDownloadOptions('<%= manUser.id %>', this)">▶</span>
-
-
-                            </li>
-                        <% }) %>
-                    <% } else if (table === "man_users") { %>
-                        <p class="no-result">⚠️ 查無男性使用者資料</p>
-                    <% } %>
-
-                    <% if (table === "users+man_users" && allUsers.length > 0) { %>
-                        <% allUsers.forEach(user => { %>
-                            <% let queryStringParam = user.tableName === 'users' ? 'user_id' : 'man_user_id'; %>
-                            <li>
-                                <input type="checkbox" name="user_ids" value="<%= user.id %>">
-                                <a href="/result?<%= queryStringParam %>=<%= user.id %>"><%= user.name %> - <%= user.gender %></a>
-                               <span class="arrow" onclick="openDownloadOptions('<%= user.id %>', this)">▶</span>
-
-
-                            </li>
-                        <% }) %>
-                    <% } else if (table === "users+man_users") { %>
-                        <p class="no-result">⚠️ 查無使用者資料</p>
-                    <% } %>
-                </ul>
-                <button type="submit" id="submitBtn">確認下載所選項目</button>
-            </form>
-        <% } else { %>
-            <p class="no-result">⚠️ 查無相似資料</p>
-        <% } %>
-
-        <!-- 彈出視窗模組 -->
-<div id="downloadModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h2>選擇下載項目</h2>
-        <ul id="modalUserList"></ul>
-        <button onclick="confirmDownload()">確定下載</button>
+<% if (users && (users.length > 0 || manUsers.length > 0 || allUsers.length > 0)) { %>
+  <form method="POST" action="/download">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <input type="checkbox" id="selectAll" class="form-check-input" />
+        <label for="selectAll" class="form-check-label">全選</label>
+      </div>
+      <div class="count-indicator">已勾選 <span id="selectedCount">0</span> 人</div>
     </div>
-</div>
-    </div>
-</body>
-</html>
+
+    <ul id="userList" class="mb-3">
+      <%
+        const resultList = table === "users" ? users : table === "man_users" ? manUsers : allUsers;
+        resultList.forEach(user => {
+          // ✅ 來源資料表
+          const source = table === 'users+man_users' ? user.tableName : table;
+
+          // ✅ 跳轉參數名（user_id or man_user_id）
+          const queryKey = source === 'users' ? 'user_id' : 'man_user_id';
+
+          // ✅ 顯示姓名（後端統一為 name）
+          const displayName = user.name || '未提供';
+
+          // ✅ 顯示性別（後端統一為 gender）
+          const displayGender = user.gender || '未指定';
+
+          // ✅ 跳轉連結組成
+          const href = `/result?${queryKey}=${user.id}`;
+      %>
+        <li class="mb-2">
+          <input type="checkbox" class="form-check-input user-box" name="user_ids" value="<%= user.id %>||<%= source %>">
+          <a href="<%= href %>"><%= displayName %> - <%= displayGender %></a>
+          <span class="arrow ms-2" style="cursor:pointer;color:#0d6efd" data-user-id="<%= user.id %>" data-table="<%= source %>">▶</span>
+        </li>
+      <% }) %>
+    </ul>
+
+    <button type="submit" class="btn btn-primary w-100">確認下載所選全部項目</button>
+  </form>
+<% } else { %>
+  <p class="text-danger">⚠️ 查無相似資料</p>
+<% } %>
