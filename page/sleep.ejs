@@ -109,7 +109,7 @@
 
 
         <!-- 顯示使用者資訊 -->
-        <p><strong>ID：</strong> <%= recordId || '未提供' %></p>
+        <p><strong>使用者 ID：</strong> <%= recordId || '未提供' %></p>
         <p><strong>名字：</strong> <%= user_name || '未提供' %></p>
 
 
@@ -125,9 +125,15 @@
                 </thead>
 <tbody>
     <tr>
-        <td>ID</td>
+        <td>量表 ID</td>
         <% assessmentsData.forEach(item => { %>
             <td><%= item.sleep_id %></td>
+        <% }); %>
+    </tr>
+        <tr>
+        <td>測驗量表</td>
+        <% assessmentsData.forEach(item => { %>
+            <td><%= item.sleep_question_content %></td>
         <% }); %>
     </tr>
     <tr>
@@ -140,12 +146,7 @@
             </td>
         <% }); %>
     </tr>
-    <tr>
-        <td>測驗量表</td>
-        <% assessmentsData.forEach(item => { %>
-            <td><%= item.sleep_question_content %></td>
-        <% }); %>
-    </tr>
+
     <tr>
         <td>過去一個月來，您通常何時上床</td>
         <% assessmentsData.forEach(item => { %>
