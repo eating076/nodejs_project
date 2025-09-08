@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -74,7 +75,7 @@
         <h2 class="text-center mb-4">親子依附支持量表紀錄</h2>
 
         <!-- 顯示使用者資訊 -->
-        <p><strong>ID：</strong> <%= userId || '未提供' %></p>
+        <p><strong>使用者 ID：</strong> <%= userId || '未提供' %></p>
         <p><strong>名字：</strong> <%= user_name || '未提供' %></p>
 
 
@@ -95,7 +96,7 @@
     </thead>
 <tbody>
     <tr>
-        <td>測驗 ID</td>
+        <td>量表 ID</td>
         <% attachmentData.forEach(data => { %>
             <td><%= data.attachment_id %></td>
         <% }); %>
